@@ -1,0 +1,313 @@
+import React, { useEffect, useState } from 'react';
+import { Search, Filter, Plus, X, RefreshCw } from 'lucide-react';
+import { getMenuItems, createMenuItem } from '../api';
+import MenuCard from '../components/MenuCard';
+
+const TABS = ['all', 'breakfast', 'lunch', 'dinner'];
+const CUISINES = ['Indian', 'North Indian', 'South Indian', 'Punjabi', 'Gujarati', 'Mughal', 'International'];
+
+const emptyForm = {
+  name: '', meal_type: 'breakfast', description: '', cuisine_type: 'Indian',
+  prep_time_minutes: 10, cook_time_minutes: 20, servings: 4,
+  calories_per_serving: 400, protein_g: 15, carbs_g: 60, fat_g: 10, fiber_g: 5,
+  kitchen_equipment: '', difficulty: 'easy', is_vegetarian: true, is_vegan: false,
+  ingredients: []
+};
+
+export default function MenuLibrary() {
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [tab, setTab] = useState('all');
+  const [search, setSearch] = useState('');
+  const [vegOnly, setVegOnly] = useState(false);
+  const [maxCal, setMaxCal] = useState(1000);
+  const [cuisine, setCuisine] = useState('');
+  const [showAdd, setShowAdd] = useState(false);
+  const [form, setForm] = useState(emptyForm);
+  const [saving, setSaving] = useState(false);
+  const [ingLine, setIngLine] = useState('');
+
+  useEffect(() => { loadItems(); }, [tab, vegOnly, cuisine]);
+
+  async function loadItems() {
+    setLoading(true);
+    try {
+      const params = {};
+      if (tab !== 'all') params.meal_type = tab;
+      if (vegOnly) params.is_vegetarian = true;
+      if (cuisine) params.cuisine_type = cuisine;
+      const res = await getMenuItems(params);
+      setItems(res.data);
+    } catch {}
+    finally { setLoading(false); }
+  }
+
+  const filtered = items.filter(item => {
+    const matchSearch = !search || item.name.toLowerCase().includes(search.toLowerCase());
+    const matchCal = item.calories_per_serving <= maxCal;
+    return matchSearch && matchCal;
+  });
+
+  function handleFormChange(e) {
+    const { name, value, type, checked } = e.target;
+    setForm(f => ({ ...f, [name]: type === 'checkbox' ? checked : value }));
+  }
+
+  function addIngredient() {
+    const parts = ingLine.trim().split(',');
+    if (parts.length < 2) return;
+    const [name, quantity, unit = '', notes = ''] = parts.map(p => p.trim());
+    setForm(f => ({ ...f, ingredients: [...f.ingredients, { name, quantity, unit, notes }] }));
+    setIngLine('');
+  }
+
+  function removeIngredient(idx) {
+    setForm(f => ({ ...f, ingredients: f.ingredients.filter((_, i) => i !== idx) }));
+  }
+
+  async function handleSave() {
+    setSaving(true);
+    try {
+      await createMenuItem(form);
+      setShowAdd(false);
+      setForm(emptyForm);
+      loadItems();
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to create item');
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="p-8">
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Menu Library</h1>
+          <p className="text-gray-500 text-sm mt-0.5">{filtered.length} items available</p>
+        </div>
+        <button
+          onClick={() => setShowAdd(true)}
+          className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white text-sm font-semibold rounded-lg hover:bg-emerald-700 transition-colors shadow-sm"
+        >
+          <Plus size={16} /> Add Dish
+        </button>
+      </div>
+
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="flex bg-gray-100 rounded-lg p-1">
+            {TABS.map(t => (
+              <button
+                key={t}
+                onClick={() => setTab(t)}
+                className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all capitalize ${tab === t ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+              >
+                {t}
+              </button>
+            ))}
+          </div>
+
+          <div className="relative flex-1 min-w-48">
+            <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input
+              value={search} onChange={e => setSearch(e.target.value)}
+              placeholder="Search dishes..."
+              className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            />
+          </div>
+
+          <select
+            value={cuisine} onChange={e => setCuisine(e.target.value)}
+            className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          >
+            <option value="">All cuisines</option>
+            {CUISINES.map(c => <option key={c} value={c}>{c}</option>)}
+          </select>
+
+          <div className="flex items-center gap-2">
+            <Filter size={14} className="text-gray-400" />
+            <span className="text-xs text-gray-500">Max {maxCal} kcal</span>
+            <input
+              type="range" min={200} max={1000} step={50} value={maxCal}
+              onChange={e => setMaxCal(Number(e.target.value))}
+              className="w-28 accent-emerald-600"
+            />
+          </div>
+
+          <label className="flex items-center gap-2 cursor-pointer">
+            <div
+              onClick={() => setVegOnly(v => !v)}
+              className={`w-10 h-5 rounded-full transition-colors relative ${vegOnly ? 'bg-emerald-500' : 'bg-gray-200'}`}
+            >
+              <div className={`w-4 h-4 bg-white rounded-full absolute top-0.5 transition-transform shadow ${vegOnly ? 'translate-x-5' : 'translate-x-0.5'}`} />
+            </div>
+            <span className="text-sm text-gray-600">Veg only</span>
+          </label>
+        </div>
+      </div>
+
+      {loading ? (
+        <div className="flex justify-center py-16">
+          <RefreshCw className="w-7 h-7 text-emerald-600 animate-spin" />
+        </div>
+      ) : filtered.length === 0 ? (
+        <div className="text-center py-16">
+          <p className="text-gray-400">No dishes found matching your filters.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-3 gap-4">
+          {filtered.map(item => <MenuCard key={item.id} item={item} />)}
+        </div>
+      )}
+
+      {showAdd && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between p-6 border-b border-gray-100">
+              <h2 className="font-bold text-gray-900">Add New Dish</h2>
+              <button onClick={() => setShowAdd(false)} className="text-gray-400 hover:text-gray-600">
+                <X size={20} />
+              </button>
+            </div>
+            <div className="p-6 space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Dish Name</label>
+                  <input name="name" value={form.name} onChange={handleFormChange}
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    placeholder="e.g., Dal Makhani" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Meal Type</label>
+                  <select name="meal_type" value={form.meal_type} onChange={handleFormChange}
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    <option value="breakfast">Breakfast</option>
+                    <option value="lunch">Lunch</option>
+                    <option value="dinner">Dinner</option>
+                    <option value="snack">Snack</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Cuisine</label>
+                  <select name="cuisine_type" value={form.cuisine_type} onChange={handleFormChange}
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    {CUISINES.map(c => <option key={c} value={c}>{c}</option>)}
+                  </select>
+                </div>
+                <div className="col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                  <textarea name="description" value={form.description} onChange={handleFormChange}
+                    rows={2}
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    placeholder="Brief description..." />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Prep Time (min)</label>
+                  <input type="number" name="prep_time_minutes" value={form.prep_time_minutes} onChange={handleFormChange}
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Cook Time (min)</label>
+                  <input type="number" name="cook_time_minutes" value={form.cook_time_minutes} onChange={handleFormChange}
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Calories/serving</label>
+                  <input type="number" name="calories_per_serving" value={form.calories_per_serving} onChange={handleFormChange}
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Servings</label>
+                  <input type="number" name="servings" value={form.servings} onChange={handleFormChange}
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Protein (g)</label>
+                  <input type="number" name="protein_g" value={form.protein_g} onChange={handleFormChange}
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Carbs (g)</label>
+                  <input type="number" name="carbs_g" value={form.carbs_g} onChange={handleFormChange}
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Fat (g)</label>
+                  <input type="number" name="fat_g" value={form.fat_g} onChange={handleFormChange}
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Fiber (g)</label>
+                  <input type="number" name="fiber_g" value={form.fiber_g} onChange={handleFormChange}
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Difficulty</label>
+                  <select name="difficulty" value={form.difficulty} onChange={handleFormChange}
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    <option value="easy">Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                  </select>
+                </div>
+                <div className="col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Kitchen Equipment (comma-separated)</label>
+                  <input name="kitchen_equipment" value={form.kitchen_equipment} onChange={handleFormChange}
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    placeholder="kadai, tawa, pressure_cooker" />
+                </div>
+                <div className="flex items-center gap-6">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" name="is_vegetarian" checked={form.is_vegetarian} onChange={handleFormChange} className="accent-emerald-600" />
+                    <span className="text-sm">Vegetarian</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" name="is_vegan" checked={form.is_vegan} onChange={handleFormChange} className="accent-emerald-600" />
+                    <span className="text-sm">Vegan</span>
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Add Ingredient (name, qty, unit, notes)</label>
+                <div className="flex gap-2">
+                  <input value={ingLine} onChange={e => setIngLine(e.target.value)}
+                    onKeyDown={e => e.key === 'Enter' && addIngredient()}
+                    className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    placeholder="e.g., Rice, 1, cup, soaked" />
+                  <button onClick={addIngredient} className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700">
+                    Add
+                  </button>
+                </div>
+                {form.ingredients.length > 0 && (
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    {form.ingredients.map((ing, i) => (
+                      <span key={i} className="flex items-center gap-1 px-2 py-0.5 bg-emerald-50 text-emerald-700 text-xs rounded-full">
+                        {ing.quantity} {ing.unit} {ing.name}
+                        <button onClick={() => removeIngredient(i)} className="ml-1 text-emerald-500 hover:text-red-500">
+                          <X size={11} />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="flex gap-3 pt-2">
+                <button onClick={() => setShowAdd(false)}
+                  className="flex-1 py-2.5 border border-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50">
+                  Cancel
+                </button>
+                <button onClick={handleSave} disabled={saving || !form.name}
+                  className="flex-1 py-2.5 bg-emerald-600 text-white rounded-lg text-sm font-semibold hover:bg-emerald-700 disabled:opacity-60">
+                  {saving ? 'Saving...' : 'Add Dish'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
