@@ -3,7 +3,14 @@ import { Search, Filter, Plus, X, RefreshCw } from 'lucide-react';
 import { getMenuItems, createMenuItem } from '../api';
 import MenuCard from '../components/MenuCard';
 
-const TABS = ['all', 'breakfast', 'lunch', 'dinner'];
+const TABS = [
+  { key: 'all',         label: 'All',                mealType: null },
+  { key: 'breakfast',   label: 'Breakfast',           mealType: 'breakfast' },
+  { key: 'lunch',       label: 'Lunch',               mealType: 'lunch' },
+  { key: 'dinner',      label: 'Dinner',              mealType: 'dinner' },
+  { key: 'lunchAddon',  label: 'Add ons for Lunch',   mealType: 'snack' },
+  { key: 'dinnerAddon', label: 'Add ons for Dinner',  mealType: 'snack' },
+];
 const CUISINES = ['Indian', 'North Indian', 'South Indian', 'Punjabi', 'Gujarati', 'Mughal', 'International'];
 
 const emptyForm = {
@@ -33,7 +40,8 @@ export default function MenuLibrary() {
     setLoading(true);
     try {
       const params = {};
-      if (tab !== 'all') params.meal_type = tab;
+      const activeTab = TABS.find(t => t.key === tab);
+      if (activeTab?.mealType) params.meal_type = activeTab.mealType;
       if (vegOnly) params.is_vegetarian = true;
       if (cuisine) params.cuisine_type = cuisine;
       const res = await getMenuItems(params);
@@ -96,14 +104,14 @@ export default function MenuLibrary() {
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
         <div className="flex flex-wrap items-center gap-3">
-          <div className="flex bg-gray-100 rounded-lg p-1">
+          <div className="flex flex-wrap bg-gray-100 rounded-lg p-1 gap-1">
             {TABS.map(t => (
               <button
-                key={t}
-                onClick={() => setTab(t)}
-                className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all capitalize ${tab === t ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                key={t.key}
+                onClick={() => setTab(t.key)}
+                className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${tab === t.key ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
               >
-                {t}
+                {t.label}
               </button>
             ))}
           </div>
