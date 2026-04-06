@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Calendar, RefreshCw, Trash2, X, Printer, Send, ChevronLeft, ChevronRight, Check, Coffee, Sun, Moon } from 'lucide-react';
+import { Calendar, RefreshCw, Trash2, X, Printer, Send, ChevronLeft, ChevronRight, Check, Coffee, Sun, Moon, Salad, UtensilsCrossed } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import {
   getPlans, generateDietPlan, getFullPlan, deletePlan,
@@ -20,11 +20,13 @@ export default function DietPlan() {
   const [weekOffset, setWeekOffset] = useState(0);
   const [showGenForm, setShowGenForm] = useState(false);
   const [genStep, setGenStep] = useState(1); // 1 = settings, 2 = meal selection
-  const [allMenuItems, setAllMenuItems] = useState({ breakfast: [], lunch: [], dinner: [] });
+  const [allMenuItems, setAllMenuItems] = useState({ breakfast: [], lunch: [], dinner: [], lunchAddon: [], dinnerAddon: [] });
   const [loadingMenuItems, setLoadingMenuItems] = useState(false);
   const [selectedBreakfast, setSelectedBreakfast] = useState([]);
   const [selectedLunch, setSelectedLunch] = useState([]);
   const [selectedDinner, setSelectedDinner] = useState([]);
+  const [selectedLunchAddon, setSelectedLunchAddon] = useState([]);
+  const [selectedDinnerAddon, setSelectedDinnerAddon] = useState([]);
   const [activeMealTab, setActiveMealTab] = useState('breakfast');
   const [showSwap, setShowSwap] = useState(false);
   const [swapDay, setSwapDay] = useState(null);
@@ -67,29 +69,39 @@ export default function DietPlan() {
     setLoadingMenuItems(true);
     setGenStep(2);
     try {
-      const [bRes, lRes, dRes] = await Promise.all([
+      const [bRes, lRes, dRes, sRes] = await Promise.all([
         getMenuItems({ meal_type: 'breakfast' }),
         getMenuItems({ meal_type: 'lunch' }),
         getMenuItems({ meal_type: 'dinner' }),
+        getMenuItems({ meal_type: 'snack' }),
       ]);
       setAllMenuItems({
         breakfast: bRes.data || [],
         lunch: lRes.data || [],
         dinner: dRes.data || [],
+        lunchAddon: sRes.data || [],
+        dinnerAddon: sRes.data || [],
       });
     } catch {}
     finally { setLoadingMenuItems(false); }
   }
 
+  const selectionMap = {
+    breakfast: [selectedBreakfast, setSelectedBreakfast],
+    lunch: [selectedLunch, setSelectedLunch],
+    dinner: [selectedDinner, setSelectedDinner],
+    lunchAddon: [selectedLunchAddon, setSelectedLunchAddon],
+    dinnerAddon: [selectedDinnerAddon, setSelectedDinnerAddon],
+  };
+
   function toggleItem(id, type) {
-    const setFn = type === 'breakfast' ? setSelectedBreakfast : type === 'lunch' ? setSelectedLunch : setSelectedDinner;
+    const [, setFn] = selectionMap[type];
     setFn(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
   }
 
   function selectAll(type) {
     const items = allMenuItems[type];
-    const setFn = type === 'breakfast' ? setSelectedBreakfast : type === 'lunch' ? setSelectedLunch : setSelectedDinner;
-    const selected = type === 'breakfast' ? selectedBreakfast : type === 'lunch' ? selectedLunch : selectedDinner;
+    const [selected, setFn] = selectionMap[type];
     setFn(selected.length === items.length ? [] : items.map(i => i.id));
   }
 
@@ -114,6 +126,7 @@ export default function DietPlan() {
       setShowGenForm(false);
       setGenStep(1);
       setSelectedBreakfast([]); setSelectedLunch([]); setSelectedDinner([]);
+      setSelectedLunchAddon([]); setSelectedDinnerAddon([]);
       loadPlans();
     } catch (err) {
       alert(err.response?.data?.error || 'Failed to generate plan');
@@ -429,19 +442,17 @@ export default function DietPlan() {
                 <div className="px-6 pt-4 pb-2 shrink-0">
                   <p className="text-sm text-gray-500 mb-3">Select items you want in your plan. Leave all unchecked to use all available items.</p>
                   {/* Meal type tabs */}
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap gap-2">
                     {[
-                      { key: 'breakfast', label: 'Breakfast', icon: Coffee, color: 'orange', count: selectedBreakfast.length },
-                      { key: 'lunch',     label: 'Lunch',     icon: Sun,    color: 'blue',   count: selectedLunch.length },
-                      { key: 'dinner',    label: 'Dinner',    icon: Moon,   color: 'purple', count: selectedDinner.length },
-                    ].map(({ key, label, icon: Icon, color, count }) => (
+                      { key: 'breakfast',  label: 'Breakfast',          icon: Coffee,          activeClass: 'bg-orange-500 border-orange-500 text-white',  count: selectedBreakfast.length },
+                      { key: 'lunch',      label: 'Lunch',              icon: Sun,             activeClass: 'bg-blue-500 border-blue-500 text-white',      count: selectedLunch.length },
+                      { key: 'dinner',     label: 'Dinner',             icon: Moon,            activeClass: 'bg-purple-500 border-purple-500 text-white',  count: selectedDinner.length },
+                      { key: 'lunchAddon', label: 'Add ons for Lunch',  icon: Salad,           activeClass: 'bg-teal-500 border-teal-500 text-white',      count: selectedLunchAddon.length },
+                      { key: 'dinnerAddon',label: 'Add ons for Dinner', icon: UtensilsCrossed, activeClass: 'bg-rose-500 border-rose-500 text-white',      count: selectedDinnerAddon.length },
+                    ].map(({ key, label, icon: Icon, activeClass, count }) => (
                       <button key={key} onClick={() => setActiveMealTab(key)}
                         className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold border-2 transition-all ${
-                          activeMealTab === key
-                            ? color === 'orange' ? 'bg-orange-500 border-orange-500 text-white'
-                            : color === 'blue'   ? 'bg-blue-500 border-blue-500 text-white'
-                            :                     'bg-purple-500 border-purple-500 text-white'
-                            : 'border-gray-200 text-gray-600 hover:border-gray-300'
+                          activeMealTab === key ? activeClass : 'border-gray-200 text-gray-600 hover:border-gray-300'
                         }`}>
                         <Icon size={14} /> {label}
                         {count > 0 && <span className="bg-white/30 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">{count}</span>}
@@ -456,7 +467,7 @@ export default function DietPlan() {
                     <div className="flex justify-center py-12"><RefreshCw className="w-6 h-6 text-emerald-600 animate-spin" /></div>
                   ) : (() => {
                     const items = allMenuItems[activeMealTab] || [];
-                    const selected = activeMealTab === 'breakfast' ? selectedBreakfast : activeMealTab === 'lunch' ? selectedLunch : selectedDinner;
+                    const [selected] = selectionMap[activeMealTab] || [[]];
                     return (
                       <>
                         <div className="flex items-center justify-between py-2 sticky top-0 bg-white">
