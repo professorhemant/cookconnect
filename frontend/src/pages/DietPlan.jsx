@@ -447,8 +447,8 @@ export default function DietPlan() {
                       { key: 'breakfast',  label: 'Breakfast',          icon: Coffee,          activeClass: 'bg-orange-500 border-orange-500 text-white',  count: selectedBreakfast.length },
                       { key: 'lunch',      label: 'Lunch',              icon: Sun,             activeClass: 'bg-blue-500 border-blue-500 text-white',      count: selectedLunch.length },
                       { key: 'dinner',     label: 'Dinner',             icon: Moon,            activeClass: 'bg-purple-500 border-purple-500 text-white',  count: selectedDinner.length },
-                      { key: 'lunchAddon', label: 'Add ons for Lunch',  icon: Salad,           activeClass: 'bg-teal-500 border-teal-500 text-white',      count: selectedLunchAddon.length },
-                      { key: 'dinnerAddon',label: 'Add ons for Dinner', icon: UtensilsCrossed, activeClass: 'bg-rose-500 border-rose-500 text-white',      count: selectedDinnerAddon.length },
+                      { key: 'lunchAddon', label: 'Add Ons for Lunch',  icon: Salad,           activeClass: 'bg-teal-500 border-teal-500 text-white',      count: selectedLunchAddon.length },
+                      { key: 'dinnerAddon',label: 'Add Ons for Dinner', icon: UtensilsCrossed, activeClass: 'bg-rose-500 border-rose-500 text-white',      count: selectedDinnerAddon.length },
                     ].map(({ key, label, icon: Icon, activeClass, count }) => (
                       <button key={key} onClick={() => setActiveMealTab(key)}
                         className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold border-2 transition-all ${
