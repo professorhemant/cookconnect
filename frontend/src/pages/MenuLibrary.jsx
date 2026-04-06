@@ -8,8 +8,8 @@ const TABS = [
   { key: 'breakfast',   label: 'Breakfast',           mealType: 'breakfast' },
   { key: 'lunch',       label: 'Lunch',               mealType: 'lunch' },
   { key: 'dinner',      label: 'Dinner',              mealType: 'dinner' },
-  { key: 'lunchAddon',  label: 'Add ons for Lunch',   mealType: 'snack' },
-  { key: 'dinnerAddon', label: 'Add ons for Dinner',  mealType: 'snack' },
+  { key: 'lunchAddon',  label: 'Add ons for Lunch',  mealType: 'snack' },
+  { key: 'dinnerAddon', label: 'Add ons for Dinner', mealType: 'snack' },
 ];
 const CUISINES = ['Indian', 'North Indian', 'South Indian', 'Punjabi', 'Gujarati', 'Mughal', 'International'];
 
