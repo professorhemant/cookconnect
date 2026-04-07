@@ -1,5 +1,50 @@
 const { MenuItem, Ingredient } = require('../models');
 const { Op } = require('sequelize');
+const Anthropic = require('@anthropic-ai/sdk');
+
+async function fetchNutritionFromAI(name, cuisine_type, description, ingredients) {
+  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  const ingredientText = ingredients && ingredients.length > 0
+    ? `Ingredients: ${ingredients.map(i => `${i.name} (${i.quantity} ${i.unit || ''})`).join(', ')}`
+    : '';
+
+  const response = await client.messages.create({
+    model: 'claude-haiku-4-5-20251001',
+    max_tokens: 1000,
+    messages: [{
+      role: 'user',
+      content: `You are a nutrition and cooking expert. For the given dish, provide complete dish details including ingredients, nutrition, and cooking info.
+
+Dish: ${name}
+Cuisine: ${cuisine_type || 'Indian'}
+${description ? `Description: ${description}` : ''}
+${ingredientText}
+
+Respond ONLY with valid JSON, no other text:
+{
+  "description": "Brief 1-sentence description of the dish",
+  "calories_per_serving": 350,
+  "protein_g": 12.5,
+  "carbs_g": 45.0,
+  "fat_g": 8.5,
+  "fiber_g": 4.0,
+  "prep_time_minutes": 15,
+  "cook_time_minutes": 25,
+  "difficulty": "easy",
+  "is_vegetarian": true,
+  "is_vegan": false,
+  "kitchen_equipment": "kadai, tawa",
+  "ingredients": [
+    { "name": "ingredient name", "quantity": "1", "unit": "cup", "notes": "" }
+  ]
+}`
+    }]
+  });
+
+  const text = response.content[0].text.trim();
+  const clean = text.replace(/^```json\n?/, '').replace(/\n?```$/, '').trim();
+  return JSON.parse(clean);
+}
 
 async function getMenuItems(req, res) {
   try {
@@ -50,9 +95,32 @@ async function getDinnerItems(req, res) {
   return getMenuItems(req, res);
 }
 
+async function estimateNutrition(req, res) {
+  const { name, cuisine_type, description, ingredients } = req.body;
+  if (!name) return res.status(400).json({ error: 'name is required' });
+  try {
+    const result = await fetchNutritionFromAI(name, cuisine_type, description, ingredients);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
 async function createMenuItem(req, res) {
   try {
     const { ingredients, ...menuData } = req.body;
+
+    if (!menuData.calories_per_serving) {
+      try {
+        const aiData = await fetchNutritionFromAI(
+          menuData.name, menuData.cuisine_type, menuData.description, ingredients
+        );
+        Object.assign(menuData, aiData);
+      } catch {
+        menuData.calories_per_serving = 300;
+      }
+    }
+
     const item = await MenuItem.create(menuData);
 
     if (ingredients && ingredients.length > 0) {
@@ -108,5 +176,5 @@ async function deleteMenuItem(req, res) {
 
 module.exports = {
   getMenuItems, getMenuItemById, getBreakfastItems, getLunchItems, getDinnerItems,
-  createMenuItem, updateMenuItem, deleteMenuItem
+  createMenuItem, updateMenuItem, deleteMenuItem, estimateNutrition
 };

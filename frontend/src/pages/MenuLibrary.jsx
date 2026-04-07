@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Search, Filter, Plus, X, RefreshCw } from 'lucide-react';
-import { getMenuItems, createMenuItem } from '../api';
+import { Search, Filter, Plus, X, RefreshCw, Sparkles } from 'lucide-react';
+import { getMenuItems, createMenuItem, estimateNutrition } from '../api';
 import MenuCard from '../components/MenuCard';
 
 const TABS = [
@@ -8,6 +8,7 @@ const TABS = [
   { key: 'breakfast', label: 'Breakfast', mealType: 'breakfast' },
   { key: 'lunch', label: 'Lunch', mealType: 'lunch' },
   { key: 'dinner', label: 'Dinner', mealType: 'dinner' },
+  { key: 'breakfastAddon', label: 'Add Ons for Breakfast', mealType: 'snack' },
   { key: 'lunchAddon', label: 'Add Ons for Lunch', mealType: 'snack' },
   { key: 'dinnerAddon', label: 'Add Ons for Dinner', mealType: 'snack' },
 ];
@@ -15,8 +16,8 @@ const CUISINES = ['Indian', 'North Indian', 'South Indian', 'Punjabi', 'Gujarati
 
 const emptyForm = {
   name: '', meal_type: 'breakfast', description: '', cuisine_type: 'Indian',
-  prep_time_minutes: 10, cook_time_minutes: 20, servings: 4,
-  calories_per_serving: 400, protein_g: 15, carbs_g: 60, fat_g: 10, fiber_g: 5,
+  prep_time_minutes: '', cook_time_minutes: '', servings: 4,
+  calories_per_serving: '', protein_g: '', carbs_g: '', fat_g: '', fiber_g: '',
   kitchen_equipment: '', difficulty: 'easy', is_vegetarian: true, is_vegan: false,
   ingredients: []
 };
@@ -33,6 +34,8 @@ export default function MenuLibrary() {
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
   const [ingLine, setIngLine] = useState('');
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiFilledFields, setAiFilledFields] = useState(false);
 
   useEffect(() => { loadItems(); }, [tab, vegOnly, cuisine]);
 
@@ -73,12 +76,37 @@ export default function MenuLibrary() {
     setForm(f => ({ ...f, ingredients: f.ingredients.filter((_, i) => i !== idx) }));
   }
 
+  async function handleAutoFill() {
+    if (!form.name.trim()) return;
+    setAiLoading(true);
+    try {
+      const res = await estimateNutrition({
+        name: form.name,
+        cuisine_type: form.cuisine_type,
+        description: form.description,
+        ingredients: form.ingredients
+      });
+      const { ingredients: aiIngredients, ...rest } = res.data;
+      setForm(f => ({
+        ...f,
+        ...rest,
+        ingredients: aiIngredients && aiIngredients.length > 0 ? aiIngredients : f.ingredients
+      }));
+      setAiFilledFields(true);
+    } catch {
+      alert('Could not auto-fill dish details. Please enter manually.');
+    } finally {
+      setAiLoading(false);
+    }
+  }
+
   async function handleSave() {
     setSaving(true);
     try {
       await createMenuItem(form);
       setShowAdd(false);
       setForm(emptyForm);
+      setAiFilledFields(false);
       loadItems();
     } catch (err) {
       alert(err.response?.data?.error || 'Failed to create item');
@@ -174,7 +202,7 @@ export default function MenuLibrary() {
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between p-6 border-b border-gray-100">
               <h2 className="font-bold text-gray-900">Add New Dish</h2>
-              <button onClick={() => setShowAdd(false)} className="text-gray-400 hover:text-gray-600">
+              <button onClick={() => { setShowAdd(false); setAiFilledFields(false); setForm(emptyForm); }} className="text-gray-400 hover:text-gray-600">
                 <X size={20} />
               </button>
             </div>
@@ -182,10 +210,33 @@ export default function MenuLibrary() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">Dish Name</label>
-                  <input name="name" value={form.name} onChange={handleFormChange}
+                  <input name="name" value={form.name} onChange={e => { handleFormChange(e); setAiFilledFields(false); }}
                     className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     placeholder="e.g., Dal Makhani" />
                 </div>
+                {form.name.trim() && (
+                  <div className="col-span-2 flex items-center gap-3">
+                    {aiFilledFields ? (
+                      <span className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-100 text-emerald-700 text-xs font-medium rounded-lg">
+                        <Sparkles size={13} /> AI Filled
+                      </span>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={handleAutoFill}
+                        disabled={aiLoading}
+                        className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white text-sm font-semibold rounded-lg hover:bg-emerald-700 disabled:opacity-60 transition-colors"
+                      >
+                        {aiLoading ? (
+                          <RefreshCw size={14} className="animate-spin" />
+                        ) : (
+                          <Sparkles size={14} />
+                        )}
+                        {aiLoading ? 'Filling dish details...' : 'Auto-fill Dish with AI'}
+                      </button>
+                    )}
+                  </div>
+                )}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Meal Type</label>
                   <select name="meal_type" value={form.meal_type} onChange={handleFormChange}
@@ -210,20 +261,26 @@ export default function MenuLibrary() {
                     className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     placeholder="Brief description..." />
                 </div>
+                <div className="col-span-2">
+                  <p className="text-xs text-gray-400 italic">These fields are optional — click 'Auto-fill Dish with AI' to fill ingredients, nutrition &amp; more automatically</p>
+                </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Prep Time (min)</label>
                   <input type="number" name="prep_time_minutes" value={form.prep_time_minutes} onChange={handleFormChange}
-                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                    placeholder="e.g., 15"
+                    className={`w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 ${aiFilledFields ? 'bg-emerald-50' : ''}`} />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Cook Time (min)</label>
                   <input type="number" name="cook_time_minutes" value={form.cook_time_minutes} onChange={handleFormChange}
-                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                    placeholder="e.g., 25"
+                    className={`w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 ${aiFilledFields ? 'bg-emerald-50' : ''}`} />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Calories/serving</label>
                   <input type="number" name="calories_per_serving" value={form.calories_per_serving} onChange={handleFormChange}
-                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                    placeholder="e.g., 350"
+                    className={`w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 ${aiFilledFields ? 'bg-emerald-50' : ''}`} />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Servings</label>
@@ -233,27 +290,31 @@ export default function MenuLibrary() {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Protein (g)</label>
                   <input type="number" name="protein_g" value={form.protein_g} onChange={handleFormChange}
-                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                    placeholder="e.g., 12.5"
+                    className={`w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 ${aiFilledFields ? 'bg-emerald-50' : ''}`} />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Carbs (g)</label>
                   <input type="number" name="carbs_g" value={form.carbs_g} onChange={handleFormChange}
-                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                    placeholder="e.g., 45"
+                    className={`w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 ${aiFilledFields ? 'bg-emerald-50' : ''}`} />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Fat (g)</label>
                   <input type="number" name="fat_g" value={form.fat_g} onChange={handleFormChange}
-                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                    placeholder="e.g., 8.5"
+                    className={`w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 ${aiFilledFields ? 'bg-emerald-50' : ''}`} />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Fiber (g)</label>
                   <input type="number" name="fiber_g" value={form.fiber_g} onChange={handleFormChange}
-                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                    placeholder="e.g., 4"
+                    className={`w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 ${aiFilledFields ? 'bg-emerald-50' : ''}`} />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Difficulty</label>
                   <select name="difficulty" value={form.difficulty} onChange={handleFormChange}
-                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    className={`w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 ${aiFilledFields ? 'bg-emerald-50' : ''}`}>
                     <option value="easy">Easy</option>
                     <option value="medium">Medium</option>
                     <option value="hard">Hard</option>
@@ -265,7 +326,7 @@ export default function MenuLibrary() {
                     className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     placeholder="kadai, tawa, pressure_cooker" />
                 </div>
-                <div className="flex items-center gap-6">
+                <div className={`flex items-center gap-6 ${aiFilledFields ? 'p-2 bg-emerald-50 rounded-lg' : ''}`}>
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input type="checkbox" name="is_vegetarian" checked={form.is_vegetarian} onChange={handleFormChange} className="accent-emerald-600" />
                     <span className="text-sm">Vegetarian</span>
@@ -303,7 +364,7 @@ export default function MenuLibrary() {
               </div>
 
               <div className="flex gap-3 pt-2">
-                <button onClick={() => setShowAdd(false)}
+                <button onClick={() => { setShowAdd(false); setAiFilledFields(false); setForm(emptyForm); }}
                   className="flex-1 py-2.5 border border-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50">
                   Cancel
                 </button>
