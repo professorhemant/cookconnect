@@ -1,7 +1,27 @@
 const { MenuItem, Ingredient } = require('../models');
 const { Op } = require('sequelize');
 
+// In-memory cache: key = "name|cuisine", value = { result, ts }
+const nutritionCache = new Map();
+const CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
+
 async function fetchNutritionFromAI(name, cuisine_type, description, ingredients, servings = 1) {
+  const cacheKey = `${name.toLowerCase().trim()}|${(cuisine_type || 'Indian').toLowerCase()}`;
+  const cached = nutritionCache.get(cacheKey);
+  if (cached && Date.now() - cached.ts < CACHE_TTL_MS) {
+    // Scale cached per-serving values to requested servings
+    const base = cached.result;
+    const ratio = (cached.servings || 1) / (servings || 1);
+    return {
+      ...base,
+      calories_per_serving: base.calories_per_serving ? Math.round(base.calories_per_serving * ratio) : base.calories_per_serving,
+      protein_g: base.protein_g ? Math.round(base.protein_g * ratio * 10) / 10 : base.protein_g,
+      carbs_g: base.carbs_g ? Math.round(base.carbs_g * ratio * 10) / 10 : base.carbs_g,
+      fat_g: base.fat_g ? Math.round(base.fat_g * ratio * 10) / 10 : base.fat_g,
+      fiber_g: base.fiber_g ? Math.round(base.fiber_g * ratio * 10) / 10 : base.fiber_g,
+    };
+  }
+
   const ingredientText = ingredients && ingredients.length > 0
     ? `Ingredients: ${ingredients.map(i => `${i.name} (${i.quantity} ${i.unit || ''})`).join(', ')}`
     : '';
@@ -67,7 +87,9 @@ Respond ONLY with valid JSON, no other text:
       const jsonStr = fenceMatch ? fenceMatch[1].trim() : text.match(/\{[\s\S]*\}/s)?.[0];
       if (!jsonStr) { lastError = new Error('No JSON found'); continue; }
 
-      return JSON.parse(jsonStr); // success — return immediately
+      const result = JSON.parse(jsonStr);
+      nutritionCache.set(cacheKey, { result, ts: Date.now(), servings: servings || 1 });
+      return result; // success — return immediately
     } catch (err) {
       lastError = err;
       // continue to next model
@@ -133,7 +155,9 @@ async function estimateNutrition(req, res) {
     const result = await fetchNutritionFromAI(name, cuisine_type, description, ingredients, servings || 1);
     res.json(result);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    const retryMatch = err.message.match(/retry in (\d+)/i);
+    const retrySeconds = retryMatch ? parseInt(retryMatch[1]) + 5 : 60;
+    res.status(429).json({ error: err.message, retryAfter: retrySeconds });
   }
 }
 

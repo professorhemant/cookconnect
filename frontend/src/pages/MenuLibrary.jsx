@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Search, Filter, Plus, X, RefreshCw, Sparkles } from 'lucide-react';
 import { getMenuItems, createMenuItem, estimateNutrition, getFamilyMembers } from '../api';
 import MenuCard from '../components/MenuCard';
@@ -40,6 +40,8 @@ export default function MenuLibrary() {
   const [aiLoading, setAiLoading] = useState(false);
   const [aiFilledFields, setAiFilledFields] = useState(false);
   const [aiError, setAiError] = useState('');
+  const [aiRetryIn, setAiRetryIn] = useState(0);
+  const retryTimerRef = useRef(null);
   const [aiBaseNutrition, setAiBaseNutrition] = useState(null);
   const [aiBaseServings, setAiBaseServings] = useState(1);
 
@@ -123,8 +125,27 @@ export default function MenuLibrary() {
         ingredients: aiIngredients && aiIngredients.length > 0 ? aiIngredients : f.ingredients
       }));
       setAiFilledFields(true);
-    } catch {
-      setAiError('Auto-fill failed — enter nutrition manually or retry by changing the dish name.');
+    } catch (err) {
+      const retryAfter = err.response?.data?.retryAfter;
+      if (retryAfter) {
+        setAiRetryIn(retryAfter);
+        setAiError(`AI quota limit hit — auto-retrying in ${retryAfter}s`);
+        clearInterval(retryTimerRef.current);
+        retryTimerRef.current = setInterval(() => {
+          setAiRetryIn(prev => {
+            if (prev <= 1) {
+              clearInterval(retryTimerRef.current);
+              setAiError('');
+              handleAutoFill();
+              return 0;
+            }
+            setAiError(`AI quota limit hit — auto-retrying in ${prev - 1}s`);
+            return prev - 1;
+          });
+        }, 1000);
+      } else {
+        setAiError('Auto-fill failed — enter nutrition manually.');
+      }
     } finally {
       setAiLoading(false);
     }
@@ -259,7 +280,7 @@ export default function MenuLibrary() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">Dish Name</label>
-                  <input name="name" value={form.name} onChange={e => { handleFormChange(e); setAiFilledFields(false); setAiLoading(false); setAiError(''); setAiBaseNutrition(null); setAiBaseServings(1); }}
+                  <input name="name" value={form.name} onChange={e => { handleFormChange(e); setAiFilledFields(false); setAiLoading(false); setAiError(''); setAiRetryIn(0); clearInterval(retryTimerRef.current); setAiBaseNutrition(null); setAiBaseServings(1); }}
                     className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     placeholder="e.g., Dal Makhani" />
                 </div>
