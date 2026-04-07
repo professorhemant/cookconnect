@@ -58,7 +58,7 @@ export default function MenuCard({ item, onSelect }) {
           </span>
           <span className="flex items-center gap-1">
             <ChefHat size={12} />
-            {item.servings} servings
+            1 serving
           </span>
         </div>
 

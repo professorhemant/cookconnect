@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Calendar, RefreshCw, Trash2, X, Printer, Send, ChevronLeft, ChevronRight, Check, Coffee, Sun, Moon, Salad, UtensilsCrossed } from 'lucide-react';
+import React, { useEffect, useState, useRef } from 'react';
+import { Calendar, RefreshCw, Trash2, X, Printer, Send, ChevronLeft, ChevronRight, Check, Coffee, Sun, Moon, Salad, UtensilsCrossed, AlertTriangle, Plus, Flame } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import {
   getPlans, generateDietPlan, getFullPlan, deletePlan,
-  updatePlanDay, getMenuItems, sendWeekMenu
+  updatePlanDay, getMenuItems, sendWeekMenu, getFamilySummary
 } from '../api';
 import MealCell from '../components/MealCell';
 import MenuCard from '../components/MenuCard';
@@ -35,6 +35,11 @@ export default function DietPlan() {
   const [loadingMenu, setLoadingMenu] = useState(false);
   const [sending, setSending] = useState(false);
   const [sendMsg, setSendMsg] = useState('');
+  const [requiredCalories, setRequiredCalories] = useState(0);
+  const [familyMembers, setFamilyMembers] = useState(1);
+  const [addonItems, setAddonItems] = useState({ breakfast: [], lunch: [], dinner: [] });
+  const [addonModal, setAddonModal] = useState(null); // { item, type: 'lunch'|'dinner' }
+  const addonsRef = useRef(null);
   const [genForm, setGenForm] = useState({
     planType: 'weekly',
     startDate: new Date().toISOString().split('T')[0],
@@ -43,7 +48,22 @@ export default function DietPlan() {
     cuisineTypes: []
   });
 
-  useEffect(() => { if (currentUser) loadPlans(); }, [currentUser]);
+  useEffect(() => {
+    if (currentUser) {
+      loadPlans();
+      Promise.all([
+        getFamilySummary(currentUser.id),
+        getMenuItems({ meal_type: 'snack' })
+      ]).then(([summaryRes, snacksRes]) => {
+        const total = summaryRes.data?.members?.reduce((s, { nutrition }) => s + (nutrition?.calories_min || 0), 0) || 0;
+        setRequiredCalories(total);
+        const count = summaryRes.data?.members?.length || 1;
+        setFamilyMembers(count);
+        const snacks = snacksRes.data || [];
+        setAddonItems({ breakfast: snacks, lunch: snacks, dinner: snacks });
+      }).catch(() => {});
+    }
+  }, [currentUser]);
 
   async function loadPlans() {
     setLoading(true);
@@ -61,7 +81,8 @@ export default function DietPlan() {
     try {
       const res = await getFullPlan(planId);
       setActivePlan(res.data);
-      setPlanDays(res.data.days || []);
+      const sorted = (res.data.days || []).slice().sort((a, b) => a.day_number - b.day_number);
+      setPlanDays(sorted);
     } catch {}
   }
 
@@ -184,6 +205,21 @@ export default function DietPlan() {
     }
   }
 
+  async function handleAssignAddon(day, item, type) {
+    const fieldMap = { breakfast: 'breakfast_addon_id', lunch: 'morning_snack_id', dinner: 'evening_snack_id' };
+    const snackKeyMap = { breakfast: 'breakfastAddon', lunch: 'morningSnack', dinner: 'eveningSnack' };
+    const field = fieldMap[type];
+    const existingCal = day[snackKeyMap[type]]?.calories_per_serving || 0;
+    const newTotal = day.total_calories - existingCal + item.calories_per_serving;
+    try {
+      await updatePlanDay(activePlan.id, day.id, { [field]: item.id, total_calories: newTotal });
+      await loadFullPlan(activePlan.id);
+      setAddonModal(null);
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to assign add-on');
+    }
+  }
+
   function handleSendWhatsApp() {
     const cookPhone = currentUser.cook_phone || '9462933363';
     const days = planDays.slice(weekOffset * 7, weekOffset * 7 + 7);
@@ -266,6 +302,28 @@ export default function DietPlan() {
         </div>
       )}
 
+      {/* ── Per-week calorie deficit alerts ── */}
+      {requiredCalories > 0 && weekDays.some(d => d.total_calories * familyMembers < requiredCalories) && (
+        <div className="flex items-center justify-between bg-amber-50 border border-amber-300 rounded-xl px-5 py-3 mb-4">
+          <div className="flex items-center gap-3">
+            <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0" />
+            <div>
+              <p className="font-bold text-amber-900 text-sm">More Calories needed — go to Add Ons</p>
+              <p className="text-xs text-amber-700 mt-0.5">
+                {weekDays.filter(d => d.total_calories * familyMembers < requiredCalories).length} day(s) this week are below the required {requiredCalories.toLocaleString()} kcal for your family.
+                Swap meals or add snacks to meet the target.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => addonsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+            className="flex items-center gap-1 px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded-lg shrink-0 ml-4 transition-colors"
+          >
+            <Plus size={12} /> Add Ons below
+          </button>
+        </div>
+      )}
+
       {loading ? (
         <div className="flex justify-center py-16"><RefreshCw className="w-7 h-7 text-emerald-600 animate-spin" /></div>
       ) : !activePlan ? (
@@ -286,6 +344,13 @@ export default function DietPlan() {
                   Week {weekOffset + 1} of {totalWeeks}
                 </h2>
                 <span className="text-xs text-gray-500">Click any meal to swap</span>
+                <div className="flex items-center gap-1.5 ml-2 bg-gray-100 rounded-lg px-2 py-1">
+                  <span className="text-xs text-gray-500 font-medium">Family:</span>
+                  <button onClick={() => setFamilyMembers(m => Math.max(1, m - 1))} className="w-5 h-5 flex items-center justify-center rounded bg-white border border-gray-200 text-gray-600 hover:bg-emerald-50 hover:border-emerald-400 text-sm font-bold">−</button>
+                  <span className="text-xs font-bold text-gray-800 w-4 text-center">{familyMembers}</span>
+                  <button onClick={() => setFamilyMembers(m => m + 1)} className="w-5 h-5 flex items-center justify-center rounded bg-white border border-gray-200 text-gray-600 hover:bg-emerald-50 hover:border-emerald-400 text-sm font-bold">+</button>
+                  <span className="text-xs text-gray-400 ml-0.5">{familyMembers === 1 ? 'member' : 'members'}</span>
+                </div>
               </div>
               <div className="flex items-center gap-2">
                 <button
@@ -309,6 +374,8 @@ export default function DietPlan() {
                 <div key={day.id || i}>
                   <MealCell
                     day={day}
+                    requiredCalories={requiredCalories}
+                    familyMembers={familyMembers}
                     onEdit={(d) => {
                       const mealType = window.prompt('Which meal to swap? (breakfast/lunch/dinner)', 'breakfast');
                       if (['breakfast', 'lunch', 'dinner'].includes(mealType)) {
@@ -330,6 +397,68 @@ export default function DietPlan() {
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* ── Add Ons Section ── */}
+          <div ref={addonsRef} className="space-y-4 mb-5">
+            {[
+              { key: 'breakfast', label: 'Add Ons For Breakfast', snackKey: 'breakfastAddon', headerClass: 'from-orange-500 to-amber-500', badge: 'bg-orange-100 text-orange-700' },
+              { key: 'lunch',     label: 'Add Ons For Lunch',     snackKey: 'morningSnack',   headerClass: 'from-teal-500 to-cyan-500',   badge: 'bg-teal-100 text-teal-700'   },
+              { key: 'dinner',    label: 'Add Ons For Dinner',    snackKey: 'eveningSnack',   headerClass: 'from-rose-500 to-pink-500',   badge: 'bg-rose-100 text-rose-700'   },
+            ].map(({ key, label, snackKey, headerClass, badge }) => (
+              <div key={key} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div className={`bg-gradient-to-r ${headerClass} px-5 py-3 flex items-center gap-2`}>
+                  <Salad className="w-4 h-4 text-white" />
+                  <h2 className="font-bold text-white text-sm">{label}</h2>
+                  <span className="text-white/70 text-xs ml-1">— click any item to assign it to a day</span>
+                </div>
+                <div className="p-4">
+                  {addonItems[key].length === 0 ? (
+                    <p className="text-sm text-gray-400 text-center py-4">No snack items found. Add some in Menu Library → Snack.</p>
+                  ) : (
+                    <div className="grid grid-cols-4 gap-3">
+                      {addonItems[key].map(item => (
+                        <div key={item.id} className="border border-gray-100 rounded-xl p-3 hover:border-emerald-300 hover:shadow-sm transition-all">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${badge}`}>snack</span>
+                            <div className="flex items-center gap-0.5 text-orange-500">
+                              <Flame size={11} />
+                              <span className="text-xs font-bold">{item.calories_per_serving}</span>
+                            </div>
+                          </div>
+                          <p className="text-sm font-semibold text-gray-800 leading-snug mt-1">{item.name}</p>
+                          <p className="text-xs text-gray-400 mt-0.5">{item.cuisine_type}</p>
+                          <button
+                            onClick={() => setAddonModal({ item, type: key })}
+                            className="mt-2 w-full py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg transition-colors"
+                          >
+                            + Add to Day
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Show current assignments for this week */}
+                  {weekDays.some(d => d[snackKey]) && (
+                    <div className="mt-3 pt-3 border-t border-gray-50">
+                      <p className="text-xs font-semibold text-gray-500 mb-2">Assigned this week:</p>
+                      <div className="flex flex-wrap gap-2">
+                        {weekDays.filter(d => d[snackKey]).map(d => {
+                          const date = new Date(d.day_date + 'T00:00:00');
+                          const dayLabel = date.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric' });
+                          return (
+                            <span key={d.id} className={`text-xs px-2.5 py-1 rounded-full font-medium ${badge}`}>
+                              {dayLabel}: {d[snackKey].name} ({d[snackKey].calories_per_serving} kcal)
+                            </span>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
 
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
@@ -365,6 +494,48 @@ export default function DietPlan() {
             </div>
           </div>
         </>
+      )}
+
+      {/* ── Assign Add-On Modal ── */}
+      {addonModal && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm">
+            <div className="flex items-center justify-between p-5 border-b border-gray-100">
+              <div>
+                <h3 className="font-bold text-gray-900">Add to Day</h3>
+                <p className="text-xs text-gray-500 mt-0.5">{addonModal.item.name} · {addonModal.item.calories_per_serving} kcal</p>
+              </div>
+              <button onClick={() => setAddonModal(null)} className="text-gray-400 hover:text-gray-600"><X size={18} /></button>
+            </div>
+            <div className="p-5">
+              <p className="text-xs text-gray-500 mb-3">Select which day to assign this {
+                addonModal.type === 'breakfast' ? 'breakfast add-on' :
+                addonModal.type === 'lunch' ? 'lunch add-on' : 'dinner add-on'
+              }:</p>
+              <div className="space-y-2">
+                {weekDays.map(day => {
+                  const date = new Date(day.day_date + 'T00:00:00');
+                  const dayLabel = date.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short' });
+                  const existing = { breakfast: day.breakfastAddon, lunch: day.morningSnack, dinner: day.eveningSnack }[addonModal.type];
+                  return (
+                    <button
+                      key={day.id}
+                      onClick={() => handleAssignAddon(day, addonModal.item, addonModal.type)}
+                      className="w-full flex items-center justify-between px-4 py-3 rounded-xl border border-gray-200 hover:border-emerald-400 hover:bg-emerald-50 transition-all text-left"
+                    >
+                      <span className="text-sm font-semibold text-gray-800">{dayLabel}</span>
+                      {existing ? (
+                        <span className="text-xs text-amber-600 font-medium truncate ml-2">replaces: {existing.name}</span>
+                      ) : (
+                        <span className="text-xs text-emerald-600 font-medium">empty slot</span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
       )}
 
       {showGenForm && (
