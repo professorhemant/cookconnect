@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Search, Filter, Plus, X, RefreshCw, Sparkles } from 'lucide-react';
-import { getMenuItems, createMenuItem, estimateNutrition } from '../api';
+import { getMenuItems, createMenuItem, estimateNutrition, getFamilyMembers } from '../api';
 import MenuCard from '../components/MenuCard';
+import { useApp } from '../context/AppContext';
 
 const TABS = [
   { key: 'all', label: 'All', mealType: null },
@@ -16,13 +17,15 @@ const CUISINES = ['Indian', 'North Indian', 'South Indian', 'Punjabi', 'Gujarati
 
 const emptyForm = {
   name: '', meal_type: 'breakfast', description: '', cuisine_type: 'Indian',
-  prep_time_minutes: '', cook_time_minutes: '', servings: 4,
+  prep_time_minutes: '', cook_time_minutes: '', servings: 1,
   calories_per_serving: '', protein_g: '', carbs_g: '', fat_g: '', fiber_g: '',
   kitchen_equipment: '', difficulty: 'easy', is_vegetarian: true, is_vegan: false,
   ingredients: []
 };
 
 export default function MenuLibrary() {
+  const { currentUser } = useApp();
+  const [familyCount, setFamilyCount] = useState(4);
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState('all');
@@ -36,8 +39,24 @@ export default function MenuLibrary() {
   const [ingLine, setIngLine] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
   const [aiFilledFields, setAiFilledFields] = useState(false);
+  const [aiBaseNutrition, setAiBaseNutrition] = useState(null);
+  const [aiBaseServings, setAiBaseServings] = useState(1);
 
   useEffect(() => { loadItems(); }, [tab, vegOnly, cuisine]);
+
+  useEffect(() => {
+    if (currentUser?.id) {
+      getFamilyMembers(currentUser.id)
+        .then(res => { if (res.data?.length > 0) setFamilyCount(res.data.length); })
+        .catch(() => {});
+    }
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (!form.name.trim() || aiFilledFields) return;
+    const timer = setTimeout(() => { handleAutoFill(); }, 1500);
+    return () => clearTimeout(timer);
+  }, [form.name]);
 
   async function loadItems() {
     setLoading(true);
@@ -80,13 +99,23 @@ export default function MenuLibrary() {
     if (!form.name.trim()) return;
     setAiLoading(true);
     try {
+      const currentServings = parseFloat(form.servings) || 1;
       const res = await estimateNutrition({
         name: form.name,
         cuisine_type: form.cuisine_type,
         description: form.description,
-        ingredients: form.ingredients
+        ingredients: form.ingredients,
+        servings: currentServings
       });
       const { ingredients: aiIngredients, ...rest } = res.data;
+      setAiBaseNutrition({
+        calories_per_serving: rest.calories_per_serving,
+        protein_g: rest.protein_g,
+        carbs_g: rest.carbs_g,
+        fat_g: rest.fat_g,
+        fiber_g: rest.fiber_g,
+      });
+      setAiBaseServings(currentServings);
       setForm(f => ({
         ...f,
         ...rest,
@@ -100,6 +129,23 @@ export default function MenuLibrary() {
     }
   }
 
+  function handleServingsChange(e) {
+    const raw = e.target.value;
+    const newServings = parseFloat(raw) || 1;
+    setForm(f => {
+      const updated = { ...f, servings: raw };
+      if (aiFilledFields && aiBaseNutrition && aiBaseServings) {
+        const ratio = aiBaseServings / newServings;
+        if (aiBaseNutrition.calories_per_serving) updated.calories_per_serving = Math.round(aiBaseNutrition.calories_per_serving * ratio);
+        if (aiBaseNutrition.protein_g) updated.protein_g = Math.round(aiBaseNutrition.protein_g * ratio * 10) / 10;
+        if (aiBaseNutrition.carbs_g) updated.carbs_g = Math.round(aiBaseNutrition.carbs_g * ratio * 10) / 10;
+        if (aiBaseNutrition.fat_g) updated.fat_g = Math.round(aiBaseNutrition.fat_g * ratio * 10) / 10;
+        if (aiBaseNutrition.fiber_g) updated.fiber_g = Math.round(aiBaseNutrition.fiber_g * ratio * 10) / 10;
+      }
+      return updated;
+    });
+  }
+
   async function handleSave() {
     setSaving(true);
     try {
@@ -107,6 +153,8 @@ export default function MenuLibrary() {
       setShowAdd(false);
       setForm(emptyForm);
       setAiFilledFields(false);
+      setAiBaseNutrition(null);
+      setAiBaseServings(1);
       loadItems();
     } catch (err) {
       alert(err.response?.data?.error || 'Failed to create item');
@@ -123,7 +171,7 @@ export default function MenuLibrary() {
           <p className="text-gray-500 text-sm mt-0.5">{filtered.length} items available</p>
         </div>
         <button
-          onClick={() => setShowAdd(true)}
+          onClick={() => { setForm(emptyForm); setAiFilledFields(false); setAiBaseNutrition(null); setAiBaseServings(1); setShowAdd(true); }}
           className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white text-sm font-semibold rounded-lg hover:bg-emerald-700 transition-colors shadow-sm"
         >
           <Plus size={16} /> Add Dish
@@ -202,7 +250,7 @@ export default function MenuLibrary() {
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between p-6 border-b border-gray-100">
               <h2 className="font-bold text-gray-900">Add New Dish</h2>
-              <button onClick={() => { setShowAdd(false); setAiFilledFields(false); setForm(emptyForm); }} className="text-gray-400 hover:text-gray-600">
+              <button onClick={() => { setShowAdd(false); setAiFilledFields(false); setAiBaseNutrition(null); setAiBaseServings(1); setForm(emptyForm); }} className="text-gray-400 hover:text-gray-600">
                 <X size={20} />
               </button>
             </div>
@@ -210,31 +258,21 @@ export default function MenuLibrary() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">Dish Name</label>
-                  <input name="name" value={form.name} onChange={e => { handleFormChange(e); setAiFilledFields(false); }}
+                  <input name="name" value={form.name} onChange={e => { handleFormChange(e); setAiFilledFields(false); setAiLoading(false); setAiBaseNutrition(null); setAiBaseServings(1); }}
                     className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     placeholder="e.g., Dal Makhani" />
                 </div>
                 {form.name.trim() && (
                   <div className="col-span-2 flex items-center gap-3">
-                    {aiFilledFields ? (
-                      <span className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-100 text-emerald-700 text-xs font-medium rounded-lg">
-                        <Sparkles size={13} /> AI Filled
+                    {aiLoading ? (
+                      <span className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-600 text-xs font-medium rounded-lg">
+                        <RefreshCw size={13} className="animate-spin" /> Analyzing nutrition...
                       </span>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={handleAutoFill}
-                        disabled={aiLoading}
-                        className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white text-sm font-semibold rounded-lg hover:bg-emerald-700 disabled:opacity-60 transition-colors"
-                      >
-                        {aiLoading ? (
-                          <RefreshCw size={14} className="animate-spin" />
-                        ) : (
-                          <Sparkles size={14} />
-                        )}
-                        {aiLoading ? 'Filling dish details...' : 'Auto-fill Dish with AI'}
-                      </button>
-                    )}
+                    ) : aiFilledFields ? (
+                      <span className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-100 text-emerald-700 text-xs font-medium rounded-lg">
+                        <Sparkles size={13} /> Nutrition auto-filled by AI
+                      </span>
+                    ) : null}
                   </div>
                 )}
                 <div>
@@ -262,7 +300,7 @@ export default function MenuLibrary() {
                     placeholder="Brief description..." />
                 </div>
                 <div className="col-span-2">
-                  <p className="text-xs text-gray-400 italic">These fields are optional — click 'Auto-fill Dish with AI' to fill ingredients, nutrition &amp; more automatically</p>
+                  <p className="text-xs text-gray-400 italic">These fields are optional — nutrition &amp; details are auto-filled by AI as you type the dish name</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Prep Time (min)</label>
@@ -284,7 +322,8 @@ export default function MenuLibrary() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Servings</label>
-                  <input type="number" name="servings" value={form.servings} onChange={handleFormChange}
+                  <input type="number" name="servings" value={form.servings} onChange={handleServingsChange}
+                    min="1" step="1"
                     className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
                 </div>
                 <div>
@@ -364,7 +403,7 @@ export default function MenuLibrary() {
               </div>
 
               <div className="flex gap-3 pt-2">
-                <button onClick={() => { setShowAdd(false); setAiFilledFields(false); setForm(emptyForm); }}
+                <button onClick={() => { setShowAdd(false); setAiFilledFields(false); setAiBaseNutrition(null); setAiBaseServings(1); setForm(emptyForm); }}
                   className="flex-1 py-2.5 border border-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50">
                   Cancel
                 </button>

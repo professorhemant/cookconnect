@@ -1,22 +1,16 @@
 const { MenuItem, Ingredient } = require('../models');
 const { Op } = require('sequelize');
-const Anthropic = require('@anthropic-ai/sdk');
 
-async function fetchNutritionFromAI(name, cuisine_type, description, ingredients) {
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+async function fetchNutritionFromAI(name, cuisine_type, description, ingredients, servings = 1) {
   const ingredientText = ingredients && ingredients.length > 0
     ? `Ingredients: ${ingredients.map(i => `${i.name} (${i.quantity} ${i.unit || ''})`).join(', ')}`
     : '';
 
-  const response = await client.messages.create({
-    model: 'claude-haiku-4-5-20251001',
-    max_tokens: 1000,
-    messages: [{
-      role: 'user',
-      content: `You are a nutrition and cooking expert. For the given dish, provide complete dish details including ingredients, nutrition, and cooking info.
+  const prompt = `You are a nutrition and cooking expert. For the given dish, provide complete dish details including ingredients, nutrition, and cooking info.
 
 Dish: ${name}
 Cuisine: ${cuisine_type || 'Indian'}
+Servings: ${servings}
 ${description ? `Description: ${description}` : ''}
 ${ingredientText}
 
@@ -37,13 +31,35 @@ Respond ONLY with valid JSON, no other text:
   "ingredients": [
     { "name": "ingredient name", "quantity": "1", "unit": "cup", "notes": "" }
   ]
-}`
-    }]
-  });
+}`;
 
-  const text = response.content[0].text.trim();
-  const clean = text.replace(/^```json\n?/, '').replace(/\n?```$/, '').trim();
-  return JSON.parse(clean);
+  const response = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${process.env.GEMINI_API_KEY}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.2, maxOutputTokens: 2048 }
+      })
+    }
+  );
+
+  const data = await response.json();
+  if (data.error) throw new Error(`Gemini API error: ${data.error.message}`);
+  const parts = data.candidates?.[0]?.content?.parts;
+  if (!parts) throw new Error('Empty response from Gemini');
+
+  // Filter out thinking parts (gemini-2.5-flash includes thought tokens)
+  const textParts = parts.filter(p => !p.thought && p.text);
+  const text = (textParts.length > 0 ? textParts : parts)
+    .map(p => p.text || '').join('').trim();
+  if (!text) throw new Error('Empty response from Gemini');
+
+  const fenceMatch = text.match(/```json\s*([\s\S]*?)\s*```/s);
+  const jsonStr = fenceMatch ? fenceMatch[1].trim() : text.match(/\{[\s\S]*\}/s)?.[0];
+  if (!jsonStr) throw new Error('No JSON found in Gemini response');
+  return JSON.parse(jsonStr);
 }
 
 async function getMenuItems(req, res) {
@@ -96,10 +112,10 @@ async function getDinnerItems(req, res) {
 }
 
 async function estimateNutrition(req, res) {
-  const { name, cuisine_type, description, ingredients } = req.body;
+  const { name, cuisine_type, description, ingredients, servings } = req.body;
   if (!name) return res.status(400).json({ error: 'name is required' });
   try {
-    const result = await fetchNutritionFromAI(name, cuisine_type, description, ingredients);
+    const result = await fetchNutritionFromAI(name, cuisine_type, description, ingredients, servings || 1);
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
