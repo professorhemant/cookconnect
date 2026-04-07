@@ -33,33 +33,48 @@ Respond ONLY with valid JSON, no other text:
   ]
 }`;
 
-  const response = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${process.env.GEMINI_API_KEY}`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.2, maxOutputTokens: 2048 }
-      })
+  const MODELS = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-flash-latest'];
+  let lastError;
+
+  for (const model of MODELS) {
+    try {
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${process.env.GEMINI_API_KEY}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: { temperature: 0.2, maxOutputTokens: 2048 }
+          })
+        }
+      );
+
+      const data = await response.json();
+      if (data.error) {
+        lastError = new Error(`Gemini error (${model}): ${data.error.message}`);
+        continue; // try next model
+      }
+      const parts = data.candidates?.[0]?.content?.parts;
+      if (!parts) { lastError = new Error('Empty response'); continue; }
+
+      const textParts = parts.filter(p => !p.thought && p.text);
+      const text = (textParts.length > 0 ? textParts : parts)
+        .map(p => p.text || '').join('').trim();
+      if (!text) { lastError = new Error('Empty text response'); continue; }
+
+      const fenceMatch = text.match(/```json\s*([\s\S]*?)\s*```/s);
+      const jsonStr = fenceMatch ? fenceMatch[1].trim() : text.match(/\{[\s\S]*\}/s)?.[0];
+      if (!jsonStr) { lastError = new Error('No JSON found'); continue; }
+
+      return JSON.parse(jsonStr); // success — return immediately
+    } catch (err) {
+      lastError = err;
+      // continue to next model
     }
-  );
+  }
 
-  const data = await response.json();
-  if (data.error) throw new Error(`Gemini API error: ${data.error.message}`);
-  const parts = data.candidates?.[0]?.content?.parts;
-  if (!parts) throw new Error('Empty response from Gemini');
-
-  // Filter out thinking parts (gemini-2.5-flash includes thought tokens)
-  const textParts = parts.filter(p => !p.thought && p.text);
-  const text = (textParts.length > 0 ? textParts : parts)
-    .map(p => p.text || '').join('').trim();
-  if (!text) throw new Error('Empty response from Gemini');
-
-  const fenceMatch = text.match(/```json\s*([\s\S]*?)\s*```/s);
-  const jsonStr = fenceMatch ? fenceMatch[1].trim() : text.match(/\{[\s\S]*\}/s)?.[0];
-  if (!jsonStr) throw new Error('No JSON found in Gemini response');
-  return JSON.parse(jsonStr);
+  throw lastError || new Error('All Gemini models failed');
 }
 
 async function getMenuItems(req, res) {

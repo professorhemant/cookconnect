@@ -39,6 +39,7 @@ export default function MenuLibrary() {
   const [ingLine, setIngLine] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
   const [aiFilledFields, setAiFilledFields] = useState(false);
+  const [aiError, setAiError] = useState('');
   const [aiBaseNutrition, setAiBaseNutrition] = useState(null);
   const [aiBaseServings, setAiBaseServings] = useState(1);
 
@@ -53,8 +54,8 @@ export default function MenuLibrary() {
   }, [currentUser]);
 
   useEffect(() => {
-    if (!form.name.trim() || aiFilledFields) return;
-    const timer = setTimeout(() => { handleAutoFill(); }, 1500);
+    if (form.name.trim().length < 3 || aiFilledFields) return;
+    const timer = setTimeout(() => { handleAutoFill(); }, 1800);
     return () => clearTimeout(timer);
   }, [form.name]);
 
@@ -123,7 +124,7 @@ export default function MenuLibrary() {
       }));
       setAiFilledFields(true);
     } catch {
-      alert('Could not auto-fill dish details. Please enter manually.');
+      setAiError('Auto-fill failed — enter nutrition manually or retry by changing the dish name.');
     } finally {
       setAiLoading(false);
     }
@@ -171,7 +172,7 @@ export default function MenuLibrary() {
           <p className="text-gray-500 text-sm mt-0.5">{filtered.length} items available</p>
         </div>
         <button
-          onClick={() => { setForm(emptyForm); setAiFilledFields(false); setAiBaseNutrition(null); setAiBaseServings(1); setShowAdd(true); }}
+          onClick={() => { setForm(emptyForm); setAiFilledFields(false); setAiBaseNutrition(null); setAiBaseServings(1); setAiError(""); setShowAdd(true); }}
           className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white text-sm font-semibold rounded-lg hover:bg-emerald-700 transition-colors shadow-sm"
         >
           <Plus size={16} /> Add Dish
@@ -250,7 +251,7 @@ export default function MenuLibrary() {
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between p-6 border-b border-gray-100">
               <h2 className="font-bold text-gray-900">Add New Dish</h2>
-              <button onClick={() => { setShowAdd(false); setAiFilledFields(false); setAiBaseNutrition(null); setAiBaseServings(1); setForm(emptyForm); }} className="text-gray-400 hover:text-gray-600">
+              <button onClick={() => { setShowAdd(false); setAiFilledFields(false); setAiError(""); setAiBaseNutrition(null); setAiBaseServings(1); setForm(emptyForm); }} className="text-gray-400 hover:text-gray-600">
                 <X size={20} />
               </button>
             </div>
@@ -258,7 +259,7 @@ export default function MenuLibrary() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">Dish Name</label>
-                  <input name="name" value={form.name} onChange={e => { handleFormChange(e); setAiFilledFields(false); setAiLoading(false); setAiBaseNutrition(null); setAiBaseServings(1); }}
+                  <input name="name" value={form.name} onChange={e => { handleFormChange(e); setAiFilledFields(false); setAiLoading(false); setAiError(''); setAiBaseNutrition(null); setAiBaseServings(1); }}
                     className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     placeholder="e.g., Dal Makhani" />
                 </div>
@@ -271,6 +272,10 @@ export default function MenuLibrary() {
                     ) : aiFilledFields ? (
                       <span className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-100 text-emerald-700 text-xs font-medium rounded-lg">
                         <Sparkles size={13} /> Nutrition auto-filled by AI
+                      </span>
+                    ) : aiError ? (
+                      <span className="flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-600 text-xs font-medium rounded-lg">
+                        ⚠ {aiError}
                       </span>
                     ) : null}
                   </div>
@@ -403,7 +408,7 @@ export default function MenuLibrary() {
               </div>
 
               <div className="flex gap-3 pt-2">
-                <button onClick={() => { setShowAdd(false); setAiFilledFields(false); setAiBaseNutrition(null); setAiBaseServings(1); setForm(emptyForm); }}
+                <button onClick={() => { setShowAdd(false); setAiFilledFields(false); setAiError(""); setAiBaseNutrition(null); setAiBaseServings(1); setForm(emptyForm); }}
                   className="flex-1 py-2.5 border border-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50">
                   Cancel
                 </button>
