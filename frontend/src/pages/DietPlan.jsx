@@ -147,7 +147,7 @@ export default function DietPlan() {
         cuisineTypes: genForm.cuisineTypes.length > 0 ? genForm.cuisineTypes : undefined,
       };
 
-      const mealPreferences = mode === 'selected' ? (() => {
+      let mealPreferences = mode === 'selected' ? (() => {
         const dailyAssignmentsPayload = Object.entries(dailyMeals)
           .map(([dayIdx, meals]) => ({
             dayIndex: parseInt(dayIdx),
@@ -157,13 +157,19 @@ export default function DietPlan() {
             dinnerIds:    (meals.dinner    || []).map(i => i.id),
           }))
           .filter(a => a.breakfastIds.length || a.lunchIds.length || a.snackIds.length || a.dinnerIds.length);
+
+        if (dailyAssignmentsPayload.length === 0) {
+          alert('Please select meals for at least one day before using "Create Selected Meal Plan".');
+          return null;
+        }
+
         return {
-          preferredBreakfastIds: selectedBreakfast.length > 0 ? selectedBreakfast : undefined,
-          preferredLunchIds: selectedLunch.length > 0 ? selectedLunch : undefined,
-          preferredDinnerIds: selectedDinner.length > 0 ? selectedDinner : undefined,
-          dailyAssignments: dailyAssignmentsPayload.length > 0 ? dailyAssignmentsPayload : undefined,
+          selectedOnly: true,
+          dailyAssignments: dailyAssignmentsPayload,
         };
       })() : {};
+
+      if (mealPreferences === null) { setGenerating(false); return; }
 
       const res = await generateDietPlan({
         userId: currentUser.id,

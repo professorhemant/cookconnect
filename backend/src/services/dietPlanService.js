@@ -48,10 +48,17 @@ function pickNonRepeating(items, recentIds, mealType) {
 }
 
 async function generatePlan(userId, planType, startDate, preferences = {}) {
-  const { isVegetarian, maxCaloriesPerDay, cuisineTypes, preferredBreakfastIds, preferredLunchIds, preferredDinnerIds, dailyAssignments } = preferences;
+  const { isVegetarian, maxCaloriesPerDay, cuisineTypes, preferredBreakfastIds, preferredLunchIds, preferredDinnerIds, dailyAssignments, selectedOnly } = preferences;
 
-  const numDays = planType === 'monthly' ? 30 : 7;
-  const endDate = addDays(startDate, numDays - 1);
+  // selectedOnly: only create days that have explicit assignments, no auto-fill
+  const selectedDayIndices = selectedOnly && dailyAssignments && dailyAssignments.length > 0
+    ? [...new Set(dailyAssignments.map(a => a.dayIndex))].sort((a, b) => a - b)
+    : null;
+
+  const numDays = selectedDayIndices ? selectedDayIndices.length : (planType === 'monthly' ? 30 : 7);
+  const endDate = selectedDayIndices
+    ? addDays(startDate, selectedDayIndices[selectedDayIndices.length - 1])
+    : addDays(startDate, numDays - 1);
 
   const calorieTarget = await getFamilyCalorieTarget(userId);
   const effectiveMax = maxCaloriesPerDay || calorieTarget.max;
@@ -98,11 +105,14 @@ async function generatePlan(userId, planType, startDate, preferences = {}) {
   const recentDinner = new Set();
 
   const days = [];
-  for (let i = 0; i < numDays; i++) {
+  const dayIndicesToProcess = selectedDayIndices || Array.from({ length: numDays }, (_, i) => i);
+
+  for (let loopIdx = 0; loopIdx < dayIndicesToProcess.length; loopIdx++) {
+    const i = dayIndicesToProcess[loopIdx];
     const dayDate = addDays(startDate, i);
 
-    if (i >= 3) {
-      const removeIdx = i - 3;
+    if (loopIdx >= 3) {
+      const removeIdx = loopIdx - 3;
       if (days[removeIdx]) {
         recentBreakfast.delete(days[removeIdx].breakfast_item_id);
         recentLunch.delete(days[removeIdx].lunch_item_id);
@@ -140,7 +150,7 @@ async function generatePlan(userId, planType, startDate, preferences = {}) {
     const day = await DietPlanDay.create({
       diet_plan_id: plan.id,
       day_date: dayDate,
-      day_number: i + 1,
+      day_number: loopIdx + 1,
       breakfast_item_id: breakfast.id,
       lunch_item_id: lunch.id,
       dinner_item_id: dinner.id,
