@@ -138,32 +138,38 @@ export default function DietPlan() {
     setFn(selected.length === items.length ? [] : items.map(i => i.id));
   }
 
-  async function handleGenerate() {
+  async function handleGenerate(mode = 'selected') {
     setGenerating(true);
     try {
-      const dailyAssignmentsPayload = Object.entries(dailyMeals)
-        .map(([dayIdx, meals]) => ({
-          dayIndex: parseInt(dayIdx),
-          breakfastIds: (meals.breakfast || []).map(i => i.id),
-          lunchIds:     (meals.lunch     || []).map(i => i.id),
-          snackIds:     (meals.snack     || []).map(i => i.id),
-          dinnerIds:    (meals.dinner    || []).map(i => i.id),
-        }))
-        .filter(a => a.breakfastIds.length || a.lunchIds.length || a.snackIds.length || a.dinnerIds.length);
+      const basePreferences = {
+        isVegetarian: genForm.isVegetarian,
+        maxCaloriesPerDay: genForm.maxCaloriesPerDay,
+        cuisineTypes: genForm.cuisineTypes.length > 0 ? genForm.cuisineTypes : undefined,
+      };
+
+      const mealPreferences = mode === 'selected' ? (() => {
+        const dailyAssignmentsPayload = Object.entries(dailyMeals)
+          .map(([dayIdx, meals]) => ({
+            dayIndex: parseInt(dayIdx),
+            breakfastIds: (meals.breakfast || []).map(i => i.id),
+            lunchIds:     (meals.lunch     || []).map(i => i.id),
+            snackIds:     (meals.snack     || []).map(i => i.id),
+            dinnerIds:    (meals.dinner    || []).map(i => i.id),
+          }))
+          .filter(a => a.breakfastIds.length || a.lunchIds.length || a.snackIds.length || a.dinnerIds.length);
+        return {
+          preferredBreakfastIds: selectedBreakfast.length > 0 ? selectedBreakfast : undefined,
+          preferredLunchIds: selectedLunch.length > 0 ? selectedLunch : undefined,
+          preferredDinnerIds: selectedDinner.length > 0 ? selectedDinner : undefined,
+          dailyAssignments: dailyAssignmentsPayload.length > 0 ? dailyAssignmentsPayload : undefined,
+        };
+      })() : {};
 
       const res = await generateDietPlan({
         userId: currentUser.id,
         planType: genForm.planType,
         startDate: genForm.startDate,
-        preferences: {
-          isVegetarian: genForm.isVegetarian,
-          maxCaloriesPerDay: genForm.maxCaloriesPerDay,
-          cuisineTypes: genForm.cuisineTypes.length > 0 ? genForm.cuisineTypes : undefined,
-          preferredBreakfastIds: selectedBreakfast.length > 0 ? selectedBreakfast : undefined,
-          preferredLunchIds: selectedLunch.length > 0 ? selectedLunch : undefined,
-          preferredDinnerIds: selectedDinner.length > 0 ? selectedDinner : undefined,
-          dailyAssignments: dailyAssignmentsPayload.length > 0 ? dailyAssignmentsPayload : undefined,
-        }
+        preferences: { ...basePreferences, ...mealPreferences }
       });
       setActivePlan(res.data);
       setPlanDays(res.data.days || []);
@@ -903,10 +909,14 @@ export default function DietPlan() {
                 {/* Footer */}
                 <div className="flex gap-3 px-6 py-4 border-t border-gray-100 shrink-0">
                   <button onClick={() => setGenStep(1)}
-                    className="flex-1 py-2.5 border-2 border-gray-200 text-gray-600 rounded-xl text-sm font-semibold hover:bg-gray-50">← Back</button>
-                  <button onClick={handleGenerate} disabled={generating}
+                    className="py-2.5 px-4 border-2 border-gray-200 text-gray-600 rounded-xl text-sm font-semibold hover:bg-gray-50 shrink-0">← Back</button>
+                  <button onClick={() => handleGenerate('selected')} disabled={generating}
                     className="flex-1 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-bold hover:bg-emerald-700 disabled:opacity-60 shadow-md">
-                    {generating ? 'Generating...' : '✨ Generate Plan'}
+                    {generating ? 'Generating...' : '✅ Create Selected Meal Plan'}
+                  </button>
+                  <button onClick={() => handleGenerate('auto')} disabled={generating}
+                    className="flex-1 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 disabled:opacity-60 shadow-md">
+                    {generating ? 'Generating...' : '✨ Create Auto Meal Plan'}
                   </button>
                 </div>
               </div>
