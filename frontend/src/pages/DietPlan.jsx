@@ -66,6 +66,7 @@ export default function DietPlan() {
       ]).then(([summaryRes, snacksRes]) => {
         const total = summaryRes.data?.members?.reduce((s, { nutrition }) => s + (nutrition?.calories_min || 0), 0) || 0;
         setRequiredCalories(total);
+        if (total > 0) setGenForm(f => ({ ...f, maxCaloriesPerDay: total }));
         const count = summaryRes.data?.members?.length || 1;
         setFamilyMembers(count);
         const snacks = snacksRes.data || [];
@@ -625,11 +626,17 @@ export default function DietPlan() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Max Calories/Day: <span className="text-emerald-600">{genForm.maxCaloriesPerDay.toLocaleString()} kcal</span></label>
-                  <input type="range" min={1200} max={3500} step={100} value={genForm.maxCaloriesPerDay}
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Max Calories/Day: <span className="text-emerald-600">{genForm.maxCaloriesPerDay.toLocaleString()} kcal</span>
+                    {requiredCalories > 0 && <span className="text-xs text-gray-400 ml-2">(family required: {requiredCalories.toLocaleString()} kcal)</span>}
+                  </label>
+                  <input type="range" min={0} max={requiredCalories > 0 ? requiredCalories : 3500} step={50} value={genForm.maxCaloriesPerDay}
                     onChange={e => setGenForm(f => ({ ...f, maxCaloriesPerDay: Number(e.target.value) }))}
                     className="w-full accent-emerald-600" />
-                  <div className="flex justify-between text-xs text-gray-400 mt-1"><span>1,200</span><span>3,500</span></div>
+                  <div className="flex justify-between text-xs text-gray-400 mt-1">
+                    <span>0</span>
+                    <span>{requiredCalories > 0 ? requiredCalories.toLocaleString() : '3,500'} kcal</span>
+                  </div>
                 </div>
 
                 <label className="flex items-center gap-3 cursor-pointer">
