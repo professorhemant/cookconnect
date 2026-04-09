@@ -830,61 +830,7 @@ const menuData = [
   }
 ,
   {
-    meal_type: 'breakfast', name: 'Aloo Paratha Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 15, cook_time_minutes: 21, servings: 1,
-    calories_per_serving: 517, protein_g: 7.0, carbs_g: 57.0, fat_g: 15.0, fiber_g: 3.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Aloo Paratha Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 15, cook_time_minutes: 21, servings: 1,
-    calories_per_serving: 517, protein_g: 7.0, carbs_g: 57.0, fat_g: 15.0, fiber_g: 3.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Aloo Paratha Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 15, cook_time_minutes: 21, servings: 1,
-    calories_per_serving: 517, protein_g: 7.0, carbs_g: 57.0, fat_g: 15.0, fiber_g: 3.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
     meal_type: 'breakfast', name: 'Banana Shake', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 6, cook_time_minutes: 14, servings: 1,
-    calories_per_serving: 398, protein_g: 23.0, carbs_g: 55.0, fat_g: 17.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Banana Shake Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 6, cook_time_minutes: 14, servings: 1,
-    calories_per_serving: 398, protein_g: 23.0, carbs_g: 55.0, fat_g: 17.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Banana Shake Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 6, cook_time_minutes: 14, servings: 1,
-    calories_per_serving: 398, protein_g: 23.0, carbs_g: 55.0, fat_g: 17.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Banana Shake Variant 3', cuisine_type: 'Indian',
     description: '',
     prep_time_minutes: 6, cook_time_minutes: 14, servings: 1,
     calories_per_serving: 398, protein_g: 23.0, carbs_g: 55.0, fat_g: 17.0, fiber_g: 7.0,
@@ -902,61 +848,7 @@ const menuData = [
     ingredients: []
   },
   {
-    meal_type: 'breakfast', name: 'Besan Cheela Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 18, cook_time_minutes: 15, servings: 1,
-    calories_per_serving: 319, protein_g: 10.0, carbs_g: 40.0, fat_g: 11.0, fiber_g: 2.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Besan Cheela Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 18, cook_time_minutes: 15, servings: 1,
-    calories_per_serving: 319, protein_g: 10.0, carbs_g: 40.0, fat_g: 11.0, fiber_g: 2.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Besan Cheela Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 18, cook_time_minutes: 15, servings: 1,
-    calories_per_serving: 319, protein_g: 10.0, carbs_g: 40.0, fat_g: 11.0, fiber_g: 2.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
     meal_type: 'breakfast', name: 'Cornflakes Milk', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 6, cook_time_minutes: 11, servings: 1,
-    calories_per_serving: 503, protein_g: 13.0, carbs_g: 57.0, fat_g: 15.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Cornflakes Milk Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 6, cook_time_minutes: 11, servings: 1,
-    calories_per_serving: 503, protein_g: 13.0, carbs_g: 57.0, fat_g: 15.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Cornflakes Milk Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 6, cook_time_minutes: 11, servings: 1,
-    calories_per_serving: 503, protein_g: 13.0, carbs_g: 57.0, fat_g: 15.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Cornflakes Milk Variant 3', cuisine_type: 'Indian',
     description: '',
     prep_time_minutes: 6, cook_time_minutes: 11, servings: 1,
     calories_per_serving: 503, protein_g: 13.0, carbs_g: 57.0, fat_g: 15.0, fiber_g: 7.0,
@@ -974,253 +866,10 @@ const menuData = [
     ingredients: []
   },
   {
-    meal_type: 'breakfast', name: 'Dosa Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 17, cook_time_minutes: 24, servings: 1,
-    calories_per_serving: 410, protein_g: 11.0, carbs_g: 70.0, fat_g: 24.0, fiber_g: 2.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Dosa Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 17, cook_time_minutes: 24, servings: 1,
-    calories_per_serving: 410, protein_g: 11.0, carbs_g: 70.0, fat_g: 24.0, fiber_g: 2.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Dosa Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 17, cook_time_minutes: 24, servings: 1,
-    calories_per_serving: 410, protein_g: 11.0, carbs_g: 70.0, fat_g: 24.0, fiber_g: 2.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Fruit Bowl Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 7, cook_time_minutes: 30, servings: 1,
-    calories_per_serving: 324, protein_g: 17.0, carbs_g: 54.0, fat_g: 9.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Fruit Bowl Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 7, cook_time_minutes: 30, servings: 1,
-    calories_per_serving: 324, protein_g: 17.0, carbs_g: 54.0, fat_g: 9.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Fruit Bowl Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 7, cook_time_minutes: 30, servings: 1,
-    calories_per_serving: 324, protein_g: 17.0, carbs_g: 54.0, fat_g: 9.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Idli Sambar Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 17, cook_time_minutes: 20, servings: 1,
-    calories_per_serving: 467, protein_g: 10.0, carbs_g: 24.0, fat_g: 14.0, fiber_g: 4.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Idli Sambar Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 17, cook_time_minutes: 20, servings: 1,
-    calories_per_serving: 467, protein_g: 10.0, carbs_g: 24.0, fat_g: 14.0, fiber_g: 4.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Idli Sambar Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 17, cook_time_minutes: 20, servings: 1,
-    calories_per_serving: 467, protein_g: 10.0, carbs_g: 24.0, fat_g: 14.0, fiber_g: 4.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Masala Dosa Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 5, cook_time_minutes: 32, servings: 1,
-    calories_per_serving: 188, protein_g: 22.0, carbs_g: 59.0, fat_g: 18.0, fiber_g: 4.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Masala Dosa Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 5, cook_time_minutes: 32, servings: 1,
-    calories_per_serving: 188, protein_g: 22.0, carbs_g: 59.0, fat_g: 18.0, fiber_g: 4.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Masala Dosa Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 5, cook_time_minutes: 32, servings: 1,
-    calories_per_serving: 188, protein_g: 22.0, carbs_g: 59.0, fat_g: 18.0, fiber_g: 4.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Moong Dal Chilla Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 17, cook_time_minutes: 17, servings: 1,
-    calories_per_serving: 294, protein_g: 5.0, carbs_g: 51.0, fat_g: 22.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Moong Dal Chilla Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 17, cook_time_minutes: 17, servings: 1,
-    calories_per_serving: 294, protein_g: 5.0, carbs_g: 51.0, fat_g: 22.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Moong Dal Chilla Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 17, cook_time_minutes: 17, servings: 1,
-    calories_per_serving: 294, protein_g: 5.0, carbs_g: 51.0, fat_g: 22.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
     meal_type: 'breakfast', name: 'Oats Porridge', cuisine_type: 'Indian',
     description: '',
     prep_time_minutes: 6, cook_time_minutes: 14, servings: 1,
     calories_per_serving: 482, protein_g: 25.0, carbs_g: 20.0, fat_g: 8.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Oats Porridge Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 6, cook_time_minutes: 14, servings: 1,
-    calories_per_serving: 482, protein_g: 25.0, carbs_g: 20.0, fat_g: 8.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Oats Porridge Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 6, cook_time_minutes: 14, servings: 1,
-    calories_per_serving: 482, protein_g: 25.0, carbs_g: 20.0, fat_g: 8.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Oats Porridge Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 6, cook_time_minutes: 14, servings: 1,
-    calories_per_serving: 482, protein_g: 25.0, carbs_g: 20.0, fat_g: 8.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Paneer Paratha Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 13, cook_time_minutes: 12, servings: 1,
-    calories_per_serving: 366, protein_g: 22.0, carbs_g: 50.0, fat_g: 8.0, fiber_g: 10.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Paneer Paratha Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 13, cook_time_minutes: 12, servings: 1,
-    calories_per_serving: 366, protein_g: 22.0, carbs_g: 50.0, fat_g: 8.0, fiber_g: 10.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Paneer Paratha Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 13, cook_time_minutes: 12, servings: 1,
-    calories_per_serving: 366, protein_g: 22.0, carbs_g: 50.0, fat_g: 8.0, fiber_g: 10.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Paneer Sandwich Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 13, cook_time_minutes: 21, servings: 1,
-    calories_per_serving: 501, protein_g: 10.0, carbs_g: 67.0, fat_g: 5.0, fiber_g: 8.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Paneer Sandwich Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 13, cook_time_minutes: 21, servings: 1,
-    calories_per_serving: 501, protein_g: 10.0, carbs_g: 67.0, fat_g: 5.0, fiber_g: 8.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Paneer Sandwich Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 13, cook_time_minutes: 21, servings: 1,
-    calories_per_serving: 501, protein_g: 10.0, carbs_g: 67.0, fat_g: 5.0, fiber_g: 8.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Poha Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 16, cook_time_minutes: 13, servings: 1,
-    calories_per_serving: 427, protein_g: 7.0, carbs_g: 58.0, fat_g: 22.0, fiber_g: 4.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Poha Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 16, cook_time_minutes: 13, servings: 1,
-    calories_per_serving: 427, protein_g: 7.0, carbs_g: 58.0, fat_g: 22.0, fiber_g: 4.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Poha Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 16, cook_time_minutes: 13, servings: 1,
-    calories_per_serving: 427, protein_g: 7.0, carbs_g: 58.0, fat_g: 22.0, fiber_g: 4.0,
     kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
     is_vegetarian: true, is_vegan: false,
     ingredients: []
@@ -1235,114 +884,6 @@ const menuData = [
     ingredients: []
   },
   {
-    meal_type: 'breakfast', name: 'Rava Idli Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 16, cook_time_minutes: 12, servings: 1,
-    calories_per_serving: 492, protein_g: 9.0, carbs_g: 26.0, fat_g: 10.0, fiber_g: 4.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Rava Idli Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 16, cook_time_minutes: 12, servings: 1,
-    calories_per_serving: 492, protein_g: 9.0, carbs_g: 26.0, fat_g: 10.0, fiber_g: 4.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Rava Idli Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 16, cook_time_minutes: 12, servings: 1,
-    calories_per_serving: 492, protein_g: 9.0, carbs_g: 26.0, fat_g: 10.0, fiber_g: 4.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Sabudana Khichdi Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 10, cook_time_minutes: 23, servings: 1,
-    calories_per_serving: 184, protein_g: 9.0, carbs_g: 57.0, fat_g: 15.0, fiber_g: 6.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Sabudana Khichdi Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 10, cook_time_minutes: 23, servings: 1,
-    calories_per_serving: 184, protein_g: 9.0, carbs_g: 57.0, fat_g: 15.0, fiber_g: 6.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Sabudana Khichdi Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 10, cook_time_minutes: 23, servings: 1,
-    calories_per_serving: 184, protein_g: 9.0, carbs_g: 57.0, fat_g: 15.0, fiber_g: 6.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Sprouts Salad Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 7, cook_time_minutes: 13, servings: 1,
-    calories_per_serving: 182, protein_g: 9.0, carbs_g: 29.0, fat_g: 18.0, fiber_g: 3.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Sprouts Salad Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 7, cook_time_minutes: 13, servings: 1,
-    calories_per_serving: 182, protein_g: 9.0, carbs_g: 29.0, fat_g: 18.0, fiber_g: 3.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Sprouts Salad Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 7, cook_time_minutes: 13, servings: 1,
-    calories_per_serving: 182, protein_g: 9.0, carbs_g: 29.0, fat_g: 18.0, fiber_g: 3.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Upma Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 12, cook_time_minutes: 13, servings: 1,
-    calories_per_serving: 384, protein_g: 6.0, carbs_g: 45.0, fat_g: 19.0, fiber_g: 2.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Upma Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 12, cook_time_minutes: 13, servings: 1,
-    calories_per_serving: 384, protein_g: 6.0, carbs_g: 45.0, fat_g: 19.0, fiber_g: 2.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Upma Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 12, cook_time_minutes: 13, servings: 1,
-    calories_per_serving: 384, protein_g: 6.0, carbs_g: 45.0, fat_g: 19.0, fiber_g: 2.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
     meal_type: 'breakfast', name: 'Vegetable Poha', cuisine_type: 'Indian',
     description: '',
     prep_time_minutes: 11, cook_time_minutes: 11, servings: 1,
@@ -1352,88 +893,7 @@ const menuData = [
     ingredients: []
   },
   {
-    meal_type: 'breakfast', name: 'Vegetable Poha Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 11, cook_time_minutes: 11, servings: 1,
-    calories_per_serving: 497, protein_g: 6.0, carbs_g: 45.0, fat_g: 23.0, fiber_g: 6.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Vegetable Poha Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 11, cook_time_minutes: 11, servings: 1,
-    calories_per_serving: 497, protein_g: 6.0, carbs_g: 45.0, fat_g: 23.0, fiber_g: 6.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Vegetable Poha Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 11, cook_time_minutes: 11, servings: 1,
-    calories_per_serving: 497, protein_g: 6.0, carbs_g: 45.0, fat_g: 23.0, fiber_g: 6.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Vegetable Sandwich Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 18, cook_time_minutes: 16, servings: 1,
-    calories_per_serving: 511, protein_g: 10.0, carbs_g: 21.0, fat_g: 24.0, fiber_g: 10.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Vegetable Sandwich Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 18, cook_time_minutes: 16, servings: 1,
-    calories_per_serving: 511, protein_g: 10.0, carbs_g: 21.0, fat_g: 24.0, fiber_g: 10.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Vegetable Sandwich Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 18, cook_time_minutes: 16, servings: 1,
-    calories_per_serving: 511, protein_g: 10.0, carbs_g: 21.0, fat_g: 24.0, fiber_g: 10.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
     meal_type: 'breakfast', name: 'Vegetable Uttapam', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 14, cook_time_minutes: 21, servings: 1,
-    calories_per_serving: 187, protein_g: 8.0, carbs_g: 20.0, fat_g: 18.0, fiber_g: 5.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Vegetable Uttapam Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 14, cook_time_minutes: 21, servings: 1,
-    calories_per_serving: 187, protein_g: 8.0, carbs_g: 20.0, fat_g: 18.0, fiber_g: 5.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Vegetable Uttapam Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 14, cook_time_minutes: 21, servings: 1,
-    calories_per_serving: 187, protein_g: 8.0, carbs_g: 20.0, fat_g: 18.0, fiber_g: 5.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Vegetable Uttapam Variant 3', cuisine_type: 'Indian',
     description: '',
     prep_time_minutes: 14, cook_time_minutes: 21, servings: 1,
     calories_per_serving: 187, protein_g: 8.0, carbs_g: 20.0, fat_g: 18.0, fiber_g: 5.0,
@@ -1451,61 +911,7 @@ const menuData = [
     ingredients: []
   },
   {
-    meal_type: 'dinner', name: 'Coconut Rice Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 20, cook_time_minutes: 25, servings: 1,
-    calories_per_serving: 186, protein_g: 6.0, carbs_g: 26.0, fat_g: 9.0, fiber_g: 4.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Coconut Rice Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 20, cook_time_minutes: 25, servings: 1,
-    calories_per_serving: 186, protein_g: 6.0, carbs_g: 26.0, fat_g: 9.0, fiber_g: 4.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Coconut Rice Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 20, cook_time_minutes: 25, servings: 1,
-    calories_per_serving: 186, protein_g: 6.0, carbs_g: 26.0, fat_g: 9.0, fiber_g: 4.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
     meal_type: 'dinner', name: 'Curd Rice', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 20, cook_time_minutes: 14, servings: 1,
-    calories_per_serving: 302, protein_g: 8.0, carbs_g: 36.0, fat_g: 25.0, fiber_g: 4.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Curd Rice Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 20, cook_time_minutes: 14, servings: 1,
-    calories_per_serving: 302, protein_g: 8.0, carbs_g: 36.0, fat_g: 25.0, fiber_g: 4.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Curd Rice Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 20, cook_time_minutes: 14, servings: 1,
-    calories_per_serving: 302, protein_g: 8.0, carbs_g: 36.0, fat_g: 25.0, fiber_g: 4.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Curd Rice Variant 3', cuisine_type: 'Indian',
     description: '',
     prep_time_minutes: 20, cook_time_minutes: 14, servings: 1,
     calories_per_serving: 302, protein_g: 8.0, carbs_g: 36.0, fat_g: 25.0, fiber_g: 4.0,
@@ -1523,61 +929,7 @@ const menuData = [
     ingredients: []
   },
   {
-    meal_type: 'dinner', name: 'Dal Khichdi Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 7, cook_time_minutes: 27, servings: 1,
-    calories_per_serving: 192, protein_g: 15.0, carbs_g: 45.0, fat_g: 14.0, fiber_g: 4.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Dal Khichdi Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 7, cook_time_minutes: 27, servings: 1,
-    calories_per_serving: 192, protein_g: 15.0, carbs_g: 45.0, fat_g: 14.0, fiber_g: 4.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Dal Khichdi Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 7, cook_time_minutes: 27, servings: 1,
-    calories_per_serving: 192, protein_g: 15.0, carbs_g: 45.0, fat_g: 14.0, fiber_g: 4.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
     meal_type: 'dinner', name: 'Grilled Veggies', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 12, cook_time_minutes: 33, servings: 1,
-    calories_per_serving: 483, protein_g: 23.0, carbs_g: 29.0, fat_g: 10.0, fiber_g: 10.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Grilled Veggies Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 12, cook_time_minutes: 33, servings: 1,
-    calories_per_serving: 483, protein_g: 23.0, carbs_g: 29.0, fat_g: 10.0, fiber_g: 10.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Grilled Veggies Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 12, cook_time_minutes: 33, servings: 1,
-    calories_per_serving: 483, protein_g: 23.0, carbs_g: 29.0, fat_g: 10.0, fiber_g: 10.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Grilled Veggies Variant 3', cuisine_type: 'Indian',
     description: '',
     prep_time_minutes: 12, cook_time_minutes: 33, servings: 1,
     calories_per_serving: 483, protein_g: 23.0, carbs_g: 29.0, fat_g: 10.0, fiber_g: 10.0,
@@ -1595,88 +947,7 @@ const menuData = [
     ingredients: []
   },
   {
-    meal_type: 'dinner', name: 'Hakka Noodles Veg Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 14, cook_time_minutes: 32, servings: 1,
-    calories_per_serving: 285, protein_g: 6.0, carbs_g: 57.0, fat_g: 24.0, fiber_g: 8.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Hakka Noodles Veg Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 14, cook_time_minutes: 32, servings: 1,
-    calories_per_serving: 285, protein_g: 6.0, carbs_g: 57.0, fat_g: 24.0, fiber_g: 8.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Hakka Noodles Veg Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 14, cook_time_minutes: 32, servings: 1,
-    calories_per_serving: 285, protein_g: 6.0, carbs_g: 57.0, fat_g: 24.0, fiber_g: 8.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Khichdi Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 19, cook_time_minutes: 11, servings: 1,
-    calories_per_serving: 220, protein_g: 6.0, carbs_g: 69.0, fat_g: 8.0, fiber_g: 9.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Khichdi Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 19, cook_time_minutes: 11, servings: 1,
-    calories_per_serving: 220, protein_g: 6.0, carbs_g: 69.0, fat_g: 8.0, fiber_g: 9.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Khichdi Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 19, cook_time_minutes: 11, servings: 1,
-    calories_per_serving: 220, protein_g: 6.0, carbs_g: 69.0, fat_g: 8.0, fiber_g: 9.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
     meal_type: 'dinner', name: 'Lemon Rice', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 20, cook_time_minutes: 34, servings: 1,
-    calories_per_serving: 309, protein_g: 5.0, carbs_g: 44.0, fat_g: 21.0, fiber_g: 2.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Lemon Rice Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 20, cook_time_minutes: 34, servings: 1,
-    calories_per_serving: 309, protein_g: 5.0, carbs_g: 44.0, fat_g: 21.0, fiber_g: 2.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Lemon Rice Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 20, cook_time_minutes: 34, servings: 1,
-    calories_per_serving: 309, protein_g: 5.0, carbs_g: 44.0, fat_g: 21.0, fiber_g: 2.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Lemon Rice Variant 3', cuisine_type: 'Indian',
     description: '',
     prep_time_minutes: 20, cook_time_minutes: 34, servings: 1,
     calories_per_serving: 309, protein_g: 5.0, carbs_g: 44.0, fat_g: 21.0, fiber_g: 2.0,
@@ -1694,61 +965,7 @@ const menuData = [
     ingredients: []
   },
   {
-    meal_type: 'dinner', name: 'Macaroni Veg Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 8, cook_time_minutes: 24, servings: 1,
-    calories_per_serving: 280, protein_g: 17.0, carbs_g: 44.0, fat_g: 24.0, fiber_g: 6.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Macaroni Veg Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 8, cook_time_minutes: 24, servings: 1,
-    calories_per_serving: 280, protein_g: 17.0, carbs_g: 44.0, fat_g: 24.0, fiber_g: 6.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Macaroni Veg Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 8, cook_time_minutes: 24, servings: 1,
-    calories_per_serving: 280, protein_g: 17.0, carbs_g: 44.0, fat_g: 24.0, fiber_g: 6.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
     meal_type: 'dinner', name: 'Paneer Bhurji', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 17, cook_time_minutes: 29, servings: 1,
-    calories_per_serving: 317, protein_g: 24.0, carbs_g: 56.0, fat_g: 17.0, fiber_g: 2.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Paneer Bhurji Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 17, cook_time_minutes: 29, servings: 1,
-    calories_per_serving: 317, protein_g: 24.0, carbs_g: 56.0, fat_g: 17.0, fiber_g: 2.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Paneer Bhurji Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 17, cook_time_minutes: 29, servings: 1,
-    calories_per_serving: 317, protein_g: 24.0, carbs_g: 56.0, fat_g: 17.0, fiber_g: 2.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Paneer Bhurji Variant 3', cuisine_type: 'Indian',
     description: '',
     prep_time_minutes: 17, cook_time_minutes: 29, servings: 1,
     calories_per_serving: 317, protein_g: 24.0, carbs_g: 56.0, fat_g: 17.0, fiber_g: 2.0,
@@ -1766,61 +983,7 @@ const menuData = [
     ingredients: []
   },
   {
-    meal_type: 'dinner', name: 'Paneer Tikka Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 19, cook_time_minutes: 24, servings: 1,
-    calories_per_serving: 497, protein_g: 19.0, carbs_g: 52.0, fat_g: 15.0, fiber_g: 9.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Paneer Tikka Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 19, cook_time_minutes: 24, servings: 1,
-    calories_per_serving: 497, protein_g: 19.0, carbs_g: 52.0, fat_g: 15.0, fiber_g: 9.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Paneer Tikka Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 19, cook_time_minutes: 24, servings: 1,
-    calories_per_serving: 497, protein_g: 19.0, carbs_g: 52.0, fat_g: 15.0, fiber_g: 9.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
     meal_type: 'dinner', name: 'Spinach Soup', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 17, cook_time_minutes: 12, servings: 1,
-    calories_per_serving: 279, protein_g: 14.0, carbs_g: 52.0, fat_g: 15.0, fiber_g: 4.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Spinach Soup Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 17, cook_time_minutes: 12, servings: 1,
-    calories_per_serving: 279, protein_g: 14.0, carbs_g: 52.0, fat_g: 15.0, fiber_g: 4.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Spinach Soup Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 17, cook_time_minutes: 12, servings: 1,
-    calories_per_serving: 279, protein_g: 14.0, carbs_g: 52.0, fat_g: 15.0, fiber_g: 4.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Spinach Soup Variant 3', cuisine_type: 'Indian',
     description: '',
     prep_time_minutes: 17, cook_time_minutes: 12, servings: 1,
     calories_per_serving: 279, protein_g: 14.0, carbs_g: 52.0, fat_g: 15.0, fiber_g: 4.0,
@@ -1838,61 +1001,7 @@ const menuData = [
     ingredients: []
   },
   {
-    meal_type: 'dinner', name: 'Stuffed Paratha Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 6, cook_time_minutes: 28, servings: 1,
-    calories_per_serving: 229, protein_g: 7.0, carbs_g: 64.0, fat_g: 10.0, fiber_g: 5.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Stuffed Paratha Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 6, cook_time_minutes: 28, servings: 1,
-    calories_per_serving: 229, protein_g: 7.0, carbs_g: 64.0, fat_g: 10.0, fiber_g: 5.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Stuffed Paratha Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 6, cook_time_minutes: 28, servings: 1,
-    calories_per_serving: 229, protein_g: 7.0, carbs_g: 64.0, fat_g: 10.0, fiber_g: 5.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
     meal_type: 'dinner', name: 'Sweet Corn Soup', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 10, cook_time_minutes: 31, servings: 1,
-    calories_per_serving: 449, protein_g: 7.0, carbs_g: 48.0, fat_g: 23.0, fiber_g: 10.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Sweet Corn Soup Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 10, cook_time_minutes: 31, servings: 1,
-    calories_per_serving: 449, protein_g: 7.0, carbs_g: 48.0, fat_g: 23.0, fiber_g: 10.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Sweet Corn Soup Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 10, cook_time_minutes: 31, servings: 1,
-    calories_per_serving: 449, protein_g: 7.0, carbs_g: 48.0, fat_g: 23.0, fiber_g: 10.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Sweet Corn Soup Variant 3', cuisine_type: 'Indian',
     description: '',
     prep_time_minutes: 10, cook_time_minutes: 31, servings: 1,
     calories_per_serving: 449, protein_g: 7.0, carbs_g: 48.0, fat_g: 23.0, fiber_g: 10.0,
@@ -1910,61 +1019,7 @@ const menuData = [
     ingredients: []
   },
   {
-    meal_type: 'dinner', name: 'Tomato Soup Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 19, cook_time_minutes: 21, servings: 1,
-    calories_per_serving: 266, protein_g: 25.0, carbs_g: 59.0, fat_g: 21.0, fiber_g: 5.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Tomato Soup Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 19, cook_time_minutes: 21, servings: 1,
-    calories_per_serving: 266, protein_g: 25.0, carbs_g: 59.0, fat_g: 21.0, fiber_g: 5.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Tomato Soup Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 19, cook_time_minutes: 21, servings: 1,
-    calories_per_serving: 266, protein_g: 25.0, carbs_g: 59.0, fat_g: 21.0, fiber_g: 5.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
     meal_type: 'dinner', name: 'Veg Fried Rice', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 15, cook_time_minutes: 31, servings: 1,
-    calories_per_serving: 359, protein_g: 23.0, carbs_g: 25.0, fat_g: 17.0, fiber_g: 10.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Veg Fried Rice Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 15, cook_time_minutes: 31, servings: 1,
-    calories_per_serving: 359, protein_g: 23.0, carbs_g: 25.0, fat_g: 17.0, fiber_g: 10.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Veg Fried Rice Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 15, cook_time_minutes: 31, servings: 1,
-    calories_per_serving: 359, protein_g: 23.0, carbs_g: 25.0, fat_g: 17.0, fiber_g: 10.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Veg Fried Rice Variant 3', cuisine_type: 'Indian',
     description: '',
     prep_time_minutes: 15, cook_time_minutes: 31, servings: 1,
     calories_per_serving: 359, protein_g: 23.0, carbs_g: 25.0, fat_g: 17.0, fiber_g: 10.0,
@@ -1982,61 +1037,7 @@ const menuData = [
     ingredients: []
   },
   {
-    meal_type: 'dinner', name: 'Veg Manchurian Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 18, cook_time_minutes: 22, servings: 1,
-    calories_per_serving: 443, protein_g: 20.0, carbs_g: 34.0, fat_g: 8.0, fiber_g: 5.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Veg Manchurian Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 18, cook_time_minutes: 22, servings: 1,
-    calories_per_serving: 443, protein_g: 20.0, carbs_g: 34.0, fat_g: 8.0, fiber_g: 5.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Veg Manchurian Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 18, cook_time_minutes: 22, servings: 1,
-    calories_per_serving: 443, protein_g: 20.0, carbs_g: 34.0, fat_g: 8.0, fiber_g: 5.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
     meal_type: 'dinner', name: 'Veg Spring Rolls', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 18, cook_time_minutes: 27, servings: 1,
-    calories_per_serving: 281, protein_g: 8.0, carbs_g: 56.0, fat_g: 8.0, fiber_g: 2.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Veg Spring Rolls Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 18, cook_time_minutes: 27, servings: 1,
-    calories_per_serving: 281, protein_g: 8.0, carbs_g: 56.0, fat_g: 8.0, fiber_g: 2.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Veg Spring Rolls Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 18, cook_time_minutes: 27, servings: 1,
-    calories_per_serving: 281, protein_g: 8.0, carbs_g: 56.0, fat_g: 8.0, fiber_g: 2.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Veg Spring Rolls Variant 3', cuisine_type: 'Indian',
     description: '',
     prep_time_minutes: 18, cook_time_minutes: 27, servings: 1,
     calories_per_serving: 281, protein_g: 8.0, carbs_g: 56.0, fat_g: 8.0, fiber_g: 2.0,
@@ -2054,61 +1055,7 @@ const menuData = [
     ingredients: []
   },
   {
-    meal_type: 'dinner', name: 'Vegetable Pasta Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 13, cook_time_minutes: 15, servings: 1,
-    calories_per_serving: 538, protein_g: 14.0, carbs_g: 58.0, fat_g: 6.0, fiber_g: 3.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Vegetable Pasta Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 13, cook_time_minutes: 15, servings: 1,
-    calories_per_serving: 538, protein_g: 14.0, carbs_g: 58.0, fat_g: 6.0, fiber_g: 3.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Vegetable Pasta Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 13, cook_time_minutes: 15, servings: 1,
-    calories_per_serving: 538, protein_g: 14.0, carbs_g: 58.0, fat_g: 6.0, fiber_g: 3.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
     meal_type: 'dinner', name: 'Vegetable Soup', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 16, cook_time_minutes: 10, servings: 1,
-    calories_per_serving: 200, protein_g: 23.0, carbs_g: 64.0, fat_g: 23.0, fiber_g: 9.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Vegetable Soup Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 16, cook_time_minutes: 10, servings: 1,
-    calories_per_serving: 200, protein_g: 23.0, carbs_g: 64.0, fat_g: 23.0, fiber_g: 9.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Vegetable Soup Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 16, cook_time_minutes: 10, servings: 1,
-    calories_per_serving: 200, protein_g: 23.0, carbs_g: 64.0, fat_g: 23.0, fiber_g: 9.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Vegetable Soup Variant 3', cuisine_type: 'Indian',
     description: '',
     prep_time_minutes: 16, cook_time_minutes: 10, servings: 1,
     calories_per_serving: 200, protein_g: 23.0, carbs_g: 64.0, fat_g: 23.0, fiber_g: 9.0,
@@ -2126,61 +1073,7 @@ const menuData = [
     ingredients: []
   },
   {
-    meal_type: 'dinner', name: 'Vegetable Stew Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 7, cook_time_minutes: 20, servings: 1,
-    calories_per_serving: 225, protein_g: 24.0, carbs_g: 61.0, fat_g: 9.0, fiber_g: 5.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Vegetable Stew Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 7, cook_time_minutes: 20, servings: 1,
-    calories_per_serving: 225, protein_g: 24.0, carbs_g: 61.0, fat_g: 9.0, fiber_g: 5.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'dinner', name: 'Vegetable Stew Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 7, cook_time_minutes: 20, servings: 1,
-    calories_per_serving: 225, protein_g: 24.0, carbs_g: 61.0, fat_g: 9.0, fiber_g: 5.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
     meal_type: 'lunch', name: 'Aloo Gobi', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 13, cook_time_minutes: 33, servings: 1,
-    calories_per_serving: 279, protein_g: 14.0, carbs_g: 42.0, fat_g: 8.0, fiber_g: 6.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Aloo Gobi Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 13, cook_time_minutes: 33, servings: 1,
-    calories_per_serving: 279, protein_g: 14.0, carbs_g: 42.0, fat_g: 8.0, fiber_g: 6.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Aloo Gobi Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 13, cook_time_minutes: 33, servings: 1,
-    calories_per_serving: 279, protein_g: 14.0, carbs_g: 42.0, fat_g: 8.0, fiber_g: 6.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Aloo Gobi Variant 3', cuisine_type: 'Indian',
     description: '',
     prep_time_minutes: 13, cook_time_minutes: 33, servings: 1,
     calories_per_serving: 279, protein_g: 14.0, carbs_g: 42.0, fat_g: 8.0, fiber_g: 6.0,
@@ -2198,61 +1091,7 @@ const menuData = [
     ingredients: []
   },
   {
-    meal_type: 'lunch', name: 'Baingan Bharta Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 7, cook_time_minutes: 26, servings: 1,
-    calories_per_serving: 519, protein_g: 14.0, carbs_g: 66.0, fat_g: 14.0, fiber_g: 9.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Baingan Bharta Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 7, cook_time_minutes: 26, servings: 1,
-    calories_per_serving: 519, protein_g: 14.0, carbs_g: 66.0, fat_g: 14.0, fiber_g: 9.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Baingan Bharta Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 7, cook_time_minutes: 26, servings: 1,
-    calories_per_serving: 519, protein_g: 14.0, carbs_g: 66.0, fat_g: 14.0, fiber_g: 9.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
     meal_type: 'lunch', name: 'Bhindi Masala', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 10, cook_time_minutes: 13, servings: 1,
-    calories_per_serving: 408, protein_g: 24.0, carbs_g: 25.0, fat_g: 21.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Bhindi Masala Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 10, cook_time_minutes: 13, servings: 1,
-    calories_per_serving: 408, protein_g: 24.0, carbs_g: 25.0, fat_g: 21.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Bhindi Masala Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 10, cook_time_minutes: 13, servings: 1,
-    calories_per_serving: 408, protein_g: 24.0, carbs_g: 25.0, fat_g: 21.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Bhindi Masala Variant 3', cuisine_type: 'Indian',
     description: '',
     prep_time_minutes: 10, cook_time_minutes: 13, servings: 1,
     calories_per_serving: 408, protein_g: 24.0, carbs_g: 25.0, fat_g: 21.0, fiber_g: 7.0,
@@ -2270,61 +1109,7 @@ const menuData = [
     ingredients: []
   },
   {
-    meal_type: 'lunch', name: 'Chole Chawal Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 13, cook_time_minutes: 18, servings: 1,
-    calories_per_serving: 458, protein_g: 14.0, carbs_g: 53.0, fat_g: 8.0, fiber_g: 5.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Chole Chawal Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 13, cook_time_minutes: 18, servings: 1,
-    calories_per_serving: 458, protein_g: 14.0, carbs_g: 53.0, fat_g: 8.0, fiber_g: 5.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Chole Chawal Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 13, cook_time_minutes: 18, servings: 1,
-    calories_per_serving: 458, protein_g: 14.0, carbs_g: 53.0, fat_g: 8.0, fiber_g: 5.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
     meal_type: 'lunch', name: 'Dal Tadka Rice', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 16, cook_time_minutes: 33, servings: 1,
-    calories_per_serving: 468, protein_g: 19.0, carbs_g: 21.0, fat_g: 14.0, fiber_g: 5.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Dal Tadka Rice Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 16, cook_time_minutes: 33, servings: 1,
-    calories_per_serving: 468, protein_g: 19.0, carbs_g: 21.0, fat_g: 14.0, fiber_g: 5.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Dal Tadka Rice Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 16, cook_time_minutes: 33, servings: 1,
-    calories_per_serving: 468, protein_g: 19.0, carbs_g: 21.0, fat_g: 14.0, fiber_g: 5.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Dal Tadka Rice Variant 3', cuisine_type: 'Indian',
     description: '',
     prep_time_minutes: 16, cook_time_minutes: 33, servings: 1,
     calories_per_serving: 468, protein_g: 19.0, carbs_g: 21.0, fat_g: 14.0, fiber_g: 5.0,
@@ -2342,61 +1127,7 @@ const menuData = [
     ingredients: []
   },
   {
-    meal_type: 'lunch', name: 'Jeera Rice Dal Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 6, cook_time_minutes: 24, servings: 1,
-    calories_per_serving: 307, protein_g: 6.0, carbs_g: 42.0, fat_g: 10.0, fiber_g: 2.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Jeera Rice Dal Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 6, cook_time_minutes: 24, servings: 1,
-    calories_per_serving: 307, protein_g: 6.0, carbs_g: 42.0, fat_g: 10.0, fiber_g: 2.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Jeera Rice Dal Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 6, cook_time_minutes: 24, servings: 1,
-    calories_per_serving: 307, protein_g: 6.0, carbs_g: 42.0, fat_g: 10.0, fiber_g: 2.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
     meal_type: 'lunch', name: 'Kadhi Chawal', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 15, cook_time_minutes: 35, servings: 1,
-    calories_per_serving: 204, protein_g: 23.0, carbs_g: 53.0, fat_g: 15.0, fiber_g: 9.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Kadhi Chawal Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 15, cook_time_minutes: 35, servings: 1,
-    calories_per_serving: 204, protein_g: 23.0, carbs_g: 53.0, fat_g: 15.0, fiber_g: 9.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Kadhi Chawal Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 15, cook_time_minutes: 35, servings: 1,
-    calories_per_serving: 204, protein_g: 23.0, carbs_g: 53.0, fat_g: 15.0, fiber_g: 9.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Kadhi Chawal Variant 3', cuisine_type: 'Indian',
     description: '',
     prep_time_minutes: 15, cook_time_minutes: 35, servings: 1,
     calories_per_serving: 204, protein_g: 23.0, carbs_g: 53.0, fat_g: 15.0, fiber_g: 9.0,
@@ -2414,61 +1145,7 @@ const menuData = [
     ingredients: []
   },
   {
-    meal_type: 'lunch', name: 'Lauki Sabzi Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 6, cook_time_minutes: 12, servings: 1,
-    calories_per_serving: 540, protein_g: 22.0, carbs_g: 24.0, fat_g: 12.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Lauki Sabzi Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 6, cook_time_minutes: 12, servings: 1,
-    calories_per_serving: 540, protein_g: 22.0, carbs_g: 24.0, fat_g: 12.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Lauki Sabzi Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 6, cook_time_minutes: 12, servings: 1,
-    calories_per_serving: 540, protein_g: 22.0, carbs_g: 24.0, fat_g: 12.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
     meal_type: 'lunch', name: 'Matar Paneer', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 6, cook_time_minutes: 16, servings: 1,
-    calories_per_serving: 185, protein_g: 24.0, carbs_g: 57.0, fat_g: 5.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Matar Paneer Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 6, cook_time_minutes: 16, servings: 1,
-    calories_per_serving: 185, protein_g: 24.0, carbs_g: 57.0, fat_g: 5.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Matar Paneer Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 6, cook_time_minutes: 16, servings: 1,
-    calories_per_serving: 185, protein_g: 24.0, carbs_g: 57.0, fat_g: 5.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Matar Paneer Variant 3', cuisine_type: 'Indian',
     description: '',
     prep_time_minutes: 6, cook_time_minutes: 16, servings: 1,
     calories_per_serving: 185, protein_g: 24.0, carbs_g: 57.0, fat_g: 5.0, fiber_g: 7.0,
@@ -2486,61 +1163,7 @@ const menuData = [
     ingredients: []
   },
   {
-    meal_type: 'lunch', name: 'Mixed Veg Curry Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 20, cook_time_minutes: 28, servings: 1,
-    calories_per_serving: 360, protein_g: 19.0, carbs_g: 57.0, fat_g: 12.0, fiber_g: 10.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Mixed Veg Curry Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 20, cook_time_minutes: 28, servings: 1,
-    calories_per_serving: 360, protein_g: 19.0, carbs_g: 57.0, fat_g: 12.0, fiber_g: 10.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Mixed Veg Curry Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 20, cook_time_minutes: 28, servings: 1,
-    calories_per_serving: 360, protein_g: 19.0, carbs_g: 57.0, fat_g: 12.0, fiber_g: 10.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
     meal_type: 'lunch', name: 'Palak Paneer', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 19, cook_time_minutes: 18, servings: 1,
-    calories_per_serving: 371, protein_g: 5.0, carbs_g: 69.0, fat_g: 10.0, fiber_g: 10.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Palak Paneer Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 19, cook_time_minutes: 18, servings: 1,
-    calories_per_serving: 371, protein_g: 5.0, carbs_g: 69.0, fat_g: 10.0, fiber_g: 10.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Palak Paneer Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 19, cook_time_minutes: 18, servings: 1,
-    calories_per_serving: 371, protein_g: 5.0, carbs_g: 69.0, fat_g: 10.0, fiber_g: 10.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Palak Paneer Variant 3', cuisine_type: 'Indian',
     description: '',
     prep_time_minutes: 19, cook_time_minutes: 18, servings: 1,
     calories_per_serving: 371, protein_g: 5.0, carbs_g: 69.0, fat_g: 10.0, fiber_g: 10.0,
@@ -2558,88 +1181,7 @@ const menuData = [
     ingredients: []
   },
   {
-    meal_type: 'lunch', name: 'Paneer Butter Masala Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 14, cook_time_minutes: 12, servings: 1,
-    calories_per_serving: 529, protein_g: 13.0, carbs_g: 22.0, fat_g: 22.0, fiber_g: 3.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Paneer Butter Masala Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 14, cook_time_minutes: 12, servings: 1,
-    calories_per_serving: 529, protein_g: 13.0, carbs_g: 22.0, fat_g: 22.0, fiber_g: 3.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Paneer Butter Masala Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 14, cook_time_minutes: 12, servings: 1,
-    calories_per_serving: 529, protein_g: 13.0, carbs_g: 22.0, fat_g: 22.0, fiber_g: 3.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Rajma Chawal Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 15, cook_time_minutes: 34, servings: 1,
-    calories_per_serving: 322, protein_g: 16.0, carbs_g: 64.0, fat_g: 23.0, fiber_g: 2.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Rajma Chawal Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 15, cook_time_minutes: 34, servings: 1,
-    calories_per_serving: 322, protein_g: 16.0, carbs_g: 64.0, fat_g: 23.0, fiber_g: 2.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Rajma Chawal Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 15, cook_time_minutes: 34, servings: 1,
-    calories_per_serving: 322, protein_g: 16.0, carbs_g: 64.0, fat_g: 23.0, fiber_g: 2.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
     meal_type: 'lunch', name: 'Soyabean Curry', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 12, cook_time_minutes: 18, servings: 1,
-    calories_per_serving: 539, protein_g: 15.0, carbs_g: 70.0, fat_g: 15.0, fiber_g: 8.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Soyabean Curry Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 12, cook_time_minutes: 18, servings: 1,
-    calories_per_serving: 539, protein_g: 15.0, carbs_g: 70.0, fat_g: 15.0, fiber_g: 8.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Soyabean Curry Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 12, cook_time_minutes: 18, servings: 1,
-    calories_per_serving: 539, protein_g: 15.0, carbs_g: 70.0, fat_g: 15.0, fiber_g: 8.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Soyabean Curry Variant 3', cuisine_type: 'Indian',
     description: '',
     prep_time_minutes: 12, cook_time_minutes: 18, servings: 1,
     calories_per_serving: 539, protein_g: 15.0, carbs_g: 70.0, fat_g: 15.0, fiber_g: 8.0,
@@ -2657,61 +1199,7 @@ const menuData = [
     ingredients: []
   },
   {
-    meal_type: 'lunch', name: 'Stuffed Capsicum Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 11, cook_time_minutes: 32, servings: 1,
-    calories_per_serving: 404, protein_g: 19.0, carbs_g: 30.0, fat_g: 21.0, fiber_g: 4.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Stuffed Capsicum Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 11, cook_time_minutes: 32, servings: 1,
-    calories_per_serving: 404, protein_g: 19.0, carbs_g: 30.0, fat_g: 21.0, fiber_g: 4.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Stuffed Capsicum Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 11, cook_time_minutes: 32, servings: 1,
-    calories_per_serving: 404, protein_g: 19.0, carbs_g: 30.0, fat_g: 21.0, fiber_g: 4.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
     meal_type: 'lunch', name: 'Tinda Masala', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 7, cook_time_minutes: 30, servings: 1,
-    calories_per_serving: 473, protein_g: 20.0, carbs_g: 66.0, fat_g: 11.0, fiber_g: 3.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Tinda Masala Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 7, cook_time_minutes: 30, servings: 1,
-    calories_per_serving: 473, protein_g: 20.0, carbs_g: 66.0, fat_g: 11.0, fiber_g: 3.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Tinda Masala Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 7, cook_time_minutes: 30, servings: 1,
-    calories_per_serving: 473, protein_g: 20.0, carbs_g: 66.0, fat_g: 11.0, fiber_g: 3.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Tinda Masala Variant 3', cuisine_type: 'Indian',
     description: '',
     prep_time_minutes: 7, cook_time_minutes: 30, servings: 1,
     calories_per_serving: 473, protein_g: 20.0, carbs_g: 66.0, fat_g: 11.0, fiber_g: 3.0,
@@ -2729,61 +1217,7 @@ const menuData = [
     ingredients: []
   },
   {
-    meal_type: 'lunch', name: 'Toor Dal Roti Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 20, cook_time_minutes: 27, servings: 1,
-    calories_per_serving: 399, protein_g: 13.0, carbs_g: 31.0, fat_g: 23.0, fiber_g: 10.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Toor Dal Roti Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 20, cook_time_minutes: 27, servings: 1,
-    calories_per_serving: 399, protein_g: 13.0, carbs_g: 31.0, fat_g: 23.0, fiber_g: 10.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Toor Dal Roti Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 20, cook_time_minutes: 27, servings: 1,
-    calories_per_serving: 399, protein_g: 13.0, carbs_g: 31.0, fat_g: 23.0, fiber_g: 10.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
     meal_type: 'lunch', name: 'Veg Biryani', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 14, cook_time_minutes: 23, servings: 1,
-    calories_per_serving: 291, protein_g: 13.0, carbs_g: 30.0, fat_g: 22.0, fiber_g: 8.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Veg Biryani Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 14, cook_time_minutes: 23, servings: 1,
-    calories_per_serving: 291, protein_g: 13.0, carbs_g: 30.0, fat_g: 22.0, fiber_g: 8.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Veg Biryani Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 14, cook_time_minutes: 23, servings: 1,
-    calories_per_serving: 291, protein_g: 13.0, carbs_g: 30.0, fat_g: 22.0, fiber_g: 8.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Veg Biryani Variant 3', cuisine_type: 'Indian',
     description: '',
     prep_time_minutes: 14, cook_time_minutes: 23, servings: 1,
     calories_per_serving: 291, protein_g: 13.0, carbs_g: 30.0, fat_g: 22.0, fiber_g: 8.0,
@@ -2796,60 +1230,6 @@ const menuData = [
     description: '',
     prep_time_minutes: 13, cook_time_minutes: 11, servings: 1,
     calories_per_serving: 431, protein_g: 20.0, carbs_g: 41.0, fat_g: 12.0, fiber_g: 8.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Vegetable Kofta Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 13, cook_time_minutes: 11, servings: 1,
-    calories_per_serving: 431, protein_g: 20.0, carbs_g: 41.0, fat_g: 12.0, fiber_g: 8.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Vegetable Kofta Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 13, cook_time_minutes: 11, servings: 1,
-    calories_per_serving: 431, protein_g: 20.0, carbs_g: 41.0, fat_g: 12.0, fiber_g: 8.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Vegetable Kofta Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 13, cook_time_minutes: 11, servings: 1,
-    calories_per_serving: 431, protein_g: 20.0, carbs_g: 41.0, fat_g: 12.0, fiber_g: 8.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Vegetable Pulao Variant 1', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 16, cook_time_minutes: 26, servings: 1,
-    calories_per_serving: 320, protein_g: 24.0, carbs_g: 38.0, fat_g: 14.0, fiber_g: 3.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Vegetable Pulao Variant 2', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 16, cook_time_minutes: 26, servings: 1,
-    calories_per_serving: 320, protein_g: 24.0, carbs_g: 38.0, fat_g: 14.0, fiber_g: 3.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Vegetable Pulao Variant 3', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 16, cook_time_minutes: 26, servings: 1,
-    calories_per_serving: 320, protein_g: 24.0, carbs_g: 38.0, fat_g: 14.0, fiber_g: 3.0,
     kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
     is_vegetarian: true, is_vegan: false,
     ingredients: []
