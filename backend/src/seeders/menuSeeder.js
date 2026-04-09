@@ -925,15 +925,13 @@ const menuData = [
 ];
 
 async function seedMenu() {
-  // Clear existing data in correct order (to avoid FK constraints)
-  await DietPlanDayItem.destroy({ where: {}, truncate: true });
-  await DietPlanDay.destroy({ where: {}, truncate: true });
-  await DietPlan.destroy({ where: {}, truncate: true });
-
-  // Delete ingredients + menu items
+  // Clear in correct FK order: deepest child first
   const { Ingredient } = require('../models');
-  await Ingredient.destroy({ where: {}, truncate: true });
-  await MenuItem.destroy({ where: {}, truncate: true });
+  await DietPlanDayItem.destroy({ where: {} });
+  await DietPlanDay.destroy({ where: {} });
+  await DietPlan.destroy({ where: {} });
+  await Ingredient.destroy({ where: {} });
+  await MenuItem.destroy({ where: {} });
 
   let created = 0;
   for (const item of menuData) {
