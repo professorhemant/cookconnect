@@ -848,15 +848,6 @@ const menuData = [
     ingredients: []
   },
   {
-    meal_type: 'breakfast', name: 'Cornflakes Milk', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 6, cook_time_minutes: 11, servings: 1,
-    calories_per_serving: 503, protein_g: 13.0, carbs_g: 57.0, fat_g: 15.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
     meal_type: 'breakfast', name: 'Dosa', cuisine_type: 'Indian',
     description: '',
     prep_time_minutes: 17, cook_time_minutes: 24, servings: 1,
