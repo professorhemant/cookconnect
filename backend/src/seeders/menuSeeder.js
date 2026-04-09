@@ -869,7 +869,7 @@ const menuData = [
     meal_type: 'breakfast', name: 'Rava Idli', cuisine_type: 'Indian',
     description: '',
     prep_time_minutes: 16, cook_time_minutes: 12, servings: 1,
-    calories_per_serving: 492, protein_g: 9.0, carbs_g: 26.0, fat_g: 10.0, fiber_g: 4.0,
+    calories_per_serving: 240, protein_g: 7, carbs_g: 38, fat_g: 8, fiber_g: 2,
     kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
     is_vegetarian: true, is_vegan: false,
     ingredients: []
@@ -878,7 +878,7 @@ const menuData = [
     meal_type: 'breakfast', name: 'Vegetable Poha', cuisine_type: 'Indian',
     description: '',
     prep_time_minutes: 11, cook_time_minutes: 11, servings: 1,
-    calories_per_serving: 497, protein_g: 6.0, carbs_g: 45.0, fat_g: 23.0, fiber_g: 6.0,
+    calories_per_serving: 360, protein_g: 6, carbs_g: 55, fat_g: 9, fiber_g: 5,
     kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
     is_vegetarian: true, is_vegan: false,
     ingredients: []
@@ -905,7 +905,7 @@ const menuData = [
     meal_type: 'dinner', name: 'Curd Rice', cuisine_type: 'Indian',
     description: '',
     prep_time_minutes: 20, cook_time_minutes: 14, servings: 1,
-    calories_per_serving: 302, protein_g: 8.0, carbs_g: 36.0, fat_g: 25.0, fiber_g: 4.0,
+    calories_per_serving: 280, protein_g: 8, carbs_g: 44, fat_g: 7, fiber_g: 2,
     kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
     is_vegetarian: true, is_vegan: false,
     ingredients: []
@@ -941,7 +941,7 @@ const menuData = [
     meal_type: 'dinner', name: 'Lemon Rice', cuisine_type: 'Indian',
     description: '',
     prep_time_minutes: 20, cook_time_minutes: 34, servings: 1,
-    calories_per_serving: 309, protein_g: 5.0, carbs_g: 44.0, fat_g: 21.0, fiber_g: 2.0,
+    calories_per_serving: 320, protein_g: 6, carbs_g: 52, fat_g: 11, fiber_g: 2,
     kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
     is_vegetarian: true, is_vegan: false,
     ingredients: []
@@ -1049,7 +1049,7 @@ const menuData = [
     meal_type: 'dinner', name: 'Vegetable Soup', cuisine_type: 'Indian',
     description: '',
     prep_time_minutes: 16, cook_time_minutes: 10, servings: 1,
-    calories_per_serving: 200, protein_g: 23.0, carbs_g: 64.0, fat_g: 23.0, fiber_g: 9.0,
+    calories_per_serving: 90, protein_g: 4, carbs_g: 14, fat_g: 3, fiber_g: 4,
     kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
     is_vegetarian: true, is_vegan: false,
     ingredients: []
@@ -1202,7 +1202,7 @@ const menuData = [
     meal_type: 'lunch', name: 'Toor Dal Roti', cuisine_type: 'Indian',
     description: '',
     prep_time_minutes: 20, cook_time_minutes: 27, servings: 1,
-    calories_per_serving: 399, protein_g: 13.0, carbs_g: 31.0, fat_g: 23.0, fiber_g: 10.0,
+    calories_per_serving: 390, protein_g: 15, carbs_g: 58, fat_g: 11, fiber_g: 9,
     kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
     is_vegetarian: true, is_vegan: false,
     ingredients: []
