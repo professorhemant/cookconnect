@@ -306,25 +306,12 @@ export default function DietPlan() {
 
   function selectMealForDay(dayIdx, mealType, item) {
     const current = dailyMeals[dayIdx]?.[mealType] || [];
-    const isSelected = current.some(i => i.id === item.id);
+    const isSelected = current.length === 1 && current[0].id === item.id;
 
-    if (isSelected) {
-      // Deselect
-      setDailyMeals(prev => ({
-        ...prev,
-        [dayIdx]: { ...prev[dayIdx], [mealType]: current.filter(i => i.id !== item.id) }
-      }));
-      return;
-    }
-
-    // Block if meal kcal limit already reached
-    const mealCal = getMealCalories(dayIdx, mealType);
-    const mealTarget = getMealTarget(mealType);
-    if (mealCal >= mealTarget) return;
-
+    // Deselect if already selected, otherwise replace with just this item (1 per meal)
     setDailyMeals(prev => ({
       ...prev,
-      [dayIdx]: { ...prev[dayIdx], [mealType]: [...current, item] }
+      [dayIdx]: { ...prev[dayIdx], [mealType]: isSelected ? [] : [item] }
     }));
   }
 
@@ -850,24 +837,6 @@ export default function DietPlan() {
                               })}
                             </div>
 
-                            {/* Per-meal limit alert */}
-                            {(() => {
-                              const mealCal = getMealCalories(activeDay, activeMealTab);
-                              const target = getMealTarget(activeMealTab);
-                              if (mealCal >= target && target > 0) {
-                                const meta = MEAL_META.find(m => m.key === activeMealTab);
-                                return (
-                                  <div className="mb-2 flex items-center gap-2 px-3 py-1.5 bg-amber-50 border border-amber-200 rounded-xl shrink-0">
-                                    <AlertTriangle size={13} className="text-amber-500 shrink-0" />
-                                    <span className="text-xs font-bold text-amber-700">
-                                      {meta?.label} limit ({target} kcal) reached — deselect a dish to swap
-                                    </span>
-                                  </div>
-                                );
-                              }
-                              return null;
-                            })()}
-
                             {/* Items list */}
                             <div className="overflow-y-auto flex-1">
                               {loadingMenuItems ? (
@@ -876,14 +845,12 @@ export default function DietPlan() {
                                 <div className="grid grid-cols-1 gap-2">
                                   {(allMenuItems[activeMealTab] || []).map(item => {
                                     const isSelected = (dayMeals[activeMealTab] || []).some(i => i.id === item.id);
-                                    const mealFull = getMealCalories(activeDay, activeMealTab) >= getMealTarget(activeMealTab) && getMealTarget(activeMealTab) > 0;
                                     return (
                                       <button
                                         key={item.id}
                                         onClick={() => selectMealForDay(activeDay, activeMealTab, item)}
-                                        disabled={!isSelected && mealFull}
                                         className={`flex items-center gap-3 p-3 rounded-xl border-2 text-left transition-all ${
-                                          isSelected ? 'border-emerald-500 bg-emerald-50' : mealFull ? 'border-gray-100 bg-gray-50 opacity-40 cursor-not-allowed' : 'border-gray-100 hover:border-gray-200 bg-gray-50'
+                                          isSelected ? 'border-emerald-500 bg-emerald-50' : 'border-gray-100 hover:border-gray-200 bg-gray-50'
                                         }`}
                                       >
                                         <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${
