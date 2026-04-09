@@ -9,6 +9,13 @@ import MealCell from '../components/MealCell';
 import MenuCard from '../components/MenuCard';
 
 const CUISINES = ['Indian', 'North Indian', 'South Indian', 'Punjabi', 'Gujarati', 'Mughal', 'International'];
+const MEAL_RATIOS = { breakfast: 0.25, lunch: 0.35, snack: 0.10, dinner: 0.30 };
+const MEAL_META = [
+  { key: 'breakfast', label: 'Breakfast',      icon: '🌅', pct: 25, color: 'bg-orange-400' },
+  { key: 'lunch',     label: 'Lunch',           icon: '☀️', pct: 35, color: 'bg-blue-400'   },
+  { key: 'snack',     label: 'Snacks/Add-Ons',  icon: '🥗', pct: 10, color: 'bg-purple-400' },
+  { key: 'dinner',    label: 'Dinner',           icon: '🌙', pct: 30, color: 'bg-rose-400'   },
+];
 
 export default function DietPlan() {
   const { currentUser } = useApp();
@@ -20,7 +27,7 @@ export default function DietPlan() {
   const [weekOffset, setWeekOffset] = useState(0);
   const [showGenForm, setShowGenForm] = useState(false);
   const [genStep, setGenStep] = useState(1); // 1 = settings, 2 = meal selection
-  const [allMenuItems, setAllMenuItems] = useState({ breakfast: [], lunch: [], dinner: [], lunchAddon: [], dinnerAddon: [] });
+  const [allMenuItems, setAllMenuItems] = useState({ breakfast: [], lunch: [], dinner: [], snack: [], lunchAddon: [], dinnerAddon: [] });
   const [loadingMenuItems, setLoadingMenuItems] = useState(false);
   const [selectedBreakfast, setSelectedBreakfast] = useState([]);
   const [selectedLunch, setSelectedLunch] = useState([]);
@@ -103,6 +110,7 @@ export default function DietPlan() {
         breakfast: bRes.data || [],
         lunch: lRes.data || [],
         dinner: dRes.data || [],
+        snack: sRes.data || [],
         lunchAddon: sRes.data || [],
         dinnerAddon: sRes.data || [],
       });
@@ -270,25 +278,26 @@ export default function DietPlan() {
 
   const dailyTarget = requiredCalories > 0 ? requiredCalories : genForm.maxCaloriesPerDay;
 
+  function getMealTarget(mealType) {
+    return Math.round(dailyTarget * (MEAL_RATIOS[mealType] || 0));
+  }
+
   function getDayCalories(dayIdx) {
     const d = dailyMeals[dayIdx] || {};
     return (d.breakfast?.calories_per_serving || 0) +
            (d.lunch?.calories_per_serving || 0) +
+           (d.snack?.calories_per_serving || 0) +
            (d.dinner?.calories_per_serving || 0);
   }
 
   function selectMealForDay(dayIdx, mealType, item) {
     const d = dailyMeals[dayIdx] || {};
-    const currentMealCal = d[mealType]?.calories_per_serving || 0;
-    const otherCal = getDayCalories(dayIdx) - currentMealCal;
-    const newTotal = otherCal + item.calories_per_serving;
-    setDailyMeals(prev => ({
-      ...prev,
-      [dayIdx]: { ...prev[dayIdx], [mealType]: item }
-    }));
-    if (newTotal >= dailyTarget) {
-      // alert shown via UI state — no window.alert
+    // Toggle off if same item clicked again
+    if (d[mealType]?.id === item.id) {
+      setDailyMeals(prev => ({ ...prev, [dayIdx]: { ...prev[dayIdx], [mealType]: null } }));
+      return;
     }
+    setDailyMeals(prev => ({ ...prev, [dayIdx]: { ...prev[dayIdx], [mealType]: item } }));
   }
 
   return (
@@ -703,40 +712,54 @@ export default function DietPlan() {
                 <div className="flex flex-col flex-1 overflow-hidden px-6 py-4">
                   {(() => {
                     const cal = getDayCalories(activeDay);
-                    const pct = Math.min(100, (cal / dailyTarget) * 100);
                     const dayMeals = dailyMeals[activeDay] || {};
                     const limitReached = cal >= dailyTarget;
                     const numDays = genForm.planType === 'monthly' ? 30 : 7;
 
                     return (
                       <>
-                        {/* Kcal tracker */}
+                        {/* 4 separate kcal trackers */}
                         <div className="mb-4 shrink-0">
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="text-sm font-bold text-gray-700">Day {activeDay + 1} — Kcal Tracker</span>
-                            <span className={`text-sm font-bold ${limitReached ? 'text-emerald-600' : 'text-blue-600'}`}>
-                              {cal} / {dailyTarget.toLocaleString()} kcal
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-sm font-bold text-gray-700">Day {activeDay + 1} — Kcal Breakdown</span>
+                            <span className={`text-sm font-bold ${limitReached ? 'text-emerald-600' : 'text-gray-500'}`}>
+                              Total: {cal} / {dailyTarget.toLocaleString()} kcal
                             </span>
                           </div>
-                          <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                            <div
-                              className={`h-full rounded-full transition-all duration-300 ${limitReached ? 'bg-emerald-500' : 'bg-blue-500'}`}
-                              style={{ width: `${pct}%` }}
-                            />
+
+                          <div className="grid grid-cols-4 gap-2">
+                            {MEAL_META.map(({ key, label, icon, pct, color }) => {
+                              const target = getMealTarget(key);
+                              const mealCal = dayMeals[key]?.calories_per_serving || 0;
+                              const mealPct = Math.min(100, target > 0 ? (mealCal / target) * 100 : 0);
+                              const done = mealCal > 0 && mealCal >= target;
+                              const isActive = activeMealTab === key;
+                              return (
+                                <div key={key}
+                                  className={`p-2.5 rounded-xl border-2 transition-all cursor-pointer ${isActive ? 'border-emerald-400 bg-emerald-50' : done ? 'border-emerald-200 bg-emerald-50/50' : 'border-gray-100 bg-gray-50'}`}
+                                  onClick={() => setActiveMealTab(key)}
+                                >
+                                  <div className="flex items-center justify-between mb-1">
+                                    <span className="text-[11px] font-bold text-gray-600 truncate">{icon} {label.split('/')[0]}</span>
+                                    <span className="text-[10px] text-gray-400 font-semibold shrink-0 ml-1">{pct}%</span>
+                                  </div>
+                                  <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden mb-1">
+                                    <div className={`h-full rounded-full transition-all duration-300 ${done ? 'bg-emerald-500' : color}`} style={{ width: `${mealPct}%` }} />
+                                  </div>
+                                  <div className="text-[10px] font-semibold">
+                                    {mealCal > 0
+                                      ? <span className={done ? 'text-emerald-600' : 'text-gray-600'}>{mealCal}/{target} kcal{done ? ' ✓' : ''}</span>
+                                      : <span className="text-gray-400">{target} kcal</span>
+                                    }
+                                  </div>
+                                  {dayMeals[key] && (
+                                    <p className="text-[9px] text-gray-400 truncate mt-0.5">{dayMeals[key].name}</p>
+                                  )}
+                                </div>
+                              );
+                            })}
                           </div>
-                          {(dayMeals.breakfast || dayMeals.lunch || dayMeals.dinner) && (
-                            <div className="flex gap-3 mt-1.5 flex-wrap">
-                              {dayMeals.breakfast && (
-                                <span className="text-xs text-gray-500">🌅 {dayMeals.breakfast.name} <span className="text-orange-500 font-semibold">({dayMeals.breakfast.calories_per_serving} kcal)</span></span>
-                              )}
-                              {dayMeals.lunch && (
-                                <span className="text-xs text-gray-500">☀️ {dayMeals.lunch.name} <span className="text-orange-500 font-semibold">({dayMeals.lunch.calories_per_serving} kcal)</span></span>
-                              )}
-                              {dayMeals.dinner && (
-                                <span className="text-xs text-gray-500">🌙 {dayMeals.dinner.name} <span className="text-orange-500 font-semibold">({dayMeals.dinner.calories_per_serving} kcal)</span></span>
-                              )}
-                            </div>
-                          )}
+
                           {limitReached && (
                             <div className="mt-2 flex items-center gap-2 px-3 py-2 bg-emerald-50 border border-emerald-300 rounded-xl">
                               <Check size={14} className="text-emerald-600 shrink-0" />
@@ -765,31 +788,49 @@ export default function DietPlan() {
                         ) : (
                           <>
                             {/* Meal type tabs */}
-                            <div className="flex gap-2 mb-3 shrink-0">
-                              {[
-                                { key: 'breakfast', label: 'Breakfast', icon: '🌅' },
-                                { key: 'lunch',     label: 'Lunch',     icon: '☀️' },
-                                { key: 'dinner',    label: 'Dinner',    icon: '🌙' },
-                              ].map(({ key, label, icon }) => {
+                            <div className="flex gap-2 mb-3 shrink-0 flex-wrap">
+                              {MEAL_META.map(({ key, label, icon }) => {
                                 const sel = dayMeals[key];
+                                const mealDone = sel && sel.calories_per_serving >= getMealTarget(key);
                                 return (
                                   <button
                                     key={key}
                                     onClick={() => setActiveMealTab(key)}
-                                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold border-2 transition-all ${
+                                    className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-bold border-2 transition-all ${
                                       activeMealTab === key
                                         ? 'bg-emerald-600 border-emerald-600 text-white'
-                                        : sel
+                                        : mealDone
                                           ? 'border-emerald-300 bg-emerald-50 text-emerald-700'
-                                          : 'border-gray-200 text-gray-600 hover:border-gray-300'
+                                          : sel
+                                            ? 'border-blue-300 bg-blue-50 text-blue-700'
+                                            : 'border-gray-200 text-gray-600 hover:border-gray-300'
                                     }`}
                                   >
                                     {icon} {label}
                                     {sel && <span className="text-[10px] font-semibold opacity-80">({sel.calories_per_serving}k)</span>}
+                                    {mealDone && <Check size={11} />}
                                   </button>
                                 );
                               })}
                             </div>
+
+                            {/* Per-meal limit alert */}
+                            {(() => {
+                              const sel = dayMeals[activeMealTab];
+                              const target = getMealTarget(activeMealTab);
+                              if (sel && sel.calories_per_serving >= target) {
+                                const meta = MEAL_META.find(m => m.key === activeMealTab);
+                                return (
+                                  <div className="mb-2 flex items-center gap-2 px-3 py-1.5 bg-amber-50 border border-amber-200 rounded-xl shrink-0">
+                                    <AlertTriangle size={13} className="text-amber-500 shrink-0" />
+                                    <span className="text-xs font-bold text-amber-700">
+                                      {meta?.label} kcalorie limit ({target} kcal) reached — you can still swap the dish
+                                    </span>
+                                  </div>
+                                );
+                              }
+                              return null;
+                            })()}
 
                             {/* Items list */}
                             <div className="overflow-y-auto flex-1">
