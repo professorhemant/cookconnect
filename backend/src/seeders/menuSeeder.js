@@ -733,33 +733,31 @@ const menuData = [
   // LUNCH
   // ─────────────────────────────────────────────
   {
-    meal_type: 'lunch', name: 'Aloo Gobhi with Roti', cuisine_type: 'North Indian',
-    sub_category: 'Roti Sabzi',
-    description: 'Dry spiced potato and cauliflower curry served with 2 whole wheat rotis',
+    meal_type: 'lunch', name: 'Aloo Gobhi', cuisine_type: 'North Indian',
+    sub_category: 'Sabzi',
+    description: 'Dry spiced potato and cauliflower stir fry — a classic North Indian sabzi',
     prep_time_minutes: 10, cook_time_minutes: 25, servings: 4,
-    calories_per_serving: 450, protein_g: 11, carbs_g: 68, fat_g: 14, fiber_g: 8,
+    calories_per_serving: 390, protein_g: 11, carbs_g: 68, fat_g: 14, fiber_g: 8,
     kitchen_equipment: 'kadai,tawa,spatula', difficulty: 'easy',
     is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Potato', quantity: '3', unit: 'medium', calories: 240 },
       { name: 'Cauliflower', quantity: '1', unit: 'small head', calories: 80 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
     ]
   },
   {
-    meal_type: 'lunch', name: 'Palak Paneer with Roti', cuisine_type: 'North Indian',
-    sub_category: 'Roti Sabzi',
-    description: 'Creamy spinach curry with soft paneer cubes served with 2 rotis',
+    meal_type: 'lunch', name: 'Palak Paneer', cuisine_type: 'North Indian',
+    sub_category: 'Sabzi',
+    description: 'Creamy spinach curry with soft paneer cubes',
     prep_time_minutes: 15, cook_time_minutes: 25, servings: 4,
-    calories_per_serving: 510, protein_g: 20, carbs_g: 52, fat_g: 24, fiber_g: 6,
+    calories_per_serving: 450, protein_g: 20, carbs_g: 52, fat_g: 24, fiber_g: 6,
     kitchen_equipment: 'kadai,tawa,blender', difficulty: 'medium',
     is_vegetarian: true, is_vegan: false,
     ingredients: [
       { name: 'Spinach (palak)', quantity: '500', unit: 'g', calories: 100 },
       { name: 'Paneer', quantity: '200', unit: 'g', calories: 320 },
       { name: 'Cream', quantity: '2', unit: 'tbsp', calories: 100 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
     ]
   },
@@ -779,11 +777,11 @@ const menuData = [
     ]
   },
   {
-    meal_type: 'lunch', name: 'Dal Makhani with Roti', cuisine_type: 'Punjabi',
+    meal_type: 'lunch', name: 'Dal Makhani', cuisine_type: 'Punjabi',
     sub_category: 'Dal Roti',
-    description: 'Rich slow-cooked black dal in butter and cream, served with 2 rotis',
+    description: 'Rich slow-cooked black dal in butter and cream,',
     prep_time_minutes: 10, cook_time_minutes: 60, servings: 4,
-    calories_per_serving: 540, protein_g: 18, carbs_g: 62, fat_g: 22, fiber_g: 9,
+    calories_per_serving: 480, protein_g: 18, carbs_g: 62, fat_g: 22, fiber_g: 9,
     kitchen_equipment: 'pressure cooker,kadai,tawa', difficulty: 'medium',
     is_vegetarian: true, is_vegan: false,
     ingredients: [
@@ -791,7 +789,6 @@ const menuData = [
       { name: 'Rajma', quantity: '0.25', unit: 'cup', calories: 100 },
       { name: 'Butter', quantity: '2', unit: 'tbsp', calories: 200 },
       { name: 'Cream', quantity: '2', unit: 'tbsp', calories: 100 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -810,11 +807,11 @@ const menuData = [
     ]
   },
   {
-    meal_type: 'lunch', name: 'Paneer Butter Masala with Roti', cuisine_type: 'North Indian',
-    sub_category: 'Roti Sabzi',
-    description: 'Paneer in rich tomato-butter gravy with aromatic spices, served with 2 rotis',
+    meal_type: 'lunch', name: 'Paneer Butter Masala', cuisine_type: 'North Indian',
+    sub_category: 'Sabzi',
+    description: 'Paneer in rich tomato-butter gravy with aromatic spices,',
     prep_time_minutes: 15, cook_time_minutes: 25, servings: 4,
-    calories_per_serving: 580, protein_g: 22, carbs_g: 56, fat_g: 28, fiber_g: 4,
+    calories_per_serving: 520, protein_g: 22, carbs_g: 56, fat_g: 28, fiber_g: 4,
     kitchen_equipment: 'kadai,tawa,blender', difficulty: 'medium',
     is_vegetarian: true, is_vegan: false,
     ingredients: [
@@ -822,52 +819,48 @@ const menuData = [
       { name: 'Tomato puree', quantity: '1', unit: 'cup', calories: 80 },
       { name: 'Butter', quantity: '2', unit: 'tbsp', calories: 200 },
       { name: 'Cream', quantity: '3', unit: 'tbsp', calories: 150 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
-    meal_type: 'lunch', name: 'Bhindi Masala with Roti', cuisine_type: 'North Indian',
-    sub_category: 'Roti Sabzi',
-    description: 'Stir-fried okra with onion, tomato and spices served with 2 rotis',
+    meal_type: 'lunch', name: 'Bhindi Masala', cuisine_type: 'North Indian',
+    sub_category: 'Sabzi',
+    description: 'Stir-fried okra with onion, tomato and spices',
     prep_time_minutes: 10, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 410, protein_g: 9, carbs_g: 58, fat_g: 15, fiber_g: 9,
+    calories_per_serving: 350, protein_g: 9, carbs_g: 58, fat_g: 15, fiber_g: 9,
     kitchen_equipment: 'kadai,tawa', difficulty: 'easy',
     is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Bhindi (okra)', quantity: '500', unit: 'g', calories: 150 },
       { name: 'Onion', quantity: '2', unit: 'medium', calories: 80 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
-    meal_type: 'lunch', name: 'Baingan Bharta with Roti', cuisine_type: 'Punjabi',
-    sub_category: 'Roti Sabzi',
-    description: 'Smoky roasted eggplant mash with onion, tomato and spices, served with rotis',
+    meal_type: 'lunch', name: 'Baingan Bharta', cuisine_type: 'Punjabi',
+    sub_category: 'Sabzi',
+    description: 'Smoky roasted eggplant mash with onion, tomato and spices, ',
     prep_time_minutes: 10, cook_time_minutes: 30, servings: 4,
-    calories_per_serving: 380, protein_g: 8, carbs_g: 58, fat_g: 11, fiber_g: 9,
+    calories_per_serving: 320, protein_g: 8, carbs_g: 58, fat_g: 11, fiber_g: 9,
     kitchen_equipment: 'gas flame,kadai,tawa', difficulty: 'medium',
     is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Brinjal (baingan)', quantity: '2', unit: 'large', calories: 100 },
       { name: 'Onion, tomato', quantity: '2', unit: 'each', calories: 100 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
-    meal_type: 'lunch', name: 'Matar Paneer with Roti', cuisine_type: 'North Indian',
-    sub_category: 'Roti Sabzi',
-    description: 'Green peas and paneer in spiced tomato-onion gravy with rotis',
+    meal_type: 'lunch', name: 'Matar Paneer', cuisine_type: 'North Indian',
+    sub_category: 'Sabzi',
+    description: 'Green peas and paneer in spiced tomato-onion gravy — comforting and satisfying',
     prep_time_minutes: 10, cook_time_minutes: 25, servings: 4,
-    calories_per_serving: 490, protein_g: 19, carbs_g: 58, fat_g: 20, fiber_g: 7,
+    calories_per_serving: 430, protein_g: 19, carbs_g: 58, fat_g: 20, fiber_g: 7,
     kitchen_equipment: 'kadai,tawa', difficulty: 'easy',
     is_vegetarian: true, is_vegan: false,
     ingredients: [
       { name: 'Paneer', quantity: '200', unit: 'g', calories: 320 },
       { name: 'Green peas', quantity: '1', unit: 'cup', calories: 120 },
       { name: 'Tomato-onion gravy', quantity: '1', unit: 'cup', calories: 120 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -920,14 +913,13 @@ const menuData = [
     sub_category: 'Thali',
     description: 'Complete thali with 2 sabzis, dal, rice, 2 rotis, salad and dahi',
     prep_time_minutes: 20, cook_time_minutes: 40, servings: 4,
-    calories_per_serving: 680, protein_g: 22, carbs_g: 92, fat_g: 22, fiber_g: 10,
+    calories_per_serving: 620, protein_g: 22, carbs_g: 92, fat_g: 22, fiber_g: 10,
     kitchen_equipment: 'kadai,tawa,pressure cooker', difficulty: 'medium',
     is_vegetarian: true, is_vegan: false,
     ingredients: [
       { name: 'Mixed sabzi', quantity: '2', unit: 'cups', calories: 300 },
       { name: 'Dal', quantity: '1', unit: 'cup', calories: 200 },
       { name: 'Rice', quantity: '1', unit: 'cup', calories: 200 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
       { name: 'Dahi, salad', quantity: '1', unit: 'serving', calories: 100 },
     ]
   },
@@ -938,14 +930,13 @@ const menuData = [
     sub_category: 'Paneer Sabzi',
     description: 'Paneer in rich cashew-cream gravy with aromatic whole spices — royal treat',
     prep_time_minutes: 15, cook_time_minutes: 25, servings: 4,
-    calories_per_serving: 560, protein_g: 20, carbs_g: 28, fat_g: 40, fiber_g: 3,
+    calories_per_serving: 500, protein_g: 20, carbs_g: 28, fat_g: 40, fiber_g: 3,
     kitchen_equipment: 'kadai,blender,tawa', difficulty: 'medium', is_vegetarian: true, is_vegan: false,
     ingredients: [
       { name: 'Paneer', quantity: '250', unit: 'g', calories: 400 },
       { name: 'Cashew paste', quantity: '3', unit: 'tbsp', calories: 150 },
       { name: 'Cream', quantity: '3', unit: 'tbsp', calories: 150 },
       { name: 'Butter', quantity: '2', unit: 'tbsp', calories: 200 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -953,14 +944,13 @@ const menuData = [
     sub_category: 'Paneer Sabzi',
     description: 'Paneer and capsicum tossed in bold kadai masala with freshly ground spices',
     prep_time_minutes: 15, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 490, protein_g: 20, carbs_g: 30, fat_g: 32, fiber_g: 5,
+    calories_per_serving: 430, protein_g: 20, carbs_g: 30, fat_g: 32, fiber_g: 5,
     kitchen_equipment: 'kadai,tawa', difficulty: 'medium', is_vegetarian: true, is_vegan: false,
     ingredients: [
       { name: 'Paneer', quantity: '250', unit: 'g', calories: 400 },
       { name: 'Capsicum (diced)', quantity: '2', unit: 'medium', calories: 50 },
       { name: 'Tomato-onion gravy', quantity: '1', unit: 'cup', calories: 120 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -968,13 +958,12 @@ const menuData = [
     sub_category: 'Paneer Sabzi',
     description: 'Paneer cooked with double the onion in two stages — sweet and spicy',
     prep_time_minutes: 10, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 470, protein_g: 18, carbs_g: 34, fat_g: 28, fiber_g: 4,
+    calories_per_serving: 410, protein_g: 18, carbs_g: 34, fat_g: 28, fiber_g: 4,
     kitchen_equipment: 'kadai,tawa', difficulty: 'medium', is_vegetarian: true, is_vegan: false,
     ingredients: [
       { name: 'Paneer', quantity: '250', unit: 'g', calories: 400 },
       { name: 'Onion (large, quartered)', quantity: '3', unit: 'large', calories: 120 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -982,14 +971,13 @@ const menuData = [
     sub_category: 'Paneer Sabzi',
     description: 'Grilled marinated paneer chunks simmered in smoky tomato-based masala gravy',
     prep_time_minutes: 20, cook_time_minutes: 25, servings: 4,
-    calories_per_serving: 530, protein_g: 22, carbs_g: 32, fat_g: 34, fiber_g: 4,
+    calories_per_serving: 470, protein_g: 22, carbs_g: 32, fat_g: 34, fiber_g: 4,
     kitchen_equipment: 'grill/tawa,kadai', difficulty: 'medium', is_vegetarian: true, is_vegan: false,
     ingredients: [
       { name: 'Paneer', quantity: '250', unit: 'g', calories: 400 },
       { name: 'Dahi (for marinade)', quantity: '3', unit: 'tbsp', calories: 50 },
       { name: 'Tomato gravy', quantity: '1', unit: 'cup', calories: 120 },
       { name: 'Cream', quantity: '2', unit: 'tbsp', calories: 100 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -997,13 +985,12 @@ const menuData = [
     sub_category: 'Paneer Sabzi',
     description: 'Soft paneer in a thick, indulgent onion-tomato-cashew gravy',
     prep_time_minutes: 15, cook_time_minutes: 25, servings: 4,
-    calories_per_serving: 510, protein_g: 20, carbs_g: 30, fat_g: 35, fiber_g: 3,
+    calories_per_serving: 450, protein_g: 20, carbs_g: 30, fat_g: 35, fiber_g: 3,
     kitchen_equipment: 'kadai,blender,tawa', difficulty: 'medium', is_vegetarian: true, is_vegan: false,
     ingredients: [
       { name: 'Paneer', quantity: '250', unit: 'g', calories: 400 },
       { name: 'Onion-tomato-cashew gravy', quantity: '1.5', unit: 'cups', calories: 250 },
       { name: 'Butter', quantity: '1.5', unit: 'tbsp', calories: 150 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
 
@@ -1013,13 +1000,12 @@ const menuData = [
     sub_category: 'Gobhi Sabzi',
     description: 'Cauliflower florets in spicy tomato-onion masala gravy',
     prep_time_minutes: 10, cook_time_minutes: 25, servings: 4,
-    calories_per_serving: 380, protein_g: 9, carbs_g: 50, fat_g: 16, fiber_g: 8,
+    calories_per_serving: 320, protein_g: 9, carbs_g: 50, fat_g: 16, fiber_g: 8,
     kitchen_equipment: 'kadai,tawa', difficulty: 'easy', is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Cauliflower', quantity: '1', unit: 'medium head', calories: 120 },
       { name: 'Tomato-onion masala', quantity: '1', unit: 'cup', calories: 120 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -1027,13 +1013,12 @@ const menuData = [
     sub_category: 'Gobhi Sabzi',
     description: 'Cauliflower and green peas in a light spiced gravy',
     prep_time_minutes: 10, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 370, protein_g: 10, carbs_g: 52, fat_g: 13, fiber_g: 8,
+    calories_per_serving: 310, protein_g: 10, carbs_g: 52, fat_g: 13, fiber_g: 8,
     kitchen_equipment: 'kadai,tawa', difficulty: 'easy', is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Cauliflower', quantity: '1', unit: 'small head', calories: 80 },
       { name: 'Green peas', quantity: '1', unit: 'cup', calories: 120 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -1041,13 +1026,12 @@ const menuData = [
     sub_category: 'Gobhi Sabzi',
     description: 'Tangy cauliflower cooked with pickling spices — bold and appetising',
     prep_time_minutes: 10, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 360, protein_g: 8, carbs_g: 48, fat_g: 15, fiber_g: 7,
+    calories_per_serving: 300, protein_g: 8, carbs_g: 48, fat_g: 15, fiber_g: 7,
     kitchen_equipment: 'kadai,tawa', difficulty: 'easy', is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Cauliflower', quantity: '1', unit: 'medium head', calories: 120 },
       { name: 'Mustard oil', quantity: '2', unit: 'tbsp', calories: 240 },
       { name: 'Pickling spices (saunf, kalonji, methi seeds)', quantity: '1', unit: 'tsp', calories: 8 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -1069,13 +1053,12 @@ const menuData = [
     sub_category: 'Gobhi Sabzi',
     description: 'Potato and cauliflower slow-cooked dum-style in rich spiced gravy',
     prep_time_minutes: 10, cook_time_minutes: 30, servings: 4,
-    calories_per_serving: 430, protein_g: 9, carbs_g: 62, fat_g: 16, fiber_g: 7,
+    calories_per_serving: 370, protein_g: 9, carbs_g: 62, fat_g: 16, fiber_g: 7,
     kitchen_equipment: 'heavy pot,tawa', difficulty: 'medium', is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Potato', quantity: '3', unit: 'medium', calories: 240 },
       { name: 'Cauliflower', quantity: '1', unit: 'small head', calories: 80 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
 
@@ -1085,13 +1068,12 @@ const menuData = [
     sub_category: 'Aloo Sabzi',
     description: 'Boiled potatoes tempered with cumin seeds, green chilli and coriander',
     prep_time_minutes: 5, cook_time_minutes: 15, servings: 4,
-    calories_per_serving: 380, protein_g: 7, carbs_g: 62, fat_g: 11, fiber_g: 5,
+    calories_per_serving: 320, protein_g: 7, carbs_g: 62, fat_g: 11, fiber_g: 5,
     kitchen_equipment: 'kadai,tawa', difficulty: 'easy', is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Potato (boiled)', quantity: '4', unit: 'medium', calories: 320 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
       { name: 'Cumin seeds (jeera)', quantity: '1.5', unit: 'tsp', calories: 8 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -1099,13 +1081,12 @@ const menuData = [
     sub_category: 'Aloo Sabzi',
     description: 'Baby potatoes slow-cooked in spiced yogurt-based Kashmiri gravy',
     prep_time_minutes: 10, cook_time_minutes: 30, servings: 4,
-    calories_per_serving: 430, protein_g: 8, carbs_g: 60, fat_g: 17, fiber_g: 5,
+    calories_per_serving: 370, protein_g: 8, carbs_g: 60, fat_g: 17, fiber_g: 5,
     kitchen_equipment: 'kadai,tawa', difficulty: 'medium', is_vegetarian: true, is_vegan: false,
     ingredients: [
       { name: 'Baby potatoes', quantity: '500', unit: 'g', calories: 400 },
       { name: 'Dahi (curd)', quantity: '0.5', unit: 'cup', calories: 80 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -1113,13 +1094,12 @@ const menuData = [
     sub_category: 'Aloo Sabzi',
     description: 'Potato cubes cooked with spiced spinach — nutritious and hearty',
     prep_time_minutes: 10, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 390, protein_g: 10, carbs_g: 56, fat_g: 13, fiber_g: 7,
+    calories_per_serving: 330, protein_g: 10, carbs_g: 56, fat_g: 13, fiber_g: 7,
     kitchen_equipment: 'kadai,tawa', difficulty: 'easy', is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Potato', quantity: '3', unit: 'medium', calories: 240 },
       { name: 'Spinach (palak)', quantity: '250', unit: 'g', calories: 50 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -1127,13 +1107,12 @@ const menuData = [
     sub_category: 'Aloo Sabzi',
     description: 'Potatoes stir-fried with fresh fenugreek leaves — slightly bitter, very flavourful',
     prep_time_minutes: 10, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 370, protein_g: 8, carbs_g: 56, fat_g: 12, fiber_g: 7,
+    calories_per_serving: 310, protein_g: 8, carbs_g: 56, fat_g: 12, fiber_g: 7,
     kitchen_equipment: 'kadai,tawa', difficulty: 'easy', is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Potato', quantity: '3', unit: 'medium', calories: 240 },
       { name: 'Fresh methi leaves', quantity: '1', unit: 'cup', calories: 30 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -1141,13 +1120,12 @@ const menuData = [
     sub_category: 'Aloo Sabzi',
     description: 'Simple potato and tomato sabzi with spices — everyday North Indian staple',
     prep_time_minutes: 5, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 360, protein_g: 7, carbs_g: 56, fat_g: 12, fiber_g: 5,
+    calories_per_serving: 300, protein_g: 7, carbs_g: 56, fat_g: 12, fiber_g: 5,
     kitchen_equipment: 'kadai,tawa', difficulty: 'easy', is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Potato', quantity: '3', unit: 'medium', calories: 240 },
       { name: 'Tomato', quantity: '3', unit: 'medium', calories: 60 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -1155,13 +1133,12 @@ const menuData = [
     sub_category: 'Aloo Sabzi',
     description: 'Potato and brinjal cooked together in a spiced dry masala',
     prep_time_minutes: 10, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 370, protein_g: 7, carbs_g: 54, fat_g: 14, fiber_g: 7,
+    calories_per_serving: 310, protein_g: 7, carbs_g: 54, fat_g: 14, fiber_g: 7,
     kitchen_equipment: 'kadai,tawa', difficulty: 'easy', is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Potato', quantity: '2', unit: 'medium', calories: 160 },
       { name: 'Brinjal', quantity: '2', unit: 'medium', calories: 60 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
 
@@ -1284,13 +1261,12 @@ const menuData = [
     sub_category: 'Stuffed Sabzi',
     description: 'Okra slit and stuffed with spiced besan-onion masala, pan-fried to perfection',
     prep_time_minutes: 20, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 360, protein_g: 10, carbs_g: 44, fat_g: 16, fiber_g: 10,
+    calories_per_serving: 300, protein_g: 10, carbs_g: 44, fat_g: 16, fiber_g: 10,
     kitchen_equipment: 'kadai,spatula', difficulty: 'medium', is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Bhindi (okra)', quantity: '500', unit: 'g', calories: 150 },
       { name: 'Besan + spices (filling)', quantity: '3', unit: 'tbsp', calories: 100 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -1298,13 +1274,12 @@ const menuData = [
     sub_category: 'Stuffed Sabzi',
     description: 'Small brinjals stuffed with peanut-coconut-sesame masala and braised in oil',
     prep_time_minutes: 20, cook_time_minutes: 25, servings: 4,
-    calories_per_serving: 400, protein_g: 10, carbs_g: 42, fat_g: 22, fiber_g: 9,
+    calories_per_serving: 340, protein_g: 10, carbs_g: 42, fat_g: 22, fiber_g: 9,
     kitchen_equipment: 'kadai,spatula', difficulty: 'medium', is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Small brinjal (baingan)', quantity: '500', unit: 'g', calories: 130 },
       { name: 'Peanuts + coconut + sesame (filling)', quantity: '4', unit: 'tbsp', calories: 200 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -1312,13 +1287,12 @@ const menuData = [
     sub_category: 'Stuffed Sabzi',
     description: 'Bitter gourd stuffed with spiced onion-amchur filling — an acquired taste',
     prep_time_minutes: 20, cook_time_minutes: 25, servings: 4,
-    calories_per_serving: 320, protein_g: 7, carbs_g: 38, fat_g: 16, fiber_g: 6,
+    calories_per_serving: 260, protein_g: 7, carbs_g: 38, fat_g: 16, fiber_g: 6,
     kitchen_equipment: 'kadai,spatula', difficulty: 'medium', is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Karela (bitter gourd)', quantity: '500', unit: 'g', calories: 100 },
       { name: 'Onion + spice filling', quantity: '1', unit: 'cup', calories: 80 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -1326,13 +1300,12 @@ const menuData = [
     sub_category: 'Stuffed Sabzi',
     description: 'Whole tomatoes stuffed with spiced paneer-potato filling and cooked in their own juices',
     prep_time_minutes: 15, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 390, protein_g: 13, carbs_g: 44, fat_g: 18, fiber_g: 4,
+    calories_per_serving: 330, protein_g: 13, carbs_g: 44, fat_g: 18, fiber_g: 4,
     kitchen_equipment: 'kadai,oven optional', difficulty: 'medium', is_vegetarian: true, is_vegan: false,
     ingredients: [
       { name: 'Large tomatoes', quantity: '8', unit: 'pcs', calories: 160 },
       { name: 'Paneer + potato filling', quantity: '1', unit: 'cup', calories: 280 },
       { name: 'Oil', quantity: '1.5', unit: 'tbsp', calories: 180 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
 
@@ -1342,13 +1315,12 @@ const menuData = [
     sub_category: 'Other Sabzi',
     description: 'Button mushrooms in a rich spiced tomato-onion gravy',
     prep_time_minutes: 10, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 380, protein_g: 13, carbs_g: 36, fat_g: 20, fiber_g: 5,
+    calories_per_serving: 320, protein_g: 13, carbs_g: 36, fat_g: 20, fiber_g: 5,
     kitchen_equipment: 'kadai,tawa', difficulty: 'easy', is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Button mushrooms', quantity: '400', unit: 'g', calories: 100 },
       { name: 'Tomato-onion masala', quantity: '1', unit: 'cup', calories: 120 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -1356,13 +1328,12 @@ const menuData = [
     sub_category: 'Other Sabzi',
     description: 'High-protein soya chunks simmered in a spiced tomato-onion gravy',
     prep_time_minutes: 15, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 440, protein_g: 28, carbs_g: 46, fat_g: 16, fiber_g: 8,
+    calories_per_serving: 380, protein_g: 28, carbs_g: 46, fat_g: 16, fiber_g: 8,
     kitchen_equipment: 'kadai,tawa', difficulty: 'easy', is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Soya chunks (soaked)', quantity: '1.5', unit: 'cups', calories: 350 },
       { name: 'Tomato-onion masala', quantity: '1', unit: 'cup', calories: 120 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -1370,13 +1341,12 @@ const menuData = [
     sub_category: 'Other Sabzi',
     description: 'Crispy taro root cooked in tangy amchur-spiced masala',
     prep_time_minutes: 15, cook_time_minutes: 25, servings: 4,
-    calories_per_serving: 420, protein_g: 7, carbs_g: 64, fat_g: 15, fiber_g: 6,
+    calories_per_serving: 360, protein_g: 7, carbs_g: 64, fat_g: 15, fiber_g: 6,
     kitchen_equipment: 'kadai,tawa', difficulty: 'medium', is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Arbi (taro root, boiled)', quantity: '500', unit: 'g', calories: 400 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
       { name: 'Amchur, red chilli, coriander', quantity: '1', unit: 'tsp each', calories: 8 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -1384,13 +1354,12 @@ const menuData = [
     sub_category: 'Other Sabzi',
     description: 'Black-eyed peas in a tangy tomato-onion gravy — wholesome and earthy',
     prep_time_minutes: 10, cook_time_minutes: 30, servings: 4,
-    calories_per_serving: 450, protein_g: 17, carbs_g: 66, fat_g: 13, fiber_g: 14,
+    calories_per_serving: 390, protein_g: 17, carbs_g: 66, fat_g: 13, fiber_g: 14,
     kitchen_equipment: 'pressure cooker,kadai,tawa', difficulty: 'easy', is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Lobhia (black-eyed peas)', quantity: '1', unit: 'cup', calories: 340 },
       { name: 'Tomato-onion masala', quantity: '1', unit: 'cup', calories: 120 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -1398,13 +1367,12 @@ const menuData = [
     sub_category: 'Other Sabzi',
     description: 'Raw jackfruit cooked in spiced onion-tomato gravy — meaty texture, full of flavour',
     prep_time_minutes: 20, cook_time_minutes: 30, servings: 4,
-    calories_per_serving: 410, protein_g: 8, carbs_g: 62, fat_g: 14, fiber_g: 9,
+    calories_per_serving: 350, protein_g: 8, carbs_g: 62, fat_g: 14, fiber_g: 9,
     kitchen_equipment: 'pressure cooker,kadai,tawa', difficulty: 'medium', is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Raw jackfruit (kathal)', quantity: '500', unit: 'g', calories: 260 },
       { name: 'Onion-tomato masala', quantity: '1', unit: 'cup', calories: 120 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
 
@@ -1436,16 +1404,15 @@ const menuData = [
     ]
   },
   {
-    meal_type: 'lunch', name: 'Chana Dal with Roti', cuisine_type: 'North Indian',
+    meal_type: 'lunch', name: 'Chana Dal', cuisine_type: 'North Indian',
     sub_category: 'Dal Roti',
     description: 'Split chickpea dal with whole spices and a fragrant ghee tadka',
     prep_time_minutes: 10, cook_time_minutes: 30, servings: 4,
-    calories_per_serving: 490, protein_g: 18, carbs_g: 64, fat_g: 15, fiber_g: 11,
+    calories_per_serving: 430, protein_g: 18, carbs_g: 64, fat_g: 15, fiber_g: 11,
     kitchen_equipment: 'pressure cooker,kadai,tawa', difficulty: 'easy', is_vegetarian: true, is_vegan: false,
     ingredients: [
       { name: 'Chana dal', quantity: '1', unit: 'cup', calories: 380 },
       { name: 'Ghee', quantity: '1.5', unit: 'tbsp', calories: 135 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -1539,53 +1506,50 @@ const menuData = [
     ]
   },
   {
-    meal_type: 'dinner', name: 'Aloo Matar with Roti', cuisine_type: 'North Indian',
-    sub_category: 'Roti Sabzi',
-    description: 'Comforting potato and peas curry in tomato-based gravy served with 2 rotis',
+    meal_type: 'dinner', name: 'Aloo Matar', cuisine_type: 'North Indian',
+    sub_category: 'Sabzi',
+    description: 'Comforting potato and peas curry in tomato-based gravy',
     prep_time_minutes: 10, cook_time_minutes: 25, servings: 4,
-    calories_per_serving: 440, protein_g: 12, carbs_g: 66, fat_g: 14, fiber_g: 8,
+    calories_per_serving: 380, protein_g: 12, carbs_g: 66, fat_g: 14, fiber_g: 8,
     kitchen_equipment: 'kadai,tawa', difficulty: 'easy',
     is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Potato', quantity: '3', unit: 'medium', calories: 240 },
       { name: 'Green peas', quantity: '1', unit: 'cup', calories: 120 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
-    meal_type: 'dinner', name: 'Lauki Sabzi with Roti', cuisine_type: 'North Indian',
-    sub_category: 'Roti Sabzi',
+    meal_type: 'dinner', name: 'Lauki Sabzi', cuisine_type: 'North Indian',
+    sub_category: 'Sabzi',
     description: 'Light bottle gourd curry — low calorie, easy to digest, great for dinner',
     prep_time_minutes: 10, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 350, protein_g: 8, carbs_g: 56, fat_g: 10, fiber_g: 7,
+    calories_per_serving: 290, protein_g: 8, carbs_g: 56, fat_g: 10, fiber_g: 7,
     kitchen_equipment: 'kadai,tawa', difficulty: 'easy',
     is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Lauki (bottle gourd)', quantity: '500', unit: 'g', calories: 80 },
       { name: 'Oil', quantity: '1.5', unit: 'tbsp', calories: 180 },
       { name: 'Spices', quantity: '1', unit: 'tsp', calories: 5 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
-    meal_type: 'dinner', name: 'Paneer Bhurji with Roti', cuisine_type: 'North Indian',
-    sub_category: 'Roti Sabzi',
-    description: 'Scrambled crumbled paneer with onion, tomato and spices, served with 2 rotis',
+    meal_type: 'dinner', name: 'Paneer Bhurji', cuisine_type: 'North Indian',
+    sub_category: 'Sabzi',
+    description: 'Scrambled crumbled paneer with onion, tomato and spices,',
     prep_time_minutes: 10, cook_time_minutes: 15, servings: 4,
-    calories_per_serving: 490, protein_g: 22, carbs_g: 50, fat_g: 24, fiber_g: 4,
+    calories_per_serving: 430, protein_g: 22, carbs_g: 50, fat_g: 24, fiber_g: 4,
     kitchen_equipment: 'kadai,tawa', difficulty: 'easy',
     is_vegetarian: true, is_vegan: false,
     ingredients: [
       { name: 'Paneer', quantity: '250', unit: 'g', calories: 400 },
       { name: 'Onion, tomato, capsicum', quantity: '2', unit: 'medium', calories: 100 },
       { name: 'Oil', quantity: '1.5', unit: 'tbsp', calories: 180 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
     meal_type: 'dinner', name: 'Methi Thepla with Dahi', cuisine_type: 'Gujarati',
-    sub_category: 'Roti Sabzi',
+    sub_category: 'Sabzi',
     description: 'Soft spiced fenugreek flatbreads served with fresh curd — light and wholesome',
     prep_time_minutes: 15, cook_time_minutes: 20, servings: 4,
     calories_per_serving: 400, protein_g: 13, carbs_g: 56, fat_g: 14, fiber_g: 7,
@@ -1630,11 +1594,11 @@ const menuData = [
     ]
   },
   {
-    meal_type: 'dinner', name: 'Stuffed Capsicum with Roti', cuisine_type: 'Indian',
-    sub_category: 'Roti Sabzi',
-    description: 'Bell peppers stuffed with spiced paneer and potato, served with 2 rotis',
+    meal_type: 'dinner', name: 'Stuffed Capsicum', cuisine_type: 'Indian',
+    sub_category: 'Sabzi',
+    description: 'Bell peppers stuffed with spiced paneer and potato,',
     prep_time_minutes: 15, cook_time_minutes: 25, servings: 4,
-    calories_per_serving: 430, protein_g: 16, carbs_g: 56, fat_g: 16, fiber_g: 6,
+    calories_per_serving: 370, protein_g: 16, carbs_g: 56, fat_g: 16, fiber_g: 6,
     kitchen_equipment: 'oven/kadai,tawa', difficulty: 'medium',
     is_vegetarian: true, is_vegan: false,
     ingredients: [
@@ -1642,22 +1606,20 @@ const menuData = [
       { name: 'Paneer', quantity: '150', unit: 'g', calories: 240 },
       { name: 'Potato (boiled)', quantity: '2', unit: 'medium', calories: 160 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
-    meal_type: 'dinner', name: 'Dahi Aloo with Roti', cuisine_type: 'North Indian',
-    sub_category: 'Roti Sabzi',
+    meal_type: 'dinner', name: 'Dahi Aloo', cuisine_type: 'North Indian',
+    sub_category: 'Sabzi',
     description: 'Potatoes cooked in tangy yogurt gravy — light and flavourful dinner',
     prep_time_minutes: 10, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 400, protein_g: 10, carbs_g: 62, fat_g: 11, fiber_g: 5,
+    calories_per_serving: 340, protein_g: 10, carbs_g: 62, fat_g: 11, fiber_g: 5,
     kitchen_equipment: 'kadai,tawa', difficulty: 'easy',
     is_vegetarian: true, is_vegan: false,
     ingredients: [
       { name: 'Baby potato / regular potato', quantity: '400', unit: 'g', calories: 320 },
       { name: 'Dahi (curd)', quantity: '0.5', unit: 'cup', calories: 80 },
       { name: 'Oil', quantity: '1.5', unit: 'tbsp', calories: 180 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -1682,14 +1644,13 @@ const menuData = [
     sub_category: 'Paneer Sabzi',
     description: 'Paneer in rich cashew-cream gravy with aromatic spices — indulgent dinner',
     prep_time_minutes: 15, cook_time_minutes: 25, servings: 4,
-    calories_per_serving: 560, protein_g: 20, carbs_g: 28, fat_g: 40, fiber_g: 3,
+    calories_per_serving: 500, protein_g: 20, carbs_g: 28, fat_g: 40, fiber_g: 3,
     kitchen_equipment: 'kadai,blender,tawa', difficulty: 'medium', is_vegetarian: true, is_vegan: false,
     ingredients: [
       { name: 'Paneer', quantity: '250', unit: 'g', calories: 400 },
       { name: 'Cashew paste', quantity: '3', unit: 'tbsp', calories: 150 },
       { name: 'Cream', quantity: '3', unit: 'tbsp', calories: 150 },
       { name: 'Butter', quantity: '2', unit: 'tbsp', calories: 200 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -1697,28 +1658,26 @@ const menuData = [
     sub_category: 'Paneer Sabzi',
     description: 'Paneer and capsicum in bold kadai masala — fragrant and satisfying dinner',
     prep_time_minutes: 15, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 490, protein_g: 20, carbs_g: 30, fat_g: 32, fiber_g: 5,
+    calories_per_serving: 430, protein_g: 20, carbs_g: 30, fat_g: 32, fiber_g: 5,
     kitchen_equipment: 'kadai,tawa', difficulty: 'medium', is_vegetarian: true, is_vegan: false,
     ingredients: [
       { name: 'Paneer', quantity: '250', unit: 'g', calories: 400 },
       { name: 'Capsicum (diced)', quantity: '2', unit: 'medium', calories: 50 },
       { name: 'Tomato-onion gravy', quantity: '1', unit: 'cup', calories: 120 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
     meal_type: 'dinner', name: 'Matar Paneer', cuisine_type: 'North Indian',
     sub_category: 'Paneer Sabzi',
-    description: 'Green peas and paneer in spiced tomato-onion gravy with rotis',
+    description: 'Green peas and paneer in spiced tomato-onion gravy — comforting and satisfying',
     prep_time_minutes: 10, cook_time_minutes: 25, servings: 4,
-    calories_per_serving: 490, protein_g: 19, carbs_g: 58, fat_g: 20, fiber_g: 7,
+    calories_per_serving: 430, protein_g: 19, carbs_g: 58, fat_g: 20, fiber_g: 7,
     kitchen_equipment: 'kadai,tawa', difficulty: 'easy', is_vegetarian: true, is_vegan: false,
     ingredients: [
       { name: 'Paneer', quantity: '200', unit: 'g', calories: 320 },
       { name: 'Green peas', quantity: '1', unit: 'cup', calories: 120 },
       { name: 'Tomato-onion gravy', quantity: '1', unit: 'cup', calories: 120 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -1726,14 +1685,13 @@ const menuData = [
     sub_category: 'Paneer Sabzi',
     description: 'Tender paneer cubes in mustard-spinach saag — rustic Punjabi winter dinner',
     prep_time_minutes: 15, cook_time_minutes: 30, servings: 4,
-    calories_per_serving: 500, protein_g: 22, carbs_g: 30, fat_g: 32, fiber_g: 8,
+    calories_per_serving: 430, protein_g: 22, carbs_g: 30, fat_g: 32, fiber_g: 8,
     kitchen_equipment: 'kadai,tawa,blender', difficulty: 'medium', is_vegetarian: true, is_vegan: false,
     ingredients: [
       { name: 'Paneer', quantity: '200', unit: 'g', calories: 320 },
       { name: 'Sarson (mustard greens)', quantity: '300', unit: 'g', calories: 60 },
       { name: 'Spinach', quantity: '200', unit: 'g', calories: 40 },
       { name: 'Butter', quantity: '2', unit: 'tbsp', calories: 200 },
-      { name: 'Makki roti', quantity: '2', unit: 'pcs', calories: 280 },
     ]
   },
   {
@@ -1741,13 +1699,12 @@ const menuData = [
     sub_category: 'Paneer Sabzi',
     description: 'Soft paneer koftas in a rich golden onion-tomato gravy',
     prep_time_minutes: 20, cook_time_minutes: 30, servings: 4,
-    calories_per_serving: 580, protein_g: 22, carbs_g: 36, fat_g: 38, fiber_g: 4,
+    calories_per_serving: 520, protein_g: 22, carbs_g: 36, fat_g: 38, fiber_g: 4,
     kitchen_equipment: 'kadai,deep pan,tawa', difficulty: 'hard', is_vegetarian: true, is_vegan: false,
     ingredients: [
       { name: 'Paneer', quantity: '250', unit: 'g', calories: 400 },
       { name: 'Onion-tomato gravy', quantity: '1.5', unit: 'cups', calories: 200 },
       { name: 'Oil', quantity: '3', unit: 'tbsp', calories: 360 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
 
@@ -1757,13 +1714,12 @@ const menuData = [
     sub_category: 'Gobhi Sabzi',
     description: 'Cauliflower in spicy tomato-onion masala — light and warming dinner',
     prep_time_minutes: 10, cook_time_minutes: 25, servings: 4,
-    calories_per_serving: 380, protein_g: 9, carbs_g: 50, fat_g: 16, fiber_g: 8,
+    calories_per_serving: 320, protein_g: 9, carbs_g: 50, fat_g: 16, fiber_g: 8,
     kitchen_equipment: 'kadai,tawa', difficulty: 'easy', is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Cauliflower', quantity: '1', unit: 'medium head', calories: 120 },
       { name: 'Tomato-onion masala', quantity: '1', unit: 'cup', calories: 120 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -1771,13 +1727,12 @@ const menuData = [
     sub_category: 'Gobhi Sabzi',
     description: 'Dry spiced potato-cauliflower stir fry — a comforting dinner staple',
     prep_time_minutes: 10, cook_time_minutes: 25, servings: 4,
-    calories_per_serving: 400, protein_g: 9, carbs_g: 60, fat_g: 14, fiber_g: 8,
+    calories_per_serving: 340, protein_g: 9, carbs_g: 60, fat_g: 14, fiber_g: 8,
     kitchen_equipment: 'kadai,tawa', difficulty: 'easy', is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Potato', quantity: '2', unit: 'medium', calories: 160 },
       { name: 'Cauliflower', quantity: '1', unit: 'small head', calories: 80 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -1785,13 +1740,12 @@ const menuData = [
     sub_category: 'Gobhi Sabzi',
     description: 'Cauliflower and peas in a light, aromatic gravy — easy wholesome dinner',
     prep_time_minutes: 10, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 360, protein_g: 10, carbs_g: 52, fat_g: 12, fiber_g: 8,
+    calories_per_serving: 300, protein_g: 10, carbs_g: 52, fat_g: 12, fiber_g: 8,
     kitchen_equipment: 'kadai,tawa', difficulty: 'easy', is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Cauliflower', quantity: '1', unit: 'small head', calories: 80 },
       { name: 'Green peas', quantity: '1', unit: 'cup', calories: 120 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
 
@@ -1801,13 +1755,12 @@ const menuData = [
     sub_category: 'Aloo Sabzi',
     description: 'Boiled potatoes tempered with cumin — quick, light and satisfying dinner side',
     prep_time_minutes: 5, cook_time_minutes: 15, servings: 4,
-    calories_per_serving: 380, protein_g: 7, carbs_g: 62, fat_g: 11, fiber_g: 5,
+    calories_per_serving: 320, protein_g: 7, carbs_g: 62, fat_g: 11, fiber_g: 5,
     kitchen_equipment: 'kadai,tawa', difficulty: 'easy', is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Potato (boiled)', quantity: '4', unit: 'medium', calories: 320 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
       { name: 'Cumin seeds', quantity: '1.5', unit: 'tsp', calories: 8 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -1815,13 +1768,12 @@ const menuData = [
     sub_category: 'Aloo Sabzi',
     description: 'Potatoes cooked in spiced spinach — iron-rich and hearty dinner',
     prep_time_minutes: 10, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 390, protein_g: 10, carbs_g: 56, fat_g: 13, fiber_g: 7,
+    calories_per_serving: 330, protein_g: 10, carbs_g: 56, fat_g: 13, fiber_g: 7,
     kitchen_equipment: 'kadai,tawa', difficulty: 'easy', is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Potato', quantity: '3', unit: 'medium', calories: 240 },
       { name: 'Spinach (palak)', quantity: '250', unit: 'g', calories: 50 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -1829,13 +1781,12 @@ const menuData = [
     sub_category: 'Aloo Sabzi',
     description: 'Baby potatoes slow-cooked in spiced yogurt-based gravy — rich dinner option',
     prep_time_minutes: 10, cook_time_minutes: 30, servings: 4,
-    calories_per_serving: 430, protein_g: 8, carbs_g: 60, fat_g: 17, fiber_g: 5,
+    calories_per_serving: 370, protein_g: 8, carbs_g: 60, fat_g: 17, fiber_g: 5,
     kitchen_equipment: 'kadai,tawa', difficulty: 'medium', is_vegetarian: true, is_vegan: false,
     ingredients: [
       { name: 'Baby potatoes', quantity: '500', unit: 'g', calories: 400 },
       { name: 'Dahi (curd)', quantity: '0.5', unit: 'cup', calories: 80 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
 
@@ -1928,17 +1879,16 @@ const menuData = [
 
   // ─────────────────── DINNER: Dal varieties ──────────────────────
   {
-    meal_type: 'dinner', name: 'Dal Tadka with Roti', cuisine_type: 'North Indian',
+    meal_type: 'dinner', name: 'Dal Tadka', cuisine_type: 'North Indian',
     sub_category: 'Dal Roti',
     description: 'Yellow toor dal with smoky ghee tadka — simple nourishing dinner',
     prep_time_minutes: 10, cook_time_minutes: 30, servings: 4,
-    calories_per_serving: 470, protein_g: 15, carbs_g: 64, fat_g: 14, fiber_g: 7,
+    calories_per_serving: 410, protein_g: 15, carbs_g: 64, fat_g: 14, fiber_g: 7,
     kitchen_equipment: 'pressure cooker,kadai,tawa', difficulty: 'easy', is_vegetarian: true, is_vegan: false,
     ingredients: [
       { name: 'Toor dal', quantity: '1', unit: 'cup', calories: 380 },
       { name: 'Ghee', quantity: '2', unit: 'tbsp', calories: 180 },
       { name: 'Onion, tomato, spices', quantity: '1', unit: 'serving', calories: 80 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -1946,13 +1896,12 @@ const menuData = [
     sub_category: 'Dal Roti',
     description: 'Slow-cooked creamy black dal with butter — an indulgent dinner classic',
     prep_time_minutes: 10, cook_time_minutes: 60, servings: 4,
-    calories_per_serving: 540, protein_g: 18, carbs_g: 62, fat_g: 22, fiber_g: 9,
+    calories_per_serving: 480, protein_g: 18, carbs_g: 62, fat_g: 22, fiber_g: 9,
     kitchen_equipment: 'pressure cooker,kadai,tawa', difficulty: 'medium', is_vegetarian: true, is_vegan: false,
     ingredients: [
       { name: 'Black urad dal (whole)', quantity: '1', unit: 'cup', calories: 380 },
       { name: 'Butter', quantity: '2', unit: 'tbsp', calories: 200 },
       { name: 'Cream', quantity: '2', unit: 'tbsp', calories: 100 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -1970,16 +1919,15 @@ const menuData = [
     ]
   },
   {
-    meal_type: 'dinner', name: 'Masoor Dal with Roti', cuisine_type: 'North Indian',
+    meal_type: 'dinner', name: 'Masoor Dal', cuisine_type: 'North Indian',
     sub_category: 'Dal Roti',
-    description: 'Red lentil dal with onion-tomato tadka, served with 2 rotis',
+    description: 'Red lentil dal with onion-tomato tadka,',
     prep_time_minutes: 5, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 450, protein_g: 16, carbs_g: 62, fat_g: 12, fiber_g: 8,
+    calories_per_serving: 390, protein_g: 16, carbs_g: 62, fat_g: 12, fiber_g: 8,
     kitchen_equipment: 'pressure cooker,kadai,tawa', difficulty: 'easy', is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Masoor dal (red lentil)', quantity: '1', unit: 'cup', calories: 360 },
       { name: 'Oil', quantity: '1.5', unit: 'tbsp', calories: 180 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
 
@@ -1989,13 +1937,12 @@ const menuData = [
     sub_category: 'Stuffed Sabzi',
     description: 'Okra stuffed with spiced besan-onion masala — flavourful dinner option',
     prep_time_minutes: 20, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 360, protein_g: 10, carbs_g: 44, fat_g: 16, fiber_g: 10,
+    calories_per_serving: 300, protein_g: 10, carbs_g: 44, fat_g: 16, fiber_g: 10,
     kitchen_equipment: 'kadai,spatula', difficulty: 'medium', is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Bhindi (okra)', quantity: '500', unit: 'g', calories: 150 },
       { name: 'Besan + spices (filling)', quantity: '3', unit: 'tbsp', calories: 100 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -2003,13 +1950,12 @@ const menuData = [
     sub_category: 'Stuffed Sabzi',
     description: 'Brinjals stuffed with peanut-coconut masala — rich and aromatic dinner',
     prep_time_minutes: 20, cook_time_minutes: 25, servings: 4,
-    calories_per_serving: 400, protein_g: 10, carbs_g: 42, fat_g: 22, fiber_g: 9,
+    calories_per_serving: 340, protein_g: 10, carbs_g: 42, fat_g: 22, fiber_g: 9,
     kitchen_equipment: 'kadai,spatula', difficulty: 'medium', is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Small brinjal (baingan)', quantity: '500', unit: 'g', calories: 130 },
       { name: 'Peanuts + coconut + sesame (filling)', quantity: '4', unit: 'tbsp', calories: 200 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
 
@@ -2019,13 +1965,12 @@ const menuData = [
     sub_category: 'Other Sabzi',
     description: 'Button mushrooms in rich spiced tomato-onion gravy — hearty dinner',
     prep_time_minutes: 10, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 380, protein_g: 13, carbs_g: 36, fat_g: 20, fiber_g: 5,
+    calories_per_serving: 320, protein_g: 13, carbs_g: 36, fat_g: 20, fiber_g: 5,
     kitchen_equipment: 'kadai,tawa', difficulty: 'easy', is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Button mushrooms', quantity: '400', unit: 'g', calories: 100 },
       { name: 'Tomato-onion masala', quantity: '1', unit: 'cup', calories: 120 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -2033,13 +1978,12 @@ const menuData = [
     sub_category: 'Other Sabzi',
     description: 'High-protein soya chunks in spiced gravy — nutritious satisfying dinner',
     prep_time_minutes: 15, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 440, protein_g: 28, carbs_g: 46, fat_g: 16, fiber_g: 8,
+    calories_per_serving: 380, protein_g: 28, carbs_g: 46, fat_g: 16, fiber_g: 8,
     kitchen_equipment: 'kadai,tawa', difficulty: 'easy', is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Soya chunks (soaked)', quantity: '1.5', unit: 'cups', calories: 350 },
       { name: 'Tomato-onion masala', quantity: '1', unit: 'cup', calories: 120 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -2047,13 +1991,12 @@ const menuData = [
     sub_category: 'Dal Roti',
     description: 'Bottle gourd cooked with moong dal — light, digestive-friendly dinner',
     prep_time_minutes: 10, cook_time_minutes: 25, servings: 4,
-    calories_per_serving: 380, protein_g: 13, carbs_g: 56, fat_g: 10, fiber_g: 7,
+    calories_per_serving: 320, protein_g: 13, carbs_g: 56, fat_g: 10, fiber_g: 7,
     kitchen_equipment: 'pressure cooker,kadai,tawa', difficulty: 'easy', is_vegetarian: true, is_vegan: false,
     ingredients: [
       { name: 'Lauki (bottle gourd)', quantity: '400', unit: 'g', calories: 60 },
       { name: 'Moong dal', quantity: '0.75', unit: 'cup', calories: 255 },
       { name: 'Ghee', quantity: '1', unit: 'tbsp', calories: 90 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
@@ -2061,41 +2004,38 @@ const menuData = [
     sub_category: 'Dal Roti',
     description: 'Toor dal cooked with spinach and spices — iron-rich, nutritious dinner',
     prep_time_minutes: 10, cook_time_minutes: 25, servings: 4,
-    calories_per_serving: 420, protein_g: 16, carbs_g: 58, fat_g: 12, fiber_g: 9,
+    calories_per_serving: 360, protein_g: 16, carbs_g: 58, fat_g: 12, fiber_g: 9,
     kitchen_equipment: 'pressure cooker,kadai,tawa', difficulty: 'easy', is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Toor dal', quantity: '0.75', unit: 'cup', calories: 285 },
       { name: 'Spinach (palak)', quantity: '200', unit: 'g', calories: 40 },
       { name: 'Oil', quantity: '1.5', unit: 'tbsp', calories: 180 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
     meal_type: 'dinner', name: 'Rajma Roti', cuisine_type: 'North Indian',
     sub_category: 'Dal Roti',
-    description: 'Spiced red kidney bean curry served with rotis — protein-packed dinner',
+    description: 'Spiced red kidney bean curry  — protein-packed dinner',
     prep_time_minutes: 10, cook_time_minutes: 40, servings: 4,
-    calories_per_serving: 510, protein_g: 18, carbs_g: 72, fat_g: 13, fiber_g: 12,
+    calories_per_serving: 450, protein_g: 18, carbs_g: 72, fat_g: 13, fiber_g: 12,
     kitchen_equipment: 'pressure cooker,kadai,tawa', difficulty: 'easy', is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Rajma (kidney beans)', quantity: '1', unit: 'cup', calories: 340 },
       { name: 'Onion, tomato, spices', quantity: '1', unit: 'serving', calories: 100 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
   {
     meal_type: 'dinner', name: 'Chana Masala Roti', cuisine_type: 'North Indian',
     sub_category: 'Dal Roti',
-    description: 'Spiced chickpea curry with rotis — wholesome high-protein dinner',
+    description: 'Spiced chickpea curry — wholesome high-protein dinner',
     prep_time_minutes: 10, cook_time_minutes: 30, servings: 4,
-    calories_per_serving: 500, protein_g: 17, carbs_g: 70, fat_g: 14, fiber_g: 12,
+    calories_per_serving: 440, protein_g: 17, carbs_g: 70, fat_g: 14, fiber_g: 12,
     kitchen_equipment: 'pressure cooker,kadai,tawa', difficulty: 'easy', is_vegetarian: true, is_vegan: true,
     ingredients: [
       { name: 'Kabuli chana', quantity: '1', unit: 'cup', calories: 340 },
       { name: 'Onion, tomato, spices', quantity: '1', unit: 'serving', calories: 100 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
     ]
   },
 
@@ -2140,6 +2080,271 @@ const menuData = [
       { name: 'Dahi (curd)', quantity: '1', unit: 'cup', calories: 150 },
       { name: 'Oil', quantity: '1', unit: 'tbsp', calories: 120 },
       { name: 'Mustard seeds, curry leaves', quantity: '1', unit: 'tsp', calories: 5 },
+    ]
+  },
+
+  // ─────────────────────────────────────────────
+  // LUNCH — Roti varieties
+  // ─────────────────────────────────────────────
+  {
+    meal_type: 'lunch', name: 'Phulka (2 pcs)', cuisine_type: 'North Indian',
+    sub_category: 'Roti',
+    description: 'Soft whole wheat phulka puffed directly on flame — lightest everyday roti',
+    prep_time_minutes: 10, cook_time_minutes: 10, servings: 4,
+    calories_per_serving: 160, protein_g: 5, carbs_g: 30, fat_g: 2, fiber_g: 3,
+    kitchen_equipment: 'tawa,rolling pin', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Whole wheat flour (atta)', quantity: '1.5', unit: 'cups', calories: 600 },
+      { name: 'Water', quantity: '0.5', unit: 'cup', calories: 0 },
+    ]
+  },
+  {
+    meal_type: 'lunch', name: 'Ghee Roti (2 pcs)', cuisine_type: 'North Indian',
+    sub_category: 'Roti',
+    description: 'Whole wheat tawa roti brushed with ghee — simple, fragrant and filling',
+    prep_time_minutes: 10, cook_time_minutes: 10, servings: 4,
+    calories_per_serving: 200, protein_g: 5, carbs_g: 30, fat_g: 7, fiber_g: 3,
+    kitchen_equipment: 'tawa,rolling pin', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: false,
+    ingredients: [
+      { name: 'Whole wheat flour (atta)', quantity: '1.5', unit: 'cups', calories: 600 },
+      { name: 'Ghee', quantity: '2', unit: 'tsp', calories: 60 },
+    ]
+  },
+  {
+    meal_type: 'lunch', name: 'Butter Roti (2 pcs)', cuisine_type: 'North Indian',
+    sub_category: 'Roti',
+    description: 'Soft tawa roti generously spread with white butter — a Punjabi classic',
+    prep_time_minutes: 10, cook_time_minutes: 10, servings: 4,
+    calories_per_serving: 220, protein_g: 5, carbs_g: 30, fat_g: 9, fiber_g: 3,
+    kitchen_equipment: 'tawa,rolling pin', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: false,
+    ingredients: [
+      { name: 'Whole wheat flour (atta)', quantity: '1.5', unit: 'cups', calories: 600 },
+      { name: 'White butter (makhan)', quantity: '2', unit: 'tsp', calories: 70 },
+    ]
+  },
+  {
+    meal_type: 'lunch', name: 'Missi Roti (2 pcs)', cuisine_type: 'Rajasthani',
+    sub_category: 'Roti',
+    description: 'Spiced besan and wheat flour flatbread — high protein, rustic flavour',
+    prep_time_minutes: 10, cook_time_minutes: 12, servings: 4,
+    calories_per_serving: 240, protein_g: 9, carbs_g: 34, fat_g: 7, fiber_g: 5,
+    kitchen_equipment: 'tawa,rolling pin', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Whole wheat flour', quantity: '1', unit: 'cup', calories: 400 },
+      { name: 'Besan (chickpea flour)', quantity: '0.5', unit: 'cup', calories: 170 },
+      { name: 'Oil', quantity: '1.5', unit: 'tbsp', calories: 180 },
+      { name: 'Ajwain, red chilli, coriander', quantity: '0.5', unit: 'tsp each', calories: 5 },
+    ]
+  },
+  {
+    meal_type: 'lunch', name: 'Bajra Roti (2 pcs)', cuisine_type: 'Rajasthani',
+    sub_category: 'Roti',
+    description: 'Pearl millet flatbread — rich in iron and fibre, great winter roti',
+    prep_time_minutes: 10, cook_time_minutes: 12, servings: 4,
+    calories_per_serving: 220, protein_g: 6, carbs_g: 36, fat_g: 5, fiber_g: 5,
+    kitchen_equipment: 'tawa,rolling pin', difficulty: 'medium',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Bajra (pearl millet) flour', quantity: '1.5', unit: 'cups', calories: 560 },
+      { name: 'Water', quantity: '0.5', unit: 'cup', calories: 0 },
+      { name: 'Oil (for tawa)', quantity: '1', unit: 'tsp', calories: 40 },
+    ]
+  },
+  {
+    meal_type: 'lunch', name: 'Makki Roti (2 pcs)', cuisine_type: 'Punjabi',
+    sub_category: 'Roti',
+    description: 'Cornmeal flatbread — best paired with sarson ka saag, a Punjabi winter staple',
+    prep_time_minutes: 10, cook_time_minutes: 15, servings: 4,
+    calories_per_serving: 230, protein_g: 5, carbs_g: 38, fat_g: 6, fiber_g: 4,
+    kitchen_equipment: 'tawa,rolling pin', difficulty: 'medium',
+    is_vegetarian: true, is_vegan: false,
+    ingredients: [
+      { name: 'Makki (corn) flour', quantity: '1.5', unit: 'cups', calories: 570 },
+      { name: 'Ghee (for tawa)', quantity: '1', unit: 'tsp', calories: 40 },
+    ]
+  },
+  {
+    meal_type: 'lunch', name: 'Jowar Roti (2 pcs)', cuisine_type: 'Maharashtrian',
+    sub_category: 'Roti',
+    description: 'Sorghum flatbread — gluten-free, high-fibre, cooling in nature',
+    prep_time_minutes: 10, cook_time_minutes: 12, servings: 4,
+    calories_per_serving: 210, protein_g: 6, carbs_g: 36, fat_g: 4, fiber_g: 5,
+    kitchen_equipment: 'tawa,rolling pin', difficulty: 'medium',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Jowar (sorghum) flour', quantity: '1.5', unit: 'cups', calories: 560 },
+      { name: 'Water', quantity: '0.5', unit: 'cup', calories: 0 },
+    ]
+  },
+  {
+    meal_type: 'lunch', name: 'Garlic Roti (2 pcs)', cuisine_type: 'North Indian',
+    sub_category: 'Roti',
+    description: 'Tawa roti flavoured with garlic and coriander — aromatic and delicious',
+    prep_time_minutes: 12, cook_time_minutes: 10, servings: 4,
+    calories_per_serving: 210, protein_g: 5, carbs_g: 30, fat_g: 8, fiber_g: 3,
+    kitchen_equipment: 'tawa,rolling pin', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Whole wheat flour', quantity: '1.5', unit: 'cups', calories: 600 },
+      { name: 'Garlic (minced)', quantity: '4', unit: 'cloves', calories: 20 },
+      { name: 'Oil', quantity: '1.5', unit: 'tbsp', calories: 180 },
+      { name: 'Coriander leaves', quantity: '2', unit: 'tbsp', calories: 4 },
+    ]
+  },
+  {
+    meal_type: 'lunch', name: 'Rumali Roti (2 pcs)', cuisine_type: 'Mughal',
+    sub_category: 'Roti',
+    description: 'Paper-thin handkerchief roti cooked on an inverted tawa — ultra soft',
+    prep_time_minutes: 15, cook_time_minutes: 8, servings: 4,
+    calories_per_serving: 180, protein_g: 5, carbs_g: 32, fat_g: 4, fiber_g: 2,
+    kitchen_equipment: 'inverted tawa,rolling pin', difficulty: 'hard',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Maida (refined flour)', quantity: '1', unit: 'cup', calories: 360 },
+      { name: 'Whole wheat flour', quantity: '0.5', unit: 'cup', calories: 200 },
+      { name: 'Oil', quantity: '1', unit: 'tbsp', calories: 120 },
+    ]
+  },
+  {
+    meal_type: 'lunch', name: 'Puri (2 pcs)', cuisine_type: 'North Indian',
+    sub_category: 'Roti',
+    description: 'Deep-fried puffed whole wheat bread — festive and irresistible',
+    prep_time_minutes: 15, cook_time_minutes: 10, servings: 4,
+    calories_per_serving: 280, protein_g: 5, carbs_g: 32, fat_g: 14, fiber_g: 3,
+    kitchen_equipment: 'deep pan,rolling pin', difficulty: 'medium',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Whole wheat flour', quantity: '1.5', unit: 'cups', calories: 600 },
+      { name: 'Oil (for frying)', quantity: '4', unit: 'tbsp', calories: 480 },
+    ]
+  },
+
+  // ─────────────────────────────────────────────
+  // DINNER — Roti varieties
+  // ─────────────────────────────────────────────
+  {
+    meal_type: 'dinner', name: 'Phulka (2 pcs)', cuisine_type: 'North Indian',
+    sub_category: 'Roti',
+    description: 'Soft whole wheat phulka puffed on flame — light and easy to digest at night',
+    prep_time_minutes: 10, cook_time_minutes: 10, servings: 4,
+    calories_per_serving: 160, protein_g: 5, carbs_g: 30, fat_g: 2, fiber_g: 3,
+    kitchen_equipment: 'tawa,rolling pin', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Whole wheat flour (atta)', quantity: '1.5', unit: 'cups', calories: 600 },
+      { name: 'Water', quantity: '0.5', unit: 'cup', calories: 0 },
+    ]
+  },
+  {
+    meal_type: 'dinner', name: 'Ghee Roti (2 pcs)', cuisine_type: 'North Indian',
+    sub_category: 'Roti',
+    description: 'Whole wheat tawa roti brushed with ghee — nourishing dinner staple',
+    prep_time_minutes: 10, cook_time_minutes: 10, servings: 4,
+    calories_per_serving: 200, protein_g: 5, carbs_g: 30, fat_g: 7, fiber_g: 3,
+    kitchen_equipment: 'tawa,rolling pin', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: false,
+    ingredients: [
+      { name: 'Whole wheat flour (atta)', quantity: '1.5', unit: 'cups', calories: 600 },
+      { name: 'Ghee', quantity: '2', unit: 'tsp', calories: 60 },
+    ]
+  },
+  {
+    meal_type: 'dinner', name: 'Butter Roti (2 pcs)', cuisine_type: 'North Indian',
+    sub_category: 'Roti',
+    description: 'Tawa roti with white butter — classic comfort dinner bread',
+    prep_time_minutes: 10, cook_time_minutes: 10, servings: 4,
+    calories_per_serving: 220, protein_g: 5, carbs_g: 30, fat_g: 9, fiber_g: 3,
+    kitchen_equipment: 'tawa,rolling pin', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: false,
+    ingredients: [
+      { name: 'Whole wheat flour (atta)', quantity: '1.5', unit: 'cups', calories: 600 },
+      { name: 'White butter (makhan)', quantity: '2', unit: 'tsp', calories: 70 },
+    ]
+  },
+  {
+    meal_type: 'dinner', name: 'Missi Roti (2 pcs)', cuisine_type: 'Rajasthani',
+    sub_category: 'Roti',
+    description: 'Spiced besan-wheat flatbread — hearty and protein-rich dinner roti',
+    prep_time_minutes: 10, cook_time_minutes: 12, servings: 4,
+    calories_per_serving: 240, protein_g: 9, carbs_g: 34, fat_g: 7, fiber_g: 5,
+    kitchen_equipment: 'tawa,rolling pin', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Whole wheat flour', quantity: '1', unit: 'cup', calories: 400 },
+      { name: 'Besan (chickpea flour)', quantity: '0.5', unit: 'cup', calories: 170 },
+      { name: 'Oil', quantity: '1.5', unit: 'tbsp', calories: 180 },
+      { name: 'Ajwain, red chilli', quantity: '0.5', unit: 'tsp each', calories: 5 },
+    ]
+  },
+  {
+    meal_type: 'dinner', name: 'Bajra Roti (2 pcs)', cuisine_type: 'Rajasthani',
+    sub_category: 'Roti',
+    description: 'Pearl millet roti — warming, iron-rich, traditionally eaten in winter evenings',
+    prep_time_minutes: 10, cook_time_minutes: 12, servings: 4,
+    calories_per_serving: 220, protein_g: 6, carbs_g: 36, fat_g: 5, fiber_g: 5,
+    kitchen_equipment: 'tawa,rolling pin', difficulty: 'medium',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Bajra (pearl millet) flour', quantity: '1.5', unit: 'cups', calories: 560 },
+      { name: 'Water', quantity: '0.5', unit: 'cup', calories: 0 },
+    ]
+  },
+  {
+    meal_type: 'dinner', name: 'Makki Roti (2 pcs)', cuisine_type: 'Punjabi',
+    sub_category: 'Roti',
+    description: 'Cornmeal flatbread with ghee — best Punjabi winter dinner option',
+    prep_time_minutes: 10, cook_time_minutes: 15, servings: 4,
+    calories_per_serving: 230, protein_g: 5, carbs_g: 38, fat_g: 6, fiber_g: 4,
+    kitchen_equipment: 'tawa,rolling pin', difficulty: 'medium',
+    is_vegetarian: true, is_vegan: false,
+    ingredients: [
+      { name: 'Makki (corn) flour', quantity: '1.5', unit: 'cups', calories: 570 },
+      { name: 'Ghee', quantity: '1', unit: 'tsp', calories: 40 },
+    ]
+  },
+  {
+    meal_type: 'dinner', name: 'Jowar Roti (2 pcs)', cuisine_type: 'Maharashtrian',
+    sub_category: 'Roti',
+    description: 'Sorghum flatbread — gluten-free, cooling, good for evening digestion',
+    prep_time_minutes: 10, cook_time_minutes: 12, servings: 4,
+    calories_per_serving: 210, protein_g: 6, carbs_g: 36, fat_g: 4, fiber_g: 5,
+    kitchen_equipment: 'tawa,rolling pin', difficulty: 'medium',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Jowar (sorghum) flour', quantity: '1.5', unit: 'cups', calories: 560 },
+      { name: 'Water', quantity: '0.5', unit: 'cup', calories: 0 },
+    ]
+  },
+  {
+    meal_type: 'dinner', name: 'Garlic Roti (2 pcs)', cuisine_type: 'North Indian',
+    sub_category: 'Roti',
+    description: 'Garlic coriander roti on tawa — pairs wonderfully with any gravy dish',
+    prep_time_minutes: 12, cook_time_minutes: 10, servings: 4,
+    calories_per_serving: 210, protein_g: 5, carbs_g: 30, fat_g: 8, fiber_g: 3,
+    kitchen_equipment: 'tawa,rolling pin', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Whole wheat flour', quantity: '1.5', unit: 'cups', calories: 600 },
+      { name: 'Garlic (minced)', quantity: '4', unit: 'cloves', calories: 20 },
+      { name: 'Oil', quantity: '1.5', unit: 'tbsp', calories: 180 },
+    ]
+  },
+  {
+    meal_type: 'dinner', name: 'Rumali Roti (2 pcs)', cuisine_type: 'Mughal',
+    sub_category: 'Roti',
+    description: 'Paper-thin roti cooked on inverted tawa — ultra soft, pairs with rich gravies',
+    prep_time_minutes: 15, cook_time_minutes: 8, servings: 4,
+    calories_per_serving: 180, protein_g: 5, carbs_g: 32, fat_g: 4, fiber_g: 2,
+    kitchen_equipment: 'inverted tawa,rolling pin', difficulty: 'hard',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Maida (refined flour)', quantity: '1', unit: 'cup', calories: 360 },
+      { name: 'Whole wheat flour', quantity: '0.5', unit: 'cup', calories: 200 },
+      { name: 'Oil', quantity: '1', unit: 'tbsp', calories: 120 },
     ]
   },
 
