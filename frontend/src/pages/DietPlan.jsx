@@ -144,11 +144,12 @@ export default function DietPlan() {
       const dailyAssignmentsPayload = Object.entries(dailyMeals)
         .map(([dayIdx, meals]) => ({
           dayIndex: parseInt(dayIdx),
-          breakfastId: meals.breakfast?.id || null,
-          lunchId: meals.lunch?.id || null,
-          dinnerId: meals.dinner?.id || null,
+          breakfastIds: (meals.breakfast || []).map(i => i.id),
+          lunchIds:     (meals.lunch     || []).map(i => i.id),
+          snackIds:     (meals.snack     || []).map(i => i.id),
+          dinnerIds:    (meals.dinner    || []).map(i => i.id),
         }))
-        .filter(a => a.breakfastId || a.lunchId || a.dinnerId);
+        .filter(a => a.breakfastIds.length || a.lunchIds.length || a.snackIds.length || a.dinnerIds.length);
 
       const res = await generateDietPlan({
         userId: currentUser.id,
@@ -283,22 +284,36 @@ export default function DietPlan() {
     return Math.round(dailyTarget * (MEAL_RATIOS[mealType] || 0));
   }
 
+  function getMealCalories(dayIdx, mealType) {
+    return (dailyMeals[dayIdx]?.[mealType] || []).reduce((s, i) => s + (i.calories_per_serving || 0), 0);
+  }
+
   function getDayCalories(dayIdx) {
-    const d = dailyMeals[dayIdx] || {};
-    return (d.breakfast?.calories_per_serving || 0) +
-           (d.lunch?.calories_per_serving || 0) +
-           (d.snack?.calories_per_serving || 0) +
-           (d.dinner?.calories_per_serving || 0);
+    return ['breakfast', 'lunch', 'snack', 'dinner'].reduce((sum, type) => sum + getMealCalories(dayIdx, type), 0);
   }
 
   function selectMealForDay(dayIdx, mealType, item) {
-    const d = dailyMeals[dayIdx] || {};
-    // Toggle off if same item clicked again
-    if (d[mealType]?.id === item.id) {
-      setDailyMeals(prev => ({ ...prev, [dayIdx]: { ...prev[dayIdx], [mealType]: null } }));
+    const current = dailyMeals[dayIdx]?.[mealType] || [];
+    const isSelected = current.some(i => i.id === item.id);
+
+    if (isSelected) {
+      // Deselect
+      setDailyMeals(prev => ({
+        ...prev,
+        [dayIdx]: { ...prev[dayIdx], [mealType]: current.filter(i => i.id !== item.id) }
+      }));
       return;
     }
-    setDailyMeals(prev => ({ ...prev, [dayIdx]: { ...prev[dayIdx], [mealType]: item } }));
+
+    // Block if meal kcal limit already reached
+    const mealCal = getMealCalories(dayIdx, mealType);
+    const mealTarget = getMealTarget(mealType);
+    if (mealCal >= mealTarget) return;
+
+    setDailyMeals(prev => ({
+      ...prev,
+      [dayIdx]: { ...prev[dayIdx], [mealType]: [...current, item] }
+    }));
   }
 
   return (
@@ -737,9 +752,10 @@ export default function DietPlan() {
                           <div className="grid grid-cols-4 gap-2">
                             {MEAL_META.map(({ key, label, icon, pct, color }) => {
                               const target = getMealTarget(key);
-                              const mealCal = dayMeals[key]?.calories_per_serving || 0;
+                              const mealCal = getMealCalories(activeDay, key);
+                              const items = dayMeals[key] || [];
                               const mealPct = Math.min(100, target > 0 ? (mealCal / target) * 100 : 0);
-                              const done = mealCal > 0 && mealCal >= target;
+                              const done = mealCal >= target && target > 0;
                               const isActive = activeMealTab === key;
                               return (
                                 <div key={key}
@@ -759,8 +775,8 @@ export default function DietPlan() {
                                       : <span className="text-gray-400">{target} kcal</span>
                                     }
                                   </div>
-                                  {dayMeals[key] && (
-                                    <p className="text-[9px] text-gray-400 truncate mt-0.5">{dayMeals[key].name}</p>
+                                  {items.length > 0 && (
+                                    <p className="text-[9px] text-gray-400 truncate mt-0.5">{items.length} dish{items.length > 1 ? 'es' : ''}</p>
                                   )}
                                 </div>
                               );
@@ -797,8 +813,9 @@ export default function DietPlan() {
                             {/* Meal type tabs */}
                             <div className="flex gap-2 mb-3 shrink-0 flex-wrap">
                               {MEAL_META.map(({ key, label, icon }) => {
-                                const sel = dayMeals[key];
-                                const mealDone = sel && sel.calories_per_serving >= getMealTarget(key);
+                                const items = dayMeals[key] || [];
+                                const mealCal = getMealCalories(activeDay, key);
+                                const mealDone = mealCal >= getMealTarget(key) && getMealTarget(key) > 0;
                                 return (
                                   <button
                                     key={key}
@@ -808,13 +825,13 @@ export default function DietPlan() {
                                         ? 'bg-emerald-600 border-emerald-600 text-white'
                                         : mealDone
                                           ? 'border-emerald-300 bg-emerald-50 text-emerald-700'
-                                          : sel
+                                          : items.length > 0
                                             ? 'border-blue-300 bg-blue-50 text-blue-700'
                                             : 'border-gray-200 text-gray-600 hover:border-gray-300'
                                     }`}
                                   >
                                     {icon} {label}
-                                    {sel && <span className="text-[10px] font-semibold opacity-80">({sel.calories_per_serving}k)</span>}
+                                    {items.length > 0 && <span className="text-[10px] font-semibold opacity-80">({mealCal}k · {items.length})</span>}
                                     {mealDone && <Check size={11} />}
                                   </button>
                                 );
@@ -823,15 +840,15 @@ export default function DietPlan() {
 
                             {/* Per-meal limit alert */}
                             {(() => {
-                              const sel = dayMeals[activeMealTab];
+                              const mealCal = getMealCalories(activeDay, activeMealTab);
                               const target = getMealTarget(activeMealTab);
-                              if (sel && sel.calories_per_serving >= target) {
+                              if (mealCal >= target && target > 0) {
                                 const meta = MEAL_META.find(m => m.key === activeMealTab);
                                 return (
                                   <div className="mb-2 flex items-center gap-2 px-3 py-1.5 bg-amber-50 border border-amber-200 rounded-xl shrink-0">
                                     <AlertTriangle size={13} className="text-amber-500 shrink-0" />
                                     <span className="text-xs font-bold text-amber-700">
-                                      {meta?.label} kcalorie limit ({target} kcal) reached — you can still swap the dish
+                                      {meta?.label} limit ({target} kcal) reached — deselect a dish to swap
                                     </span>
                                   </div>
                                 );
@@ -846,13 +863,15 @@ export default function DietPlan() {
                               ) : (
                                 <div className="grid grid-cols-1 gap-2">
                                   {(allMenuItems[activeMealTab] || []).map(item => {
-                                    const isSelected = dayMeals[activeMealTab]?.id === item.id;
+                                    const isSelected = (dayMeals[activeMealTab] || []).some(i => i.id === item.id);
+                                    const mealFull = getMealCalories(activeDay, activeMealTab) >= getMealTarget(activeMealTab) && getMealTarget(activeMealTab) > 0;
                                     return (
                                       <button
                                         key={item.id}
                                         onClick={() => selectMealForDay(activeDay, activeMealTab, item)}
+                                        disabled={!isSelected && mealFull}
                                         className={`flex items-center gap-3 p-3 rounded-xl border-2 text-left transition-all ${
-                                          isSelected ? 'border-emerald-500 bg-emerald-50' : 'border-gray-100 hover:border-gray-200 bg-gray-50'
+                                          isSelected ? 'border-emerald-500 bg-emerald-50' : mealFull ? 'border-gray-100 bg-gray-50 opacity-40 cursor-not-allowed' : 'border-gray-100 hover:border-gray-200 bg-gray-50'
                                         }`}
                                       >
                                         <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${

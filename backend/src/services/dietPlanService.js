@@ -112,12 +112,21 @@ async function generatePlan(userId, planType, startDate, preferences = {}) {
 
     const assignment = dailyAssignments?.find(a => a.dayIndex === i);
 
-    const breakfast = (assignment?.breakfastId && allItems.find(x => x.id === assignment.breakfastId))
-      || pickItem(breakfastItems, recentBreakfast);
-    const lunch = (assignment?.lunchId && allItems.find(x => x.id === assignment.lunchId))
-      || pickItem(lunchItems, recentLunch);
-    const dinner = (assignment?.dinnerId && allItems.find(x => x.id === assignment.dinnerId))
-      || pickItem(dinnerItems, recentDinner);
+    const pickFromIds = (ids, pool, recentSet) => {
+      if (ids && ids.length > 0) {
+        const available = ids.map(id => allItems.find(x => x.id === id)).filter(Boolean);
+        if (available.length > 0) {
+          const nonRecent = available.filter(x => !recentSet.has(x.id));
+          const finalPool = nonRecent.length > 0 ? nonRecent : available;
+          return finalPool[Math.floor(Math.random() * finalPool.length)];
+        }
+      }
+      return pickItem(pool, recentSet);
+    };
+
+    const breakfast = pickFromIds(assignment?.breakfastIds, breakfastItems, recentBreakfast);
+    const lunch     = pickFromIds(assignment?.lunchIds,     lunchItems,     recentLunch);
+    const dinner    = pickFromIds(assignment?.dinnerIds,    dinnerItems,    recentDinner);
 
     recentBreakfast.add(breakfast.id);
     recentLunch.add(lunch.id);
