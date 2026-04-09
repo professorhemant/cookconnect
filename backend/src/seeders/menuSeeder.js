@@ -1,1250 +1,953 @@
-const { MenuItem, Ingredient } = require('../models');
+const { MenuItem, Ingredient, DietPlanDayItem, DietPlanDay, DietPlan } = require('../models');
 
 const menuData = [
-  // BREAKFAST ITEMS
+
+  // ─────────────────────────────────────────────
+  // BREAKFAST — Paranthas
+  // ─────────────────────────────────────────────
   {
-    meal_type: 'breakfast', name: 'Poha', cuisine_type: 'Indian',
-    description: 'Flattened rice cooked with mustard seeds, onions, peas and turmeric',
-    prep_time_minutes: 10, cook_time_minutes: 15, servings: 4,
-    calories_per_serving: 350, protein_g: 8, carbs_g: 60, fat_g: 8, fiber_g: 4,
-    kitchen_equipment: 'kadai,spatula,bowl', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: true,
+    meal_type: 'breakfast', name: 'Aloo Parantha', cuisine_type: 'North Indian',
+    description: 'Whole wheat flatbread stuffed with spiced mashed potato, served with dahi and butter',
+    prep_time_minutes: 15, cook_time_minutes: 20, servings: 4,
+    calories_per_serving: 380, protein_g: 9, carbs_g: 58, fat_g: 13, fiber_g: 5,
+    kitchen_equipment: 'tawa,rolling pin,bowl', difficulty: 'medium',
+    is_vegetarian: true, is_vegan: false,
     ingredients: [
-      { name: 'Poha (flattened rice)', quantity: '2', unit: 'cups', calories: 350 },
-      { name: 'Onion', quantity: '1', unit: 'large', calories: 40 },
-      { name: 'Green peas', quantity: '0.5', unit: 'cup', calories: 60 },
-      { name: 'Mustard seeds', quantity: '1', unit: 'tsp', calories: 5 },
-      { name: 'Turmeric', quantity: '0.5', unit: 'tsp', calories: 2 },
-      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Curry leaves', quantity: '8', unit: 'leaves', calories: 2 },
-      { name: 'Lemon juice', quantity: '1', unit: 'tbsp', calories: 4 }
+      { name: 'Whole wheat flour', quantity: '2', unit: 'cups', calories: 400 },
+      { name: 'Potato (boiled, mashed)', quantity: '3', unit: 'medium', calories: 240 },
+      { name: 'Green chilli', quantity: '2', unit: 'pcs', calories: 6 },
+      { name: 'Ghee / butter', quantity: '2', unit: 'tbsp', calories: 180 },
+      { name: 'Salt', quantity: '1', unit: 'tsp', calories: 0 },
+      { name: 'Ajwain', quantity: '0.5', unit: 'tsp', calories: 3 },
     ]
   },
   {
-    meal_type: 'breakfast', name: 'Upma', cuisine_type: 'South Indian',
-    description: 'Semolina porridge cooked with vegetables and tempered with mustard seeds',
-    prep_time_minutes: 5, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 320, protein_g: 9, carbs_g: 55, fat_g: 7, fiber_g: 3,
+    meal_type: 'breakfast', name: 'Gobhi Parantha', cuisine_type: 'North Indian',
+    description: 'Flaky whole wheat parantha stuffed with spiced grated cauliflower',
+    prep_time_minutes: 15, cook_time_minutes: 20, servings: 4,
+    calories_per_serving: 340, protein_g: 10, carbs_g: 52, fat_g: 11, fiber_g: 6,
+    kitchen_equipment: 'tawa,rolling pin,grater', difficulty: 'medium',
+    is_vegetarian: true, is_vegan: false,
+    ingredients: [
+      { name: 'Whole wheat flour', quantity: '2', unit: 'cups', calories: 400 },
+      { name: 'Cauliflower (grated)', quantity: '2', unit: 'cups', calories: 80 },
+      { name: 'Green chilli', quantity: '2', unit: 'pcs', calories: 6 },
+      { name: 'Ghee / butter', quantity: '2', unit: 'tbsp', calories: 180 },
+      { name: 'Ginger (grated)', quantity: '1', unit: 'tsp', calories: 3 },
+      { name: 'Coriander (chopped)', quantity: '2', unit: 'tbsp', calories: 4 },
+    ]
+  },
+  {
+    meal_type: 'breakfast', name: 'Paneer Parantha', cuisine_type: 'North Indian',
+    description: 'Whole wheat parantha stuffed with crumbled spiced paneer',
+    prep_time_minutes: 15, cook_time_minutes: 20, servings: 4,
+    calories_per_serving: 420, protein_g: 16, carbs_g: 50, fat_g: 18, fiber_g: 4,
+    kitchen_equipment: 'tawa,rolling pin,bowl', difficulty: 'medium',
+    is_vegetarian: true, is_vegan: false,
+    ingredients: [
+      { name: 'Whole wheat flour', quantity: '2', unit: 'cups', calories: 400 },
+      { name: 'Paneer (crumbled)', quantity: '200', unit: 'g', calories: 320 },
+      { name: 'Green chilli', quantity: '2', unit: 'pcs', calories: 6 },
+      { name: 'Ghee / butter', quantity: '2', unit: 'tbsp', calories: 180 },
+      { name: 'Cumin powder', quantity: '0.5', unit: 'tsp', calories: 4 },
+    ]
+  },
+  {
+    meal_type: 'breakfast', name: 'Methi Parantha', cuisine_type: 'North Indian',
+    description: 'Healthy parantha made with fresh fenugreek leaves and spices',
+    prep_time_minutes: 10, cook_time_minutes: 20, servings: 4,
+    calories_per_serving: 310, protein_g: 9, carbs_g: 48, fat_g: 10, fiber_g: 7,
+    kitchen_equipment: 'tawa,rolling pin,bowl', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Whole wheat flour', quantity: '2', unit: 'cups', calories: 400 },
+      { name: 'Fresh methi leaves', quantity: '1', unit: 'cup', calories: 30 },
+      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
+      { name: 'Ajwain', quantity: '0.5', unit: 'tsp', calories: 3 },
+      { name: 'Red chilli powder', quantity: '0.5', unit: 'tsp', calories: 3 },
+    ]
+  },
+  {
+    meal_type: 'breakfast', name: 'Mooli Parantha', cuisine_type: 'North Indian',
+    description: 'Parantha stuffed with spiced grated radish — a Punjabi winter favourite',
+    prep_time_minutes: 15, cook_time_minutes: 20, servings: 4,
+    calories_per_serving: 320, protein_g: 8, carbs_g: 50, fat_g: 11, fiber_g: 5,
+    kitchen_equipment: 'tawa,rolling pin,grater', difficulty: 'medium',
+    is_vegetarian: true, is_vegan: false,
+    ingredients: [
+      { name: 'Whole wheat flour', quantity: '2', unit: 'cups', calories: 400 },
+      { name: 'Radish (grated)', quantity: '2', unit: 'cups', calories: 40 },
+      { name: 'Green chilli', quantity: '2', unit: 'pcs', calories: 6 },
+      { name: 'Ghee', quantity: '2', unit: 'tbsp', calories: 180 },
+      { name: 'Ajwain', quantity: '0.5', unit: 'tsp', calories: 3 },
+    ]
+  },
+  {
+    meal_type: 'breakfast', name: 'Pyaz Parantha', cuisine_type: 'North Indian',
+    description: 'Crispy parantha stuffed with spiced onion and herbs',
+    prep_time_minutes: 10, cook_time_minutes: 20, servings: 4,
+    calories_per_serving: 330, protein_g: 8, carbs_g: 52, fat_g: 11, fiber_g: 5,
+    kitchen_equipment: 'tawa,rolling pin,bowl', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Whole wheat flour', quantity: '2', unit: 'cups', calories: 400 },
+      { name: 'Onion (finely chopped)', quantity: '2', unit: 'medium', calories: 80 },
+      { name: 'Green chilli', quantity: '2', unit: 'pcs', calories: 6 },
+      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
+      { name: 'Coriander', quantity: '2', unit: 'tbsp', calories: 4 },
+    ]
+  },
+  {
+    meal_type: 'breakfast', name: 'Dal Parantha', cuisine_type: 'North Indian',
+    description: 'Protein-rich parantha stuffed with cooked chana dal and spices',
+    prep_time_minutes: 20, cook_time_minutes: 20, servings: 4,
+    calories_per_serving: 390, protein_g: 14, carbs_g: 56, fat_g: 13, fiber_g: 8,
+    kitchen_equipment: 'tawa,rolling pin,pressure cooker', difficulty: 'medium',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Whole wheat flour', quantity: '2', unit: 'cups', calories: 400 },
+      { name: 'Chana dal (cooked)', quantity: '1', unit: 'cup', calories: 220 },
+      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
+      { name: 'Coriander powder', quantity: '1', unit: 'tsp', calories: 6 },
+      { name: 'Amchur powder', quantity: '0.5', unit: 'tsp', calories: 2 },
+    ]
+  },
+  {
+    meal_type: 'breakfast', name: 'Lachha Parantha', cuisine_type: 'North Indian',
+    description: 'Multi-layered flaky whole wheat parantha with butter',
+    prep_time_minutes: 15, cook_time_minutes: 20, servings: 4,
+    calories_per_serving: 360, protein_g: 8, carbs_g: 50, fat_g: 15, fiber_g: 4,
+    kitchen_equipment: 'tawa,rolling pin', difficulty: 'medium',
+    is_vegetarian: true, is_vegan: false,
+    ingredients: [
+      { name: 'Whole wheat flour', quantity: '2', unit: 'cups', calories: 400 },
+      { name: 'Ghee', quantity: '3', unit: 'tbsp', calories: 270 },
+      { name: 'Salt', quantity: '1', unit: 'tsp', calories: 0 },
+    ]
+  },
+
+  // ─────────────────────────────────────────────
+  // BREAKFAST — Poha
+  // ─────────────────────────────────────────────
+  {
+    meal_type: 'breakfast', name: 'Batata Poha', cuisine_type: 'Gujarati',
+    description: 'Flattened rice with potato, onion, and tempering of mustard seeds and curry leaves',
+    prep_time_minutes: 10, cook_time_minutes: 15, servings: 4,
+    calories_per_serving: 370, protein_g: 7, carbs_g: 62, fat_g: 9, fiber_g: 4,
     kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
     is_vegetarian: true, is_vegan: true,
     ingredients: [
-      { name: 'Semolina (rava)', quantity: '1.5', unit: 'cups', calories: 420 },
-      { name: 'Mixed vegetables', quantity: '1', unit: 'cup', calories: 80 },
-      { name: 'Onion', quantity: '1', unit: 'medium', calories: 30 },
+      { name: 'Poha (flattened rice)', quantity: '2', unit: 'cups', calories: 350 },
+      { name: 'Potato (diced)', quantity: '2', unit: 'medium', calories: 160 },
+      { name: 'Onion', quantity: '1', unit: 'large', calories: 40 },
+      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
       { name: 'Mustard seeds', quantity: '1', unit: 'tsp', calories: 5 },
-      { name: 'Ghee', quantity: '1', unit: 'tbsp', calories: 120 },
-      { name: 'Green chillies', quantity: '2', unit: 'pieces', calories: 4 }
+      { name: 'Curry leaves', quantity: '8', unit: 'leaves', calories: 2 },
+      { name: 'Lemon juice', quantity: '1', unit: 'tbsp', calories: 4 },
+    ]
+  },
+  {
+    meal_type: 'breakfast', name: 'Kanda Poha', cuisine_type: 'Indian',
+    description: 'Maharashtra-style poha with onion, peanuts and a dash of lemon',
+    prep_time_minutes: 10, cook_time_minutes: 15, servings: 4,
+    calories_per_serving: 355, protein_g: 8, carbs_g: 58, fat_g: 9, fiber_g: 4,
+    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Poha', quantity: '2', unit: 'cups', calories: 350 },
+      { name: 'Onion (finely chopped)', quantity: '2', unit: 'medium', calories: 80 },
+      { name: 'Peanuts (roasted)', quantity: '3', unit: 'tbsp', calories: 120 },
+      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
+      { name: 'Green chilli', quantity: '2', unit: 'pcs', calories: 6 },
+      { name: 'Lemon juice', quantity: '1', unit: 'tbsp', calories: 4 },
+    ]
+  },
+  {
+    meal_type: 'breakfast', name: 'Indori Poha', cuisine_type: 'Indian',
+    description: 'Indori-style thick poha topped with sev, onion, and jalebi',
+    prep_time_minutes: 10, cook_time_minutes: 15, servings: 4,
+    calories_per_serving: 410, protein_g: 8, carbs_g: 65, fat_g: 12, fiber_g: 4,
+    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Thick poha', quantity: '2', unit: 'cups', calories: 350 },
+      { name: 'Sev', quantity: '4', unit: 'tbsp', calories: 120 },
+      { name: 'Onion (chopped)', quantity: '1', unit: 'medium', calories: 40 },
+      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
+      { name: 'Fennel seeds', quantity: '1', unit: 'tsp', calories: 5 },
+    ]
+  },
+
+  // ─────────────────────────────────────────────
+  // BREAKFAST — Uttapam
+  // ─────────────────────────────────────────────
+  {
+    meal_type: 'breakfast', name: 'Plain Uttapam', cuisine_type: 'South Indian',
+    description: 'Thick rice-lentil pancake served with coconut chutney and sambar',
+    prep_time_minutes: 5, cook_time_minutes: 15, servings: 4,
+    calories_per_serving: 280, protein_g: 9, carbs_g: 48, fat_g: 6, fiber_g: 3,
+    kitchen_equipment: 'tawa,spatula', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Idli-dosa batter', quantity: '2', unit: 'cups', calories: 400 },
+      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
+    ]
+  },
+  {
+    meal_type: 'breakfast', name: 'Tomato Uttapam', cuisine_type: 'South Indian',
+    description: 'Fluffy uttapam topped with fresh tomatoes and green chilli',
+    prep_time_minutes: 5, cook_time_minutes: 15, servings: 4,
+    calories_per_serving: 295, protein_g: 9, carbs_g: 50, fat_g: 6, fiber_g: 4,
+    kitchen_equipment: 'tawa,spatula', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Idli-dosa batter', quantity: '2', unit: 'cups', calories: 400 },
+      { name: 'Tomato (sliced)', quantity: '2', unit: 'medium', calories: 40 },
+      { name: 'Green chilli', quantity: '2', unit: 'pcs', calories: 6 },
+      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
+    ]
+  },
+  {
+    meal_type: 'breakfast', name: 'Onion Uttapam', cuisine_type: 'South Indian',
+    description: 'Soft uttapam loaded with caramelised onion and coriander',
+    prep_time_minutes: 5, cook_time_minutes: 15, servings: 4,
+    calories_per_serving: 300, protein_g: 9, carbs_g: 50, fat_g: 7, fiber_g: 4,
+    kitchen_equipment: 'tawa,spatula', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Idli-dosa batter', quantity: '2', unit: 'cups', calories: 400 },
+      { name: 'Onion (finely chopped)', quantity: '2', unit: 'medium', calories: 80 },
+      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
+    ]
+  },
+  {
+    meal_type: 'breakfast', name: 'Mixed Veg Uttapam', cuisine_type: 'South Indian',
+    description: 'Colourful uttapam topped with tomato, onion, capsicum and carrot',
+    prep_time_minutes: 8, cook_time_minutes: 15, servings: 4,
+    calories_per_serving: 315, protein_g: 10, carbs_g: 52, fat_g: 7, fiber_g: 5,
+    kitchen_equipment: 'tawa,spatula', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Idli-dosa batter', quantity: '2', unit: 'cups', calories: 400 },
+      { name: 'Mixed vegetables (chopped)', quantity: '1', unit: 'cup', calories: 80 },
+      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
+    ]
+  },
+
+  // ─────────────────────────────────────────────
+  // BREAKFAST — Shakes
+  // ─────────────────────────────────────────────
+  {
+    meal_type: 'breakfast', name: 'Banana Shake', cuisine_type: 'Indian',
+    description: 'Thick creamy banana milkshake with honey — energising morning drink',
+    prep_time_minutes: 5, cook_time_minutes: 0, servings: 2,
+    calories_per_serving: 280, protein_g: 8, carbs_g: 45, fat_g: 7, fiber_g: 2,
+    kitchen_equipment: 'blender,glass', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: false,
+    ingredients: [
+      { name: 'Banana', quantity: '2', unit: 'large', calories: 200 },
+      { name: 'Milk (full cream)', quantity: '1.5', unit: 'cups', calories: 220 },
+      { name: 'Honey', quantity: '1', unit: 'tbsp', calories: 60 },
+    ]
+  },
+  {
+    meal_type: 'breakfast', name: 'Mango Shake', cuisine_type: 'Indian',
+    description: 'Refreshing Alphonso mango milkshake — summer breakfast favourite',
+    prep_time_minutes: 5, cook_time_minutes: 0, servings: 2,
+    calories_per_serving: 310, protein_g: 7, carbs_g: 52, fat_g: 7, fiber_g: 2,
+    kitchen_equipment: 'blender,glass', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: false,
+    ingredients: [
+      { name: 'Mango pulp / fresh mango', quantity: '1', unit: 'cup', calories: 200 },
+      { name: 'Milk', quantity: '1.5', unit: 'cups', calories: 220 },
+      { name: 'Sugar', quantity: '1', unit: 'tbsp', calories: 50 },
+    ]
+  },
+  {
+    meal_type: 'breakfast', name: 'Chikoo Shake', cuisine_type: 'Indian',
+    description: 'Sweet sapodilla milkshake — rich, smooth and full of natural energy',
+    prep_time_minutes: 5, cook_time_minutes: 0, servings: 2,
+    calories_per_serving: 295, protein_g: 7, carbs_g: 48, fat_g: 7, fiber_g: 3,
+    kitchen_equipment: 'blender,glass', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: false,
+    ingredients: [
+      { name: 'Chikoo (sapodilla)', quantity: '3', unit: 'pcs', calories: 200 },
+      { name: 'Milk', quantity: '1.5', unit: 'cups', calories: 220 },
+      { name: 'Honey', quantity: '1', unit: 'tsp', calories: 20 },
+    ]
+  },
+  {
+    meal_type: 'breakfast', name: 'Strawberry Shake', cuisine_type: 'Indian',
+    description: 'Fresh strawberry blended with chilled milk and a hint of vanilla',
+    prep_time_minutes: 5, cook_time_minutes: 0, servings: 2,
+    calories_per_serving: 250, protein_g: 8, carbs_g: 38, fat_g: 7, fiber_g: 2,
+    kitchen_equipment: 'blender,glass', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: false,
+    ingredients: [
+      { name: 'Strawberry', quantity: '1', unit: 'cup', calories: 50 },
+      { name: 'Milk', quantity: '1.5', unit: 'cups', calories: 220 },
+      { name: 'Sugar', quantity: '1', unit: 'tbsp', calories: 50 },
+    ]
+  },
+  {
+    meal_type: 'breakfast', name: 'Papaya Shake', cuisine_type: 'Indian',
+    description: 'Nutritious papaya blended with milk and cardamom — great for digestion',
+    prep_time_minutes: 5, cook_time_minutes: 0, servings: 2,
+    calories_per_serving: 240, protein_g: 7, carbs_g: 40, fat_g: 6, fiber_g: 3,
+    kitchen_equipment: 'blender,glass', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: false,
+    ingredients: [
+      { name: 'Papaya (ripe)', quantity: '1', unit: 'cup', calories: 60 },
+      { name: 'Milk', quantity: '1.5', unit: 'cups', calories: 220 },
+      { name: 'Honey', quantity: '1', unit: 'tsp', calories: 20 },
+      { name: 'Cardamom powder', quantity: '0.25', unit: 'tsp', calories: 2 },
+    ]
+  },
+
+  // ─────────────────────────────────────────────
+  // BREAKFAST — Dahi / Lassi
+  // ─────────────────────────────────────────────
+  {
+    meal_type: 'breakfast', name: 'Dahi with Shakkar', cuisine_type: 'North Indian',
+    description: 'Fresh homemade curd with jaggery or sugar — light and cooling',
+    prep_time_minutes: 2, cook_time_minutes: 0, servings: 2,
+    calories_per_serving: 180, protein_g: 8, carbs_g: 24, fat_g: 5, fiber_g: 0,
+    kitchen_equipment: 'bowl', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: false,
+    ingredients: [
+      { name: 'Dahi (curd)', quantity: '1', unit: 'cup', calories: 150 },
+      { name: 'Sugar / jaggery', quantity: '2', unit: 'tsp', calories: 30 },
+    ]
+  },
+  {
+    meal_type: 'breakfast', name: 'Sweet Lassi', cuisine_type: 'Punjabi',
+    description: 'Thick churned yogurt drink sweetened with sugar and flavoured with cardamom',
+    prep_time_minutes: 5, cook_time_minutes: 0, servings: 2,
+    calories_per_serving: 220, protein_g: 9, carbs_g: 32, fat_g: 6, fiber_g: 0,
+    kitchen_equipment: 'blender,glass', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: false,
+    ingredients: [
+      { name: 'Dahi (thick curd)', quantity: '1.5', unit: 'cups', calories: 220 },
+      { name: 'Sugar', quantity: '2', unit: 'tbsp', calories: 100 },
+      { name: 'Cardamom powder', quantity: '0.25', unit: 'tsp', calories: 2 },
+      { name: 'Ice', quantity: '4', unit: 'cubes', calories: 0 },
+    ]
+  },
+  {
+    meal_type: 'breakfast', name: 'Namkeen Lassi', cuisine_type: 'Punjabi',
+    description: 'Salted buttermilk lassi with roasted cumin and mint — a cooling drink',
+    prep_time_minutes: 5, cook_time_minutes: 0, servings: 2,
+    calories_per_serving: 140, protein_g: 8, carbs_g: 12, fat_g: 5, fiber_g: 0,
+    kitchen_equipment: 'blender,glass', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: false,
+    ingredients: [
+      { name: 'Dahi (curd)', quantity: '1.5', unit: 'cups', calories: 220 },
+      { name: 'Roasted cumin powder', quantity: '0.5', unit: 'tsp', calories: 4 },
+      { name: 'Salt', quantity: '0.5', unit: 'tsp', calories: 0 },
+      { name: 'Mint leaves', quantity: '5', unit: 'leaves', calories: 2 },
+    ]
+  },
+  {
+    meal_type: 'breakfast', name: 'Mango Lassi', cuisine_type: 'Punjabi',
+    description: 'Creamy mango yogurt lassi — thick, sweet and absolutely irresistible',
+    prep_time_minutes: 5, cook_time_minutes: 0, servings: 2,
+    calories_per_serving: 270, protein_g: 8, carbs_g: 42, fat_g: 6, fiber_g: 1,
+    kitchen_equipment: 'blender,glass', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: false,
+    ingredients: [
+      { name: 'Dahi (thick curd)', quantity: '1', unit: 'cup', calories: 150 },
+      { name: 'Mango pulp', quantity: '0.5', unit: 'cup', calories: 100 },
+      { name: 'Sugar', quantity: '2', unit: 'tbsp', calories: 100 },
+    ]
+  },
+
+  // ─────────────────────────────────────────────
+  // BREAKFAST — Other classics
+  // ─────────────────────────────────────────────
+  {
+    meal_type: 'breakfast', name: 'Masala Dosa', cuisine_type: 'South Indian',
+    description: 'Crispy fermented rice crepe stuffed with spiced potato filling, served with sambar and chutney',
+    prep_time_minutes: 10, cook_time_minutes: 20, servings: 4,
+    calories_per_serving: 390, protein_g: 10, carbs_g: 60, fat_g: 13, fiber_g: 4,
+    kitchen_equipment: 'tawa,spatula', difficulty: 'medium',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Dosa batter', quantity: '2', unit: 'cups', calories: 360 },
+      { name: 'Potato (boiled)', quantity: '3', unit: 'medium', calories: 240 },
+      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
+      { name: 'Mustard seeds, curry leaves', quantity: '1', unit: 'tsp', calories: 5 },
+    ]
+  },
+  {
+    meal_type: 'breakfast', name: 'Plain Dosa', cuisine_type: 'South Indian',
+    description: 'Thin crispy plain dosa served with coconut chutney and sambar',
+    prep_time_minutes: 5, cook_time_minutes: 15, servings: 4,
+    calories_per_serving: 250, protein_g: 7, carbs_g: 44, fat_g: 6, fiber_g: 2,
+    kitchen_equipment: 'tawa,spatula', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Dosa batter', quantity: '2', unit: 'cups', calories: 360 },
+      { name: 'Oil', quantity: '1', unit: 'tbsp', calories: 120 },
     ]
   },
   {
     meal_type: 'breakfast', name: 'Idli Sambar', cuisine_type: 'South Indian',
-    description: 'Steamed rice cakes served with lentil vegetable stew and coconut chutney',
-    prep_time_minutes: 480, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 380, protein_g: 12, carbs_g: 65, fat_g: 6, fiber_g: 5,
-    kitchen_equipment: 'idli_mould,pressure_cooker,kadai', difficulty: 'medium',
+    description: 'Steamed rice-lentil cakes served with toor dal sambar and coconut chutney',
+    prep_time_minutes: 5, cook_time_minutes: 15, servings: 4,
+    calories_per_serving: 260, protein_g: 9, carbs_g: 46, fat_g: 4, fiber_g: 3,
+    kitchen_equipment: 'idli cooker,pressure cooker', difficulty: 'easy',
     is_vegetarian: true, is_vegan: true,
     ingredients: [
-      { name: 'Idli batter', quantity: '3', unit: 'cups', calories: 480 },
-      { name: 'Toor dal', quantity: '0.5', unit: 'cup', calories: 180 },
-      { name: 'Mixed vegetables', quantity: '1', unit: 'cup', calories: 80 },
-      { name: 'Sambar powder', quantity: '2', unit: 'tsp', calories: 15 },
-      { name: 'Tamarind', quantity: '1', unit: 'small ball', calories: 20 }
-    ]
-  },
-  {
-    meal_type: 'breakfast', name: 'Aloo Paratha', cuisine_type: 'North Indian',
-    description: 'Whole wheat flatbread stuffed with spiced mashed potatoes, served with curd',
-    prep_time_minutes: 20, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 480, protein_g: 10, carbs_g: 72, fat_g: 16, fiber_g: 5,
-    kitchen_equipment: 'tawa,rolling_pin,bowl', difficulty: 'medium',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: [
-      { name: 'Whole wheat flour', quantity: '2', unit: 'cups', calories: 450 },
-      { name: 'Potato', quantity: '3', unit: 'medium', calories: 300 },
-      { name: 'Ghee', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Green chillies', quantity: '2', unit: 'pieces', calories: 4 },
-      { name: 'Coriander leaves', quantity: '2', unit: 'tbsp', calories: 5 },
-      { name: 'Curd', quantity: '0.5', unit: 'cup', calories: 60 }
-    ]
-  },
-  {
-    meal_type: 'breakfast', name: 'Oatmeal with Fruits', cuisine_type: 'International',
-    description: 'Rolled oats cooked with milk, topped with seasonal fruits and honey',
-    prep_time_minutes: 5, cook_time_minutes: 10, servings: 2,
-    calories_per_serving: 340, protein_g: 12, carbs_g: 58, fat_g: 7, fiber_g: 6,
-    kitchen_equipment: 'saucepan,bowl', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: [
-      { name: 'Rolled oats', quantity: '1', unit: 'cup', calories: 300 },
-      { name: 'Milk', quantity: '1.5', unit: 'cups', calories: 180 },
-      { name: 'Banana', quantity: '1', unit: 'medium', calories: 100 },
-      { name: 'Honey', quantity: '1', unit: 'tbsp', calories: 60 },
-      { name: 'Mixed fruits', quantity: '0.5', unit: 'cup', calories: 80 }
-    ]
-  },
-  {
-    meal_type: 'breakfast', name: 'Vegetable Sandwich', cuisine_type: 'International',
-    description: 'Toasted whole wheat bread with fresh vegetables, cheese and green chutney',
-    prep_time_minutes: 10, cook_time_minutes: 5, servings: 2,
-    calories_per_serving: 310, protein_g: 11, carbs_g: 45, fat_g: 10, fiber_g: 4,
-    kitchen_equipment: 'toaster,knife,plate', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: [
-      { name: 'Whole wheat bread', quantity: '4', unit: 'slices', calories: 280 },
-      { name: 'Cucumber', quantity: '1', unit: 'medium', calories: 20 },
-      { name: 'Tomato', quantity: '1', unit: 'medium', calories: 25 },
-      { name: 'Cheese slice', quantity: '2', unit: 'slices', calories: 140 },
-      { name: 'Green chutney', quantity: '2', unit: 'tbsp', calories: 30 }
-    ]
-  },
-  {
-    meal_type: 'breakfast', name: 'Dalia (Broken Wheat Porridge)', cuisine_type: 'North Indian',
-    description: 'Nutritious broken wheat cooked with vegetables and mild spices',
-    prep_time_minutes: 5, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 290, protein_g: 10, carbs_g: 52, fat_g: 5, fiber_g: 7,
-    kitchen_equipment: 'pressure_cooker,kadai', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: true,
-    ingredients: [
-      { name: 'Broken wheat (dalia)', quantity: '1', unit: 'cup', calories: 340 },
-      { name: 'Mixed vegetables', quantity: '1', unit: 'cup', calories: 80 },
-      { name: 'Ghee', quantity: '1', unit: 'tbsp', calories: 120 },
-      { name: 'Cumin seeds', quantity: '1', unit: 'tsp', calories: 8 }
+      { name: 'Idli batter', quantity: '2', unit: 'cups', calories: 360 },
+      { name: 'Toor dal (cooked)', quantity: '0.5', unit: 'cup', calories: 120 },
+      { name: 'Mixed vegetables', quantity: '0.5', unit: 'cup', calories: 40 },
+      { name: 'Tamarind', quantity: '1', unit: 'small piece', calories: 10 },
     ]
   },
   {
     meal_type: 'breakfast', name: 'Besan Chilla', cuisine_type: 'North Indian',
-    description: 'Savory chickpea flour pancake with vegetables, high in protein',
-    prep_time_minutes: 10, cook_time_minutes: 15, servings: 4,
-    calories_per_serving: 260, protein_g: 14, carbs_g: 35, fat_g: 7, fiber_g: 5,
-    kitchen_equipment: 'tawa,ladle,bowl', difficulty: 'easy',
+    description: 'Savoury gram flour pancake with veggies — high protein, quick breakfast',
+    prep_time_minutes: 5, cook_time_minutes: 15, servings: 4,
+    calories_per_serving: 300, protein_g: 14, carbs_g: 38, fat_g: 10, fiber_g: 6,
+    kitchen_equipment: 'tawa,spatula', difficulty: 'easy',
     is_vegetarian: true, is_vegan: true,
     ingredients: [
-      { name: 'Chickpea flour (besan)', quantity: '2', unit: 'cups', calories: 400 },
-      { name: 'Onion', quantity: '1', unit: 'medium', calories: 30 },
-      { name: 'Tomato', quantity: '1', unit: 'medium', calories: 25 },
-      { name: 'Spinach', quantity: '0.5', unit: 'cup', calories: 15 },
-      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 }
-    ]
-  },
-  {
-    meal_type: 'breakfast', name: 'Fruit Bowl', cuisine_type: 'International',
-    description: 'Mixed seasonal fruits with chaat masala and mint, light and refreshing',
-    prep_time_minutes: 10, cook_time_minutes: 0, servings: 2,
-    calories_per_serving: 200, protein_g: 3, carbs_g: 48, fat_g: 1, fiber_g: 6,
-    kitchen_equipment: 'knife,bowl', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: true,
-    ingredients: [
-      { name: 'Apple', quantity: '1', unit: 'medium', calories: 80 },
-      { name: 'Banana', quantity: '1', unit: 'medium', calories: 100 },
-      { name: 'Orange', quantity: '1', unit: 'medium', calories: 60 },
-      { name: 'Papaya', quantity: '0.5', unit: 'cup', calories: 40 },
-      { name: 'Chaat masala', quantity: '0.5', unit: 'tsp', calories: 3 }
-    ]
-  },
-  {
-    meal_type: 'breakfast', name: 'Egg Toast', cuisine_type: 'International',
-    description: 'Whole wheat toast topped with scrambled eggs, bell peppers and herbs',
-    prep_time_minutes: 5, cook_time_minutes: 10, servings: 2,
-    calories_per_serving: 360, protein_g: 18, carbs_g: 32, fat_g: 16, fiber_g: 3,
-    kitchen_equipment: 'pan,toaster,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: [
-      { name: 'Eggs', quantity: '4', unit: 'pieces', calories: 280 },
-      { name: 'Whole wheat bread', quantity: '4', unit: 'slices', calories: 280 },
-      { name: 'Bell pepper', quantity: '0.5', unit: 'cup', calories: 20 },
-      { name: 'Butter', quantity: '1', unit: 'tbsp', calories: 100 }
+      { name: 'Besan (chickpea flour)', quantity: '1.5', unit: 'cups', calories: 500 },
+      { name: 'Onion (chopped)', quantity: '1', unit: 'medium', calories: 40 },
+      { name: 'Green chilli', quantity: '2', unit: 'pcs', calories: 6 },
+      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
+      { name: 'Tomato (chopped)', quantity: '1', unit: 'medium', calories: 20 },
     ]
   },
   {
     meal_type: 'breakfast', name: 'Moong Dal Chilla', cuisine_type: 'North Indian',
-    description: 'Green moong lentil pancakes, protein-rich and easy to digest',
-    prep_time_minutes: 240, cook_time_minutes: 15, servings: 4,
-    calories_per_serving: 240, protein_g: 15, carbs_g: 38, fat_g: 4, fiber_g: 6,
-    kitchen_equipment: 'tawa,ladle,blender', difficulty: 'medium',
+    description: 'Light protein-rich green moong dal pancake with spices and herbs',
+    prep_time_minutes: 15, cook_time_minutes: 15, servings: 4,
+    calories_per_serving: 280, protein_g: 15, carbs_g: 38, fat_g: 8, fiber_g: 7,
+    kitchen_equipment: 'tawa,spatula,blender', difficulty: 'easy',
     is_vegetarian: true, is_vegan: true,
     ingredients: [
-      { name: 'Moong dal (soaked)', quantity: '1.5', unit: 'cups', calories: 360 },
-      { name: 'Onion', quantity: '1', unit: 'medium', calories: 30 },
-      { name: 'Green chillies', quantity: '2', unit: 'pieces', calories: 4 },
-      { name: 'Ginger', quantity: '0.5', unit: 'inch', calories: 3 },
-      { name: 'Oil', quantity: '1', unit: 'tbsp', calories: 120 }
-    ]
-  },
-  {
-    meal_type: 'breakfast', name: 'Masala Dosa', cuisine_type: 'South Indian',
-    description: 'Crispy rice and lentil crepe filled with spiced potato mixture',
-    prep_time_minutes: 480, cook_time_minutes: 25, servings: 4,
-    calories_per_serving: 420, protein_g: 9, carbs_g: 68, fat_g: 12, fiber_g: 4,
-    kitchen_equipment: 'tawa,ladle,pressure_cooker', difficulty: 'hard',
-    is_vegetarian: true, is_vegan: true,
-    ingredients: [
-      { name: 'Dosa batter', quantity: '3', unit: 'cups', calories: 480 },
-      { name: 'Potato', quantity: '3', unit: 'medium', calories: 300 },
-      { name: 'Onion', quantity: '2', unit: 'medium', calories: 60 },
-      { name: 'Mustard seeds', quantity: '1', unit: 'tsp', calories: 5 },
-      { name: 'Oil', quantity: '3', unit: 'tbsp', calories: 360 }
-    ]
-  },
-
-  // LUNCH ITEMS
-  {
-    meal_type: 'lunch', name: 'Dal Rice', cuisine_type: 'North Indian',
-    description: 'Comforting yellow lentil dal served with steamed basmati rice',
-    prep_time_minutes: 10, cook_time_minutes: 30, servings: 4,
-    calories_per_serving: 520, protein_g: 18, carbs_g: 90, fat_g: 8, fiber_g: 8,
-    kitchen_equipment: 'pressure_cooker,kadai', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: true,
-    ingredients: [
-      { name: 'Toor dal', quantity: '1', unit: 'cup', calories: 360 },
-      { name: 'Basmati rice', quantity: '1.5', unit: 'cups', calories: 480 },
-      { name: 'Tomato', quantity: '2', unit: 'medium', calories: 50 },
-      { name: 'Onion', quantity: '1', unit: 'medium', calories: 30 },
-      { name: 'Ghee', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Spices (cumin, turmeric, coriander)', quantity: '1', unit: 'set', calories: 20 }
-    ]
-  },
-  {
-    meal_type: 'lunch', name: 'Rajma Chawal', cuisine_type: 'North Indian',
-    description: 'Kidney beans in rich tomato-onion gravy served with steamed rice',
-    prep_time_minutes: 480, cook_time_minutes: 45, servings: 4,
-    calories_per_serving: 580, protein_g: 22, carbs_g: 95, fat_g: 10, fiber_g: 12,
-    kitchen_equipment: 'pressure_cooker,kadai', difficulty: 'medium',
-    is_vegetarian: true, is_vegan: true,
-    ingredients: [
-      { name: 'Rajma (kidney beans)', quantity: '1', unit: 'cup', calories: 340 },
-      { name: 'Basmati rice', quantity: '1.5', unit: 'cups', calories: 480 },
-      { name: 'Tomatoes', quantity: '3', unit: 'medium', calories: 75 },
-      { name: 'Onion', quantity: '2', unit: 'medium', calories: 60 },
-      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 }
-    ]
-  },
-  {
-    meal_type: 'lunch', name: 'Chole Bhature', cuisine_type: 'Punjabi',
-    description: 'Spiced chickpea curry with deep-fried leavened bread, a Punjabi classic',
-    prep_time_minutes: 480, cook_time_minutes: 40, servings: 4,
-    calories_per_serving: 680, protein_g: 20, carbs_g: 100, fat_g: 22, fiber_g: 10,
-    kitchen_equipment: 'pressure_cooker,kadai,deep_fry_pan', difficulty: 'medium',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: [
-      { name: 'Chickpeas (chole)', quantity: '1.5', unit: 'cups', calories: 500 },
-      { name: 'All-purpose flour', quantity: '2', unit: 'cups', calories: 440 },
-      { name: 'Curd', quantity: '0.5', unit: 'cup', calories: 60 },
-      { name: 'Oil for frying', quantity: '4', unit: 'tbsp', calories: 480 }
-    ]
-  },
-  {
-    meal_type: 'lunch', name: 'Vegetable Pulao', cuisine_type: 'North Indian',
-    description: 'Fragrant basmati rice cooked with mixed vegetables and whole spices',
-    prep_time_minutes: 15, cook_time_minutes: 25, servings: 4,
-    calories_per_serving: 490, protein_g: 10, carbs_g: 85, fat_g: 12, fiber_g: 5,
-    kitchen_equipment: 'pressure_cooker,kadai', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: [
-      { name: 'Basmati rice', quantity: '1.5', unit: 'cups', calories: 480 },
-      { name: 'Mixed vegetables', quantity: '2', unit: 'cups', calories: 160 },
-      { name: 'Ghee', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Whole spices (bay leaf, cardamom, cloves)', quantity: '1', unit: 'set', calories: 10 }
-    ]
-  },
-  {
-    meal_type: 'lunch', name: 'Paneer Sabzi with Roti', cuisine_type: 'North Indian',
-    description: 'Fresh cottage cheese cooked in spiced tomato-onion gravy with whole wheat rotis',
-    prep_time_minutes: 15, cook_time_minutes: 30, servings: 4,
-    calories_per_serving: 560, protein_g: 24, carbs_g: 60, fat_g: 22, fiber_g: 4,
-    kitchen_equipment: 'kadai,tawa,rolling_pin', difficulty: 'medium',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: [
-      { name: 'Paneer', quantity: '300', unit: 'grams', calories: 480 },
-      { name: 'Whole wheat flour', quantity: '2', unit: 'cups', calories: 450 },
-      { name: 'Tomatoes', quantity: '3', unit: 'medium', calories: 75 },
-      { name: 'Onion', quantity: '2', unit: 'medium', calories: 60 },
-      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 }
-    ]
-  },
-  {
-    meal_type: 'lunch', name: 'Mixed Veg Thali', cuisine_type: 'Indian',
-    description: 'Complete Indian thali with dal, two sabzis, rice, roti, salad and papad',
-    prep_time_minutes: 20, cook_time_minutes: 45, servings: 4,
-    calories_per_serving: 650, protein_g: 20, carbs_g: 105, fat_g: 15, fiber_g: 10,
-    kitchen_equipment: 'pressure_cooker,kadai,tawa', difficulty: 'hard',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: [
-      { name: 'Dal (mixed lentils)', quantity: '0.5', unit: 'cup', calories: 180 },
-      { name: 'Seasonal vegetables', quantity: '2', unit: 'cups', calories: 160 },
-      { name: 'Rice', quantity: '0.5', unit: 'cup', calories: 160 },
-      { name: 'Whole wheat flour', quantity: '0.5', unit: 'cup', calories: 112 }
-    ]
-  },
-  {
-    meal_type: 'lunch', name: 'Khichdi', cuisine_type: 'Indian',
-    description: 'One-pot rice and lentil dish, the ultimate comfort food and easy to digest',
-    prep_time_minutes: 10, cook_time_minutes: 25, servings: 4,
-    calories_per_serving: 460, protein_g: 16, carbs_g: 80, fat_g: 8, fiber_g: 7,
-    kitchen_equipment: 'pressure_cooker,kadai', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: true,
-    ingredients: [
-      { name: 'Rice', quantity: '1', unit: 'cup', calories: 320 },
-      { name: 'Moong dal', quantity: '0.5', unit: 'cup', calories: 180 },
-      { name: 'Mixed vegetables', quantity: '1', unit: 'cup', calories: 80 },
-      { name: 'Ghee', quantity: '1', unit: 'tbsp', calories: 120 },
-      { name: 'Turmeric', quantity: '0.5', unit: 'tsp', calories: 2 }
-    ]
-  },
-  {
-    meal_type: 'lunch', name: 'Palak Dal with Rice', cuisine_type: 'North Indian',
-    description: 'Protein-rich lentils cooked with fresh spinach, served with steamed rice',
-    prep_time_minutes: 10, cook_time_minutes: 30, servings: 4,
-    calories_per_serving: 500, protein_g: 20, carbs_g: 85, fat_g: 7, fiber_g: 9,
-    kitchen_equipment: 'pressure_cooker,kadai', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: true,
-    ingredients: [
-      { name: 'Toor dal', quantity: '0.75', unit: 'cup', calories: 270 },
-      { name: 'Spinach (palak)', quantity: '2', unit: 'cups', calories: 50 },
-      { name: 'Rice', quantity: '1.5', unit: 'cups', calories: 480 },
-      { name: 'Ghee', quantity: '1', unit: 'tbsp', calories: 120 }
-    ]
-  },
-  {
-    meal_type: 'lunch', name: 'Aloo Gobi with Roti', cuisine_type: 'North Indian',
-    description: 'Potato and cauliflower cooked with cumin and spices, served with whole wheat roti',
-    prep_time_minutes: 15, cook_time_minutes: 25, servings: 4,
-    calories_per_serving: 480, protein_g: 11, carbs_g: 78, fat_g: 12, fiber_g: 7,
-    kitchen_equipment: 'kadai,tawa,rolling_pin', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: true,
-    ingredients: [
-      { name: 'Potato', quantity: '3', unit: 'medium', calories: 300 },
-      { name: 'Cauliflower', quantity: '1', unit: 'small head', calories: 100 },
-      { name: 'Whole wheat flour', quantity: '2', unit: 'cups', calories: 450 },
-      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 }
-    ]
-  },
-  {
-    meal_type: 'lunch', name: 'Sambar Rice', cuisine_type: 'South Indian',
-    description: 'Rice mixed with tangy tamarind sambar, tempered with mustard seeds',
-    prep_time_minutes: 10, cook_time_minutes: 35, servings: 4,
-    calories_per_serving: 510, protein_g: 14, carbs_g: 90, fat_g: 8, fiber_g: 8,
-    kitchen_equipment: 'pressure_cooker,kadai', difficulty: 'medium',
-    is_vegetarian: true, is_vegan: true,
-    ingredients: [
-      { name: 'Rice', quantity: '1.5', unit: 'cups', calories: 480 },
-      { name: 'Toor dal', quantity: '0.5', unit: 'cup', calories: 180 },
-      { name: 'Vegetables (drumstick, brinjal)', quantity: '1', unit: 'cup', calories: 80 },
-      { name: 'Tamarind', quantity: '1', unit: 'small ball', calories: 20 },
-      { name: 'Sambar powder', quantity: '2', unit: 'tsp', calories: 15 }
-    ]
-  },
-  {
-    meal_type: 'lunch', name: 'Vegetable Biryani', cuisine_type: 'Mughal',
-    description: 'Aromatic basmati rice cooked with vegetables and whole spices in dum style',
-    prep_time_minutes: 20, cook_time_minutes: 45, servings: 4,
-    calories_per_serving: 580, protein_g: 12, carbs_g: 98, fat_g: 14, fiber_g: 5,
-    kitchen_equipment: 'heavy_pot,kadai', difficulty: 'hard',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: [
-      { name: 'Basmati rice', quantity: '2', unit: 'cups', calories: 640 },
-      { name: 'Mixed vegetables', quantity: '2', unit: 'cups', calories: 160 },
-      { name: 'Saffron', quantity: '0.25', unit: 'tsp', calories: 1 },
-      { name: 'Whole spices', quantity: '1', unit: 'set', calories: 15 },
-      { name: 'Ghee', quantity: '3', unit: 'tbsp', calories: 360 }
-    ]
-  },
-  {
-    meal_type: 'lunch', name: 'Dahi Rice', cuisine_type: 'South Indian',
-    description: 'Cooled rice mixed with curd and tempered with mustard seeds and curry leaves',
-    prep_time_minutes: 10, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 430, protein_g: 12, carbs_g: 75, fat_g: 8, fiber_g: 2,
-    kitchen_equipment: 'pressure_cooker,kadai', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: [
-      { name: 'Rice', quantity: '1.5', unit: 'cups', calories: 480 },
-      { name: 'Curd', quantity: '1', unit: 'cup', calories: 120 },
-      { name: 'Mustard seeds', quantity: '1', unit: 'tsp', calories: 5 },
-      { name: 'Curry leaves', quantity: '10', unit: 'leaves', calories: 3 },
-      { name: 'Oil', quantity: '1', unit: 'tbsp', calories: 120 }
-    ]
-  },
-
-  // DINNER ITEMS
-  {
-    meal_type: 'dinner', name: 'Roti with Mixed Sabzi', cuisine_type: 'North Indian',
-    description: 'Soft whole wheat rotis with seasonal vegetable curry, a balanced dinner',
-    prep_time_minutes: 15, cook_time_minutes: 25, servings: 4,
-    calories_per_serving: 420, protein_g: 12, carbs_g: 68, fat_g: 10, fiber_g: 6,
-    kitchen_equipment: 'tawa,kadai,rolling_pin', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: true,
-    ingredients: [
-      { name: 'Whole wheat flour', quantity: '2', unit: 'cups', calories: 450 },
-      { name: 'Seasonal vegetables', quantity: '2', unit: 'cups', calories: 160 },
+      { name: 'Moong dal (soaked)', quantity: '1', unit: 'cup', calories: 340 },
+      { name: 'Ginger', quantity: '1', unit: 'inch', calories: 5 },
+      { name: 'Green chilli', quantity: '2', unit: 'pcs', calories: 6 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Spices', quantity: '1', unit: 'set', calories: 15 }
-    ]
-  },
-  {
-    meal_type: 'dinner', name: 'Paneer Butter Masala with Roti', cuisine_type: 'North Indian',
-    description: 'Creamy tomato-based paneer gravy with butter rotis, a family favourite',
-    prep_time_minutes: 15, cook_time_minutes: 30, servings: 4,
-    calories_per_serving: 560, protein_g: 22, carbs_g: 55, fat_g: 26, fiber_g: 4,
-    kitchen_equipment: 'kadai,tawa,blender', difficulty: 'medium',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: [
-      { name: 'Paneer', quantity: '300', unit: 'grams', calories: 480 },
-      { name: 'Tomatoes', quantity: '4', unit: 'medium', calories: 100 },
-      { name: 'Butter', quantity: '2', unit: 'tbsp', calories: 200 },
-      { name: 'Cream', quantity: '3', unit: 'tbsp', calories: 150 },
-      { name: 'Whole wheat flour', quantity: '2', unit: 'cups', calories: 450 }
-    ]
-  },
-  {
-    meal_type: 'dinner', name: 'Tomato Soup with Bread', cuisine_type: 'International',
-    description: 'Fresh tomato soup with herbs, served with toasted whole grain bread',
-    prep_time_minutes: 10, cook_time_minutes: 25, servings: 4,
-    calories_per_serving: 290, protein_g: 8, carbs_g: 45, fat_g: 8, fiber_g: 5,
-    kitchen_equipment: 'saucepan,blender', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: [
-      { name: 'Tomatoes', quantity: '6', unit: 'medium', calories: 150 },
-      { name: 'Onion', quantity: '1', unit: 'medium', calories: 30 },
-      { name: 'Cream', quantity: '2', unit: 'tbsp', calories: 100 },
-      { name: 'Whole grain bread', quantity: '4', unit: 'slices', calories: 280 },
-      { name: 'Butter', quantity: '1', unit: 'tbsp', calories: 100 }
-    ]
-  },
-  {
-    meal_type: 'dinner', name: 'Moong Dal Khichdi', cuisine_type: 'Indian',
-    description: 'Light and digestible moong dal khichdi, ideal for a healthy dinner',
-    prep_time_minutes: 10, cook_time_minutes: 25, servings: 4,
-    calories_per_serving: 400, protein_g: 18, carbs_g: 68, fat_g: 6, fiber_g: 8,
-    kitchen_equipment: 'pressure_cooker,kadai', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: true,
-    ingredients: [
-      { name: 'Rice', quantity: '0.75', unit: 'cup', calories: 240 },
-      { name: 'Moong dal', quantity: '0.75', unit: 'cup', calories: 270 },
-      { name: 'Ghee', quantity: '1', unit: 'tbsp', calories: 120 },
-      { name: 'Turmeric', quantity: '0.5', unit: 'tsp', calories: 2 },
-      { name: 'Ginger', quantity: '0.5', unit: 'inch', calories: 3 }
-    ]
-  },
-  {
-    meal_type: 'dinner', name: 'Dal Tadka with Jeera Rice', cuisine_type: 'North Indian',
-    description: 'Yellow dal tempered with cumin and red chillies, served with cumin-flavored rice',
-    prep_time_minutes: 10, cook_time_minutes: 30, servings: 4,
-    calories_per_serving: 510, protein_g: 18, carbs_g: 88, fat_g: 9, fiber_g: 8,
-    kitchen_equipment: 'pressure_cooker,kadai', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: true,
-    ingredients: [
-      { name: 'Chana dal', quantity: '0.75', unit: 'cup', calories: 270 },
-      { name: 'Basmati rice', quantity: '1.5', unit: 'cups', calories: 480 },
-      { name: 'Ghee', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Cumin seeds', quantity: '2', unit: 'tsp', calories: 16 }
-    ]
-  },
-  {
-    meal_type: 'dinner', name: 'Vegetable Curry with Rice', cuisine_type: 'Indian',
-    description: 'Mixed vegetable curry in coconut milk gravy, served with steamed rice',
-    prep_time_minutes: 15, cook_time_minutes: 30, servings: 4,
-    calories_per_serving: 480, protein_g: 10, carbs_g: 80, fat_g: 12, fiber_g: 6,
-    kitchen_equipment: 'kadai,pressure_cooker', difficulty: 'medium',
-    is_vegetarian: true, is_vegan: true,
-    ingredients: [
-      { name: 'Mixed vegetables', quantity: '3', unit: 'cups', calories: 240 },
-      { name: 'Coconut milk', quantity: '0.5', unit: 'cup', calories: 120 },
-      { name: 'Rice', quantity: '1.5', unit: 'cups', calories: 480 },
-      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 }
-    ]
-  },
-  {
-    meal_type: 'dinner', name: 'Palak Paneer with Roti', cuisine_type: 'North Indian',
-    description: 'Iron-rich spinach gravy with soft paneer cubes, served with whole wheat rotis',
-    prep_time_minutes: 15, cook_time_minutes: 25, servings: 4,
-    calories_per_serving: 500, protein_g: 24, carbs_g: 52, fat_g: 20, fiber_g: 6,
-    kitchen_equipment: 'kadai,tawa,blender', difficulty: 'medium',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: [
-      { name: 'Spinach (palak)', quantity: '4', unit: 'cups', calories: 100 },
-      { name: 'Paneer', quantity: '250', unit: 'grams', calories: 400 },
-      { name: 'Whole wheat flour', quantity: '2', unit: 'cups', calories: 450 },
-      { name: 'Cream', quantity: '2', unit: 'tbsp', calories: 100 },
-      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 }
-    ]
-  },
-  {
-    meal_type: 'dinner', name: 'Mixed Dal with Roti', cuisine_type: 'North Indian',
-    description: 'Five-lentil dal cooked with tomatoes and tempered, served with fresh rotis',
-    prep_time_minutes: 10, cook_time_minutes: 35, servings: 4,
-    calories_per_serving: 450, protein_g: 20, carbs_g: 72, fat_g: 8, fiber_g: 10,
-    kitchen_equipment: 'pressure_cooker,kadai,tawa', difficulty: 'medium',
-    is_vegetarian: true, is_vegan: true,
-    ingredients: [
-      { name: 'Mixed lentils (panchratna dal)', quantity: '1', unit: 'cup', calories: 360 },
-      { name: 'Whole wheat flour', quantity: '2', unit: 'cups', calories: 450 },
-      { name: 'Tomatoes', quantity: '2', unit: 'medium', calories: 50 },
-      { name: 'Oil', quantity: '1', unit: 'tbsp', calories: 120 }
-    ]
-  },
-  {
-    meal_type: 'dinner', name: 'Vegetable Soup with Salad', cuisine_type: 'International',
-    description: 'Clear vegetable soup with fresh seasonal salad, a light and healthy dinner',
-    prep_time_minutes: 15, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 220, protein_g: 6, carbs_g: 38, fat_g: 5, fiber_g: 7,
-    kitchen_equipment: 'saucepan,bowl', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: true,
-    ingredients: [
-      { name: 'Mixed vegetables', quantity: '3', unit: 'cups', calories: 240 },
-      { name: 'Salad greens', quantity: '2', unit: 'cups', calories: 30 },
-      { name: 'Olive oil', quantity: '1', unit: 'tbsp', calories: 120 },
-      { name: 'Lemon', quantity: '1', unit: 'piece', calories: 15 }
-    ]
-  },
-  {
-    meal_type: 'dinner', name: 'Methi Thepla with Raita', cuisine_type: 'Gujarati',
-    description: 'Fenugreek flatbreads with whole wheat and besan, served with cucumber raita',
-    prep_time_minutes: 15, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 390, protein_g: 14, carbs_g: 60, fat_g: 10, fiber_g: 5,
-    kitchen_equipment: 'tawa,rolling_pin,bowl', difficulty: 'medium',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: [
-      { name: 'Whole wheat flour', quantity: '1.5', unit: 'cups', calories: 338 },
-      { name: 'Fresh methi (fenugreek)', quantity: '1', unit: 'cup', calories: 30 },
-      { name: 'Chickpea flour', quantity: '0.5', unit: 'cup', calories: 200 },
-      { name: 'Curd', quantity: '0.5', unit: 'cup', calories: 60 },
-      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 }
-    ]
-  },
-  {
-    meal_type: 'dinner', name: 'Tomato Rice', cuisine_type: 'South Indian',
-    description: 'Tangy rice cooked with tomatoes, mustard seeds and curry leaves',
-    prep_time_minutes: 10, cook_time_minutes: 25, servings: 4,
-    calories_per_serving: 440, protein_g: 8, carbs_g: 80, fat_g: 10, fiber_g: 3,
-    kitchen_equipment: 'pressure_cooker,kadai', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: true,
-    ingredients: [
-      { name: 'Rice', quantity: '1.5', unit: 'cups', calories: 480 },
-      { name: 'Tomatoes', quantity: '4', unit: 'medium', calories: 100 },
-      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Mustard seeds', quantity: '1', unit: 'tsp', calories: 5 }
-    ]
-  },
-  {
-    meal_type: 'dinner', name: 'Baingan Bharta with Roti', cuisine_type: 'North Indian',
-    description: 'Smoky roasted eggplant mash with onions and tomatoes, served with rotis',
-    prep_time_minutes: 10, cook_time_minutes: 30, servings: 4,
-    calories_per_serving: 380, protein_g: 9, carbs_g: 62, fat_g: 10, fiber_g: 8,
-    kitchen_equipment: 'gas_burner,kadai,tawa', difficulty: 'medium',
-    is_vegetarian: true, is_vegan: true,
-    ingredients: [
-      { name: 'Brinjal/Eggplant', quantity: '2', unit: 'large', calories: 80 },
-      { name: 'Whole wheat flour', quantity: '2', unit: 'cups', calories: 450 },
-      { name: 'Onion', quantity: '2', unit: 'medium', calories: 60 },
-      { name: 'Tomatoes', quantity: '2', unit: 'medium', calories: 50 },
-      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 }
-    ]
-  },
-
-  // ── NEW BREAKFAST ITEMS ──────────────────────────────────────────────
-  {
-    meal_type: 'breakfast', name: 'Paneer Paratha', cuisine_type: 'North Indian',
-    description: 'Whole wheat flatbread stuffed with spiced paneer filling, served with curd and pickle',
-    prep_time_minutes: 15, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 320, protein_g: 12, carbs_g: 38, fat_g: 14, fiber_g: 3,
-    kitchen_equipment: 'tawa,rolling pin,bowl', difficulty: 'medium',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: [
-      { name: 'Whole wheat flour', quantity: '2', unit: 'cups', calories: 450 },
-      { name: 'Paneer', quantity: '200', unit: 'grams', calories: 320 },
-      { name: 'Ghee', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Green chillies', quantity: '2', unit: 'pieces', calories: 4 },
-      { name: 'Coriander leaves', quantity: '2', unit: 'tbsp', calories: 5 },
-      { name: 'Curd', quantity: '0.5', unit: 'cup', calories: 60 }
-    ]
-  },
-  {
-    meal_type: 'breakfast', name: 'Dosa (Plain)', cuisine_type: 'South Indian',
-    description: 'Crispy thin rice and lentil crepe served with coconut chutney and sambar',
-    prep_time_minutes: 5, cook_time_minutes: 15, servings: 4,
-    calories_per_serving: 160, protein_g: 4, carbs_g: 32, fat_g: 3, fiber_g: 1,
-    kitchen_equipment: 'tawa,ladle,bowl', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: true,
-    ingredients: [
-      { name: 'Dosa batter', quantity: '3', unit: 'cups', calories: 480 },
-      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Coconut chutney', quantity: '4', unit: 'tbsp', calories: 80 }
     ]
   },
   {
     meal_type: 'breakfast', name: 'Sabudana Khichdi', cuisine_type: 'Indian',
-    description: 'Sago pearls cooked with peanuts, curry leaves and mild spices — popular fasting food',
-    prep_time_minutes: 20, cook_time_minutes: 15, servings: 4,
-    calories_per_serving: 280, protein_g: 4, carbs_g: 55, fat_g: 6, fiber_g: 1,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
+    description: 'Tapioca pearls cooked with peanuts, potato and cumin — popular fasting breakfast',
+    prep_time_minutes: 30, cook_time_minutes: 15, servings: 4,
+    calories_per_serving: 420, protein_g: 8, carbs_g: 68, fat_g: 13, fiber_g: 2,
+    kitchen_equipment: 'kadai,spatula', difficulty: 'medium',
     is_vegetarian: true, is_vegan: true,
     ingredients: [
-      { name: 'Sabudana (sago)', quantity: '1.5', unit: 'cups', calories: 480 },
-      { name: 'Peanuts (roasted)', quantity: '0.5', unit: 'cup', calories: 200 },
-      { name: 'Potato', quantity: '2', unit: 'medium', calories: 160 },
-      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Curry leaves', quantity: '10', unit: 'leaves', calories: 3 },
-      { name: 'Green chillies', quantity: '2', unit: 'pieces', calories: 4 }
+      { name: 'Sabudana (tapioca pearls)', quantity: '1.5', unit: 'cups', calories: 540 },
+      { name: 'Peanuts (roasted, coarsely ground)', quantity: '0.5', unit: 'cup', calories: 280 },
+      { name: 'Potato (boiled, cubed)', quantity: '2', unit: 'medium', calories: 160 },
+      { name: 'Oil / ghee', quantity: '2', unit: 'tbsp', calories: 240 },
     ]
-  },
-  {
-    meal_type: 'breakfast', name: 'Bread Sandwich', cuisine_type: 'International',
-    description: 'Simple yet filling sandwich with vegetables, cheese or chutney between bread slices',
-    prep_time_minutes: 5, cook_time_minutes: 5, servings: 4,
-    calories_per_serving: 220, protein_g: 7, carbs_g: 38, fat_g: 5, fiber_g: 2,
-    kitchen_equipment: 'toaster,knife,plate', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: [
-      { name: 'Whole wheat bread', quantity: '8', unit: 'slices', calories: 560 },
-      { name: 'Cucumber', quantity: '1', unit: 'medium', calories: 20 },
-      { name: 'Tomato', quantity: '2', unit: 'medium', calories: 50 },
-      { name: 'Butter', quantity: '1', unit: 'tbsp', calories: 100 },
-      { name: 'Green chutney', quantity: '2', unit: 'tbsp', calories: 30 }
-    ]
-  },
-  {
-    meal_type: 'breakfast', name: 'Masala Oats', cuisine_type: 'Indian',
-    description: 'Savory oats cooked with Indian spices, vegetables — a quick high-fibre breakfast',
-    prep_time_minutes: 5, cook_time_minutes: 10, servings: 4,
-    calories_per_serving: 200, protein_g: 7, carbs_g: 32, fat_g: 5, fiber_g: 4,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: true,
-    ingredients: [
-      { name: 'Rolled oats', quantity: '1.5', unit: 'cups', calories: 450 },
-      { name: 'Mixed vegetables', quantity: '1', unit: 'cup', calories: 80 },
-      { name: 'Onion', quantity: '1', unit: 'medium', calories: 30 },
-      { name: 'Mustard seeds', quantity: '1', unit: 'tsp', calories: 5 },
-      { name: 'Oil', quantity: '1', unit: 'tbsp', calories: 120 },
-      { name: 'Spices (cumin, turmeric)', quantity: '1', unit: 'set', calories: 10 }
-    ]
-  },
-  {
-    meal_type: 'breakfast', name: 'Bread Butter Toast', cuisine_type: 'International',
-    description: 'Toasted bread with butter and jam or honey — quick and easy morning meal',
-    prep_time_minutes: 2, cook_time_minutes: 5, servings: 4,
-    calories_per_serving: 250, protein_g: 5, carbs_g: 42, fat_g: 8, fiber_g: 2,
-    kitchen_equipment: 'toaster,knife', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: [
-      { name: 'White/brown bread', quantity: '8', unit: 'slices', calories: 560 },
-      { name: 'Butter', quantity: '2', unit: 'tbsp', calories: 200 },
-      { name: 'Jam/honey', quantity: '2', unit: 'tbsp', calories: 100 }
-    ]
-  },
-  {
-    meal_type: 'breakfast', name: 'Cornflakes with Milk', cuisine_type: 'International',
-    description: 'Ready-to-eat cornflakes or cereals with chilled or warm milk and optional fruits',
-    prep_time_minutes: 2, cook_time_minutes: 0, servings: 4,
-    calories_per_serving: 180, protein_g: 4, carbs_g: 38, fat_g: 1, fiber_g: 3,
-    kitchen_equipment: 'bowl,spoon', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: [
-      { name: 'Cornflakes/cereals', quantity: '1.5', unit: 'cups', calories: 420 },
-      { name: 'Milk', quantity: '1.5', unit: 'cups', calories: 180 },
-      { name: 'Banana (optional)', quantity: '1', unit: 'medium', calories: 100 }
-    ]
-  },
-  {
-    meal_type: 'breakfast', name: 'Sprouts Salad', cuisine_type: 'Indian',
-    description: 'Nutritious mixed sprouts tossed with lemon juice, onion, tomato and chaat masala',
-    prep_time_minutes: 10, cook_time_minutes: 0, servings: 4,
-    calories_per_serving: 120, protein_g: 9, carbs_g: 18, fat_g: 1, fiber_g: 5,
-    kitchen_equipment: 'bowl,knife', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: true,
-    ingredients: [
-      { name: 'Mixed sprouts (moong/chana)', quantity: '2', unit: 'cups', calories: 300 },
-      { name: 'Onion', quantity: '1', unit: 'medium', calories: 30 },
-      { name: 'Tomato', quantity: '1', unit: 'medium', calories: 25 },
-      { name: 'Lemon juice', quantity: '2', unit: 'tbsp', calories: 8 },
-      { name: 'Chaat masala', quantity: '0.5', unit: 'tsp', calories: 3 }
-    ]
-  },
-  {
-    meal_type: 'breakfast', name: 'Uttapam', cuisine_type: 'South Indian',
-    description: 'Thick rice pancake topped with onion, tomato and green chillies — a South Indian classic',
-    prep_time_minutes: 10, cook_time_minutes: 15, servings: 4,
-    calories_per_serving: 230, protein_g: 7, carbs_g: 42, fat_g: 5, fiber_g: 2,
-    kitchen_equipment: 'tawa,ladle,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: true,
-    ingredients: [
-      { name: 'Idli/dosa batter', quantity: '3', unit: 'cups', calories: 480 },
-      { name: 'Onion', quantity: '2', unit: 'medium', calories: 60 },
-      { name: 'Tomato', quantity: '2', unit: 'medium', calories: 50 },
-      { name: 'Green chillies', quantity: '2', unit: 'pieces', calories: 4 },
-      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 }
-    ]
-  },
-  {
-    meal_type: 'breakfast', name: 'Medu Vada', cuisine_type: 'South Indian',
-    description: 'Crispy deep-fried urad dal doughnuts served with coconut chutney and sambar',
-    prep_time_minutes: 20, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 190, protein_g: 7, carbs_g: 28, fat_g: 6, fiber_g: 3,
-    kitchen_equipment: 'kadai,grinder,spatula', difficulty: 'medium',
-    is_vegetarian: true, is_vegan: true,
-    ingredients: [
-      { name: 'Urad dal (soaked)', quantity: '1.5', unit: 'cups', calories: 450 },
-      { name: 'Onion', quantity: '1', unit: 'medium', calories: 30 },
-      { name: 'Green chillies', quantity: '2', unit: 'pieces', calories: 4 },
-      { name: 'Ginger', quantity: '0.5', unit: 'inch', calories: 3 },
-      { name: 'Oil for frying', quantity: '3', unit: 'tbsp', calories: 360 }
-    ]
-  },
-  {
-    meal_type: 'breakfast', name: 'Paneer Sandwich', cuisine_type: 'Indian',
-    description: 'Grilled sandwich stuffed with spiced paneer, capsicum and onion — high protein breakfast',
-    prep_time_minutes: 10, cook_time_minutes: 10, servings: 4,
-    calories_per_serving: 280, protein_g: 14, carbs_g: 30, fat_g: 11, fiber_g: 2,
-    kitchen_equipment: 'sandwich maker,knife,bowl', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: [
-      { name: 'Whole wheat bread', quantity: '8', unit: 'slices', calories: 560 },
-      { name: 'Paneer', quantity: '200', unit: 'grams', calories: 320 },
-      { name: 'Capsicum', quantity: '1', unit: 'medium', calories: 30 },
-      { name: 'Onion', quantity: '1', unit: 'medium', calories: 30 },
-      { name: 'Butter', quantity: '1', unit: 'tbsp', calories: 100 },
-      { name: 'Chaat masala', quantity: '1', unit: 'tsp', calories: 5 }
-    ]
-  },
-  {
-    meal_type: 'breakfast', name: 'Sprouts Chaat', cuisine_type: 'Indian',
-    description: 'Protein-packed sprouts tossed with tamarind chutney, sev and spices as a light breakfast',
-    prep_time_minutes: 10, cook_time_minutes: 0, servings: 4,
-    calories_per_serving: 130, protein_g: 10, carbs_g: 20, fat_g: 1, fiber_g: 5,
-    kitchen_equipment: 'bowl,knife', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: true,
-    ingredients: [
-      { name: 'Mixed sprouts', quantity: '2', unit: 'cups', calories: 300 },
-      { name: 'Tamarind chutney', quantity: '2', unit: 'tbsp', calories: 60 },
-      { name: 'Onion', quantity: '1', unit: 'medium', calories: 30 },
-      { name: 'Tomato', quantity: '1', unit: 'medium', calories: 25 },
-      { name: 'Sev', quantity: '2', unit: 'tbsp', calories: 80 },
-      { name: 'Chaat masala', quantity: '1', unit: 'tsp', calories: 5 }
-    ]
-  },
-  {
-    meal_type: 'breakfast', name: 'Sprouts Cheela', cuisine_type: 'Indian',
-    description: 'Savory pancakes made from ground sprouts batter — high protein and filling',
-    prep_time_minutes: 15, cook_time_minutes: 15, servings: 4,
-    calories_per_serving: 170, protein_g: 12, carbs_g: 22, fat_g: 4, fiber_g: 5,
-    kitchen_equipment: 'tawa,grinder,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: true,
-    ingredients: [
-      { name: 'Moong sprouts (ground)', quantity: '2', unit: 'cups', calories: 280 },
-      { name: 'Onion', quantity: '1', unit: 'medium', calories: 30 },
-      { name: 'Green chillies', quantity: '2', unit: 'pieces', calories: 4 },
-      { name: 'Ginger', quantity: '0.5', unit: 'inch', calories: 3 },
-      { name: 'Oil', quantity: '1', unit: 'tbsp', calories: 120 }
-    ]
-  },
-  {
-    meal_type: 'breakfast', name: 'Soya Chunks Upma', cuisine_type: 'Indian',
-    description: 'Semolina upma loaded with protein-rich soya chunks — a wholesome high-protein breakfast',
-    prep_time_minutes: 15, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 260, protein_g: 18, carbs_g: 32, fat_g: 6, fiber_g: 4,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: true,
-    ingredients: [
-      { name: 'Semolina (rava)', quantity: '1', unit: 'cup', calories: 280 },
-      { name: 'Soya chunks (soaked)', quantity: '1', unit: 'cup', calories: 250 },
-      { name: 'Onion', quantity: '1', unit: 'medium', calories: 30 },
-      { name: 'Mixed vegetables', quantity: '0.5', unit: 'cup', calories: 40 },
-      { name: 'Oil', quantity: '1.5', unit: 'tbsp', calories: 180 },
-      { name: 'Mustard seeds', quantity: '1', unit: 'tsp', calories: 5 }
-    ]
-  },
-  {
-    meal_type: 'breakfast', name: 'Oats Cheela', cuisine_type: 'Indian',
-    description: 'Savory pancakes made from oats batter with veggies — can be stuffed with curd or paneer',
-    prep_time_minutes: 10, cook_time_minutes: 15, servings: 4,
-    calories_per_serving: 180, protein_g: 10, carbs_g: 28, fat_g: 4, fiber_g: 4,
-    kitchen_equipment: 'tawa,bowl,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: [
-      { name: 'Rolled oats (ground)', quantity: '1.5', unit: 'cups', calories: 450 },
-      { name: 'Curd', quantity: '0.5', unit: 'cup', calories: 60 },
-      { name: 'Onion', quantity: '1', unit: 'medium', calories: 30 },
-      { name: 'Spinach', quantity: '0.5', unit: 'cup', calories: 15 },
-      { name: 'Oil', quantity: '1', unit: 'tbsp', calories: 120 },
-      { name: 'Paneer (optional stuffing)', quantity: '100', unit: 'grams', calories: 160 }
-    ]
-  },
-  {
-    meal_type: 'breakfast', name: 'Greek Yogurt Bowl', cuisine_type: 'International',
-    description: 'Thick Greek yogurt topped with nuts, seeds, honey and fresh fruits — protein-rich',
-    prep_time_minutes: 5, cook_time_minutes: 0, servings: 4,
-    calories_per_serving: 180, protein_g: 15, carbs_g: 20, fat_g: 5, fiber_g: 2,
-    kitchen_equipment: 'bowl,spoon', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: [
-      { name: 'Greek yogurt', quantity: '2', unit: 'cups', calories: 300 },
-      { name: 'Mixed nuts (almonds, walnuts)', quantity: '3', unit: 'tbsp', calories: 150 },
-      { name: 'Honey', quantity: '1', unit: 'tbsp', calories: 60 },
-      { name: 'Mixed berries/fruits', quantity: '0.5', unit: 'cup', calories: 50 },
-      { name: 'Chia seeds', quantity: '1', unit: 'tbsp', calories: 60 }
-    ]
-  },
-  {
-    meal_type: 'breakfast', name: 'Curd with Roasted Chana', cuisine_type: 'Indian',
-    description: 'Cooling curd paired with crunchy roasted chana — high protein, gut-friendly breakfast',
-    prep_time_minutes: 5, cook_time_minutes: 0, servings: 4,
-    calories_per_serving: 210, protein_g: 13, carbs_g: 28, fat_g: 4, fiber_g: 6,
-    kitchen_equipment: 'bowl,spoon', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: [
-      { name: 'Curd (dahi)', quantity: '2', unit: 'cups', calories: 240 },
-      { name: 'Roasted chana', quantity: '1', unit: 'cup', calories: 360 },
-      { name: 'Cucumber', quantity: '1', unit: 'medium', calories: 20 },
-      { name: 'Chaat masala', quantity: '0.5', unit: 'tsp', calories: 3 }
-    ]
-  },
-  {
-    meal_type: 'breakfast', name: 'Dal Paratha', cuisine_type: 'North Indian',
-    description: 'Whole wheat flatbread stuffed with spiced cooked lentils — filling and nutritious',
-    prep_time_minutes: 20, cook_time_minutes: 20, servings: 4,
-    calories_per_serving: 300, protein_g: 11, carbs_g: 42, fat_g: 9, fiber_g: 5,
-    kitchen_equipment: 'tawa,rolling pin,pressure cooker', difficulty: 'medium',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: [
-      { name: 'Whole wheat flour', quantity: '2', unit: 'cups', calories: 450 },
-      { name: 'Chana dal / moong dal (cooked)', quantity: '1', unit: 'cup', calories: 360 },
-      { name: 'Ghee', quantity: '2', unit: 'tbsp', calories: 240 },
-      { name: 'Onion', quantity: '1', unit: 'medium', calories: 30 },
-      { name: 'Green chillies', quantity: '2', unit: 'pieces', calories: 4 },
-      { name: 'Coriander leaves', quantity: '2', unit: 'tbsp', calories: 5 }
-    ]
-  },
-  {
-    meal_type: 'breakfast', name: 'Quinoa Upma', cuisine_type: 'Indian',
-    description: 'Protein-rich quinoa cooked with vegetables and spices in upma style — modern healthy twist',
-    prep_time_minutes: 10, cook_time_minutes: 15, servings: 4,
-    calories_per_serving: 220, protein_g: 8, carbs_g: 38, fat_g: 5, fiber_g: 4,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: true,
-    ingredients: [
-      { name: 'Quinoa', quantity: '1.5', unit: 'cups', calories: 480 },
-      { name: 'Mixed vegetables', quantity: '1', unit: 'cup', calories: 80 },
-      { name: 'Onion', quantity: '1', unit: 'medium', calories: 30 },
-      { name: 'Mustard seeds', quantity: '1', unit: 'tsp', calories: 5 },
-      { name: 'Oil', quantity: '1.5', unit: 'tbsp', calories: 180 },
-      { name: 'Curry leaves', quantity: '10', unit: 'leaves', calories: 3 }
-    ]
-  }
-,
-  {
-    meal_type: 'breakfast', name: 'Banana Shake', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 6, cook_time_minutes: 14, servings: 1,
-    calories_per_serving: 398, protein_g: 23.0, carbs_g: 55.0, fat_g: 17.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Besan Cheela', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 18, cook_time_minutes: 15, servings: 1,
-    calories_per_serving: 319, protein_g: 10.0, carbs_g: 40.0, fat_g: 11.0, fiber_g: 2.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'breakfast', name: 'Dosa', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 17, cook_time_minutes: 24, servings: 1,
-    calories_per_serving: 410, protein_g: 11.0, carbs_g: 70.0, fat_g: 24.0, fiber_g: 2.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
   },
   {
     meal_type: 'breakfast', name: 'Oats Porridge', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 6, cook_time_minutes: 14, servings: 1,
-    calories_per_serving: 482, protein_g: 25.0, carbs_g: 20.0, fat_g: 8.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
+    description: 'Creamy oats cooked with milk, banana and honey — hearty healthy breakfast',
+    prep_time_minutes: 2, cook_time_minutes: 10, servings: 2,
+    calories_per_serving: 320, protein_g: 10, carbs_g: 52, fat_g: 7, fiber_g: 5,
+    kitchen_equipment: 'saucepan,bowl', difficulty: 'easy',
     is_vegetarian: true, is_vegan: false,
-    ingredients: []
+    ingredients: [
+      { name: 'Rolled oats', quantity: '1', unit: 'cup', calories: 300 },
+      { name: 'Milk', quantity: '1.5', unit: 'cups', calories: 220 },
+      { name: 'Banana', quantity: '1', unit: 'medium', calories: 100 },
+      { name: 'Honey', quantity: '1', unit: 'tbsp', calories: 60 },
+    ]
   },
   {
-    meal_type: 'breakfast', name: 'Rava Idli', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 16, cook_time_minutes: 12, servings: 1,
-    calories_per_serving: 240, protein_g: 7, carbs_g: 38, fat_g: 8, fiber_g: 2,
+    meal_type: 'breakfast', name: 'Upma', cuisine_type: 'South Indian',
+    description: 'Semolina porridge cooked with mixed vegetables and tempered spices',
+    prep_time_minutes: 5, cook_time_minutes: 20, servings: 4,
+    calories_per_serving: 320, protein_g: 9, carbs_g: 52, fat_g: 8, fiber_g: 3,
     kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Sooji (semolina)', quantity: '1.5', unit: 'cups', calories: 500 },
+      { name: 'Onion', quantity: '1', unit: 'large', calories: 40 },
+      { name: 'Mixed vegetables', quantity: '0.5', unit: 'cup', calories: 40 },
+      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
+      { name: 'Mustard seeds, curry leaves', quantity: '1', unit: 'tsp', calories: 5 },
+    ]
+  },
+
+  // ─────────────────────────────────────────────
+  // LUNCH
+  // ─────────────────────────────────────────────
+  {
+    meal_type: 'lunch', name: 'Aloo Gobhi with Roti', cuisine_type: 'North Indian',
+    description: 'Dry spiced potato and cauliflower curry served with 2 whole wheat rotis',
+    prep_time_minutes: 10, cook_time_minutes: 25, servings: 4,
+    calories_per_serving: 450, protein_g: 11, carbs_g: 68, fat_g: 14, fiber_g: 8,
+    kitchen_equipment: 'kadai,tawa,spatula', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Potato', quantity: '3', unit: 'medium', calories: 240 },
+      { name: 'Cauliflower', quantity: '1', unit: 'small head', calories: 80 },
+      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
+      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
+    ]
   },
   {
-    meal_type: 'breakfast', name: 'Vegetable Poha', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 11, cook_time_minutes: 11, servings: 1,
-    calories_per_serving: 360, protein_g: 6, carbs_g: 55, fat_g: 9, fiber_g: 5,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
+    meal_type: 'lunch', name: 'Palak Paneer with Roti', cuisine_type: 'North Indian',
+    description: 'Creamy spinach curry with soft paneer cubes served with 2 rotis',
+    prep_time_minutes: 15, cook_time_minutes: 25, servings: 4,
+    calories_per_serving: 510, protein_g: 20, carbs_g: 52, fat_g: 24, fiber_g: 6,
+    kitchen_equipment: 'kadai,tawa,blender', difficulty: 'medium',
     is_vegetarian: true, is_vegan: false,
-    ingredients: []
+    ingredients: [
+      { name: 'Spinach (palak)', quantity: '500', unit: 'g', calories: 100 },
+      { name: 'Paneer', quantity: '200', unit: 'g', calories: 320 },
+      { name: 'Cream', quantity: '2', unit: 'tbsp', calories: 100 },
+      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
+      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
+    ]
   },
   {
-    meal_type: 'breakfast', name: 'Vegetable Uttapam', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 14, cook_time_minutes: 21, servings: 1,
-    calories_per_serving: 187, protein_g: 8.0, carbs_g: 20.0, fat_g: 18.0, fiber_g: 5.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
+    meal_type: 'lunch', name: 'Dal Tadka with Rice', cuisine_type: 'North Indian',
+    description: 'Yellow toor dal with a smoky ghee-tempered tadka, served with steamed rice',
+    prep_time_minutes: 10, cook_time_minutes: 30, servings: 4,
+    calories_per_serving: 480, protein_g: 16, carbs_g: 72, fat_g: 14, fiber_g: 7,
+    kitchen_equipment: 'pressure cooker,kadai', difficulty: 'easy',
     is_vegetarian: true, is_vegan: false,
-    ingredients: []
+    ingredients: [
+      { name: 'Toor dal', quantity: '1', unit: 'cup', calories: 380 },
+      { name: 'Basmati rice (cooked)', quantity: '1.5', unit: 'cups', calories: 340 },
+      { name: 'Ghee', quantity: '2', unit: 'tbsp', calories: 180 },
+      { name: 'Onion, tomato, spices', quantity: '1', unit: 'serving', calories: 80 },
+    ]
   },
   {
-    meal_type: 'dinner', name: 'Coconut Rice', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 20, cook_time_minutes: 25, servings: 1,
-    calories_per_serving: 186, protein_g: 6.0, carbs_g: 26.0, fat_g: 9.0, fiber_g: 4.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
+    meal_type: 'lunch', name: 'Dal Makhani with Roti', cuisine_type: 'Punjabi',
+    description: 'Rich slow-cooked black dal in butter and cream, served with 2 rotis',
+    prep_time_minutes: 10, cook_time_minutes: 60, servings: 4,
+    calories_per_serving: 540, protein_g: 18, carbs_g: 62, fat_g: 22, fiber_g: 9,
+    kitchen_equipment: 'pressure cooker,kadai,tawa', difficulty: 'medium',
     is_vegetarian: true, is_vegan: false,
-    ingredients: []
+    ingredients: [
+      { name: 'Black urad dal (whole)', quantity: '1', unit: 'cup', calories: 380 },
+      { name: 'Rajma', quantity: '0.25', unit: 'cup', calories: 100 },
+      { name: 'Butter', quantity: '2', unit: 'tbsp', calories: 200 },
+      { name: 'Cream', quantity: '2', unit: 'tbsp', calories: 100 },
+      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
+    ]
   },
   {
-    meal_type: 'dinner', name: 'Curd Rice', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 20, cook_time_minutes: 14, servings: 1,
-    calories_per_serving: 280, protein_g: 8, carbs_g: 44, fat_g: 7, fiber_g: 2,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
+    meal_type: 'lunch', name: 'Rajma Chawal', cuisine_type: 'North Indian',
+    description: 'Spiced red kidney bean curry served over steamed rice — comfort food',
+    prep_time_minutes: 10, cook_time_minutes: 40, servings: 4,
+    calories_per_serving: 500, protein_g: 18, carbs_g: 78, fat_g: 12, fiber_g: 12,
+    kitchen_equipment: 'pressure cooker,kadai', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Rajma (red kidney beans)', quantity: '1', unit: 'cup', calories: 340 },
+      { name: 'Basmati rice (cooked)', quantity: '1.5', unit: 'cups', calories: 340 },
+      { name: 'Onion, tomato, spices', quantity: '1', unit: 'serving', calories: 100 },
+      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
+    ]
   },
+  {
+    meal_type: 'lunch', name: 'Paneer Butter Masala with Roti', cuisine_type: 'North Indian',
+    description: 'Paneer in rich tomato-butter gravy with aromatic spices, served with 2 rotis',
+    prep_time_minutes: 15, cook_time_minutes: 25, servings: 4,
+    calories_per_serving: 580, protein_g: 22, carbs_g: 56, fat_g: 28, fiber_g: 4,
+    kitchen_equipment: 'kadai,tawa,blender', difficulty: 'medium',
+    is_vegetarian: true, is_vegan: false,
+    ingredients: [
+      { name: 'Paneer', quantity: '250', unit: 'g', calories: 400 },
+      { name: 'Tomato puree', quantity: '1', unit: 'cup', calories: 80 },
+      { name: 'Butter', quantity: '2', unit: 'tbsp', calories: 200 },
+      { name: 'Cream', quantity: '3', unit: 'tbsp', calories: 150 },
+      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
+    ]
+  },
+  {
+    meal_type: 'lunch', name: 'Bhindi Masala with Roti', cuisine_type: 'North Indian',
+    description: 'Stir-fried okra with onion, tomato and spices served with 2 rotis',
+    prep_time_minutes: 10, cook_time_minutes: 20, servings: 4,
+    calories_per_serving: 410, protein_g: 9, carbs_g: 58, fat_g: 15, fiber_g: 9,
+    kitchen_equipment: 'kadai,tawa', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Bhindi (okra)', quantity: '500', unit: 'g', calories: 150 },
+      { name: 'Onion', quantity: '2', unit: 'medium', calories: 80 },
+      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
+      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
+    ]
+  },
+  {
+    meal_type: 'lunch', name: 'Baingan Bharta with Roti', cuisine_type: 'Punjabi',
+    description: 'Smoky roasted eggplant mash with onion, tomato and spices, served with rotis',
+    prep_time_minutes: 10, cook_time_minutes: 30, servings: 4,
+    calories_per_serving: 380, protein_g: 8, carbs_g: 58, fat_g: 11, fiber_g: 9,
+    kitchen_equipment: 'gas flame,kadai,tawa', difficulty: 'medium',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Brinjal (baingan)', quantity: '2', unit: 'large', calories: 100 },
+      { name: 'Onion, tomato', quantity: '2', unit: 'each', calories: 100 },
+      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
+      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
+    ]
+  },
+  {
+    meal_type: 'lunch', name: 'Matar Paneer with Roti', cuisine_type: 'North Indian',
+    description: 'Green peas and paneer in spiced tomato-onion gravy with rotis',
+    prep_time_minutes: 10, cook_time_minutes: 25, servings: 4,
+    calories_per_serving: 490, protein_g: 19, carbs_g: 58, fat_g: 20, fiber_g: 7,
+    kitchen_equipment: 'kadai,tawa', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: false,
+    ingredients: [
+      { name: 'Paneer', quantity: '200', unit: 'g', calories: 320 },
+      { name: 'Green peas', quantity: '1', unit: 'cup', calories: 120 },
+      { name: 'Tomato-onion gravy', quantity: '1', unit: 'cup', calories: 120 },
+      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
+    ]
+  },
+  {
+    meal_type: 'lunch', name: 'Chana Masala with Bhatura', cuisine_type: 'Punjabi',
+    description: 'Spiced chickpea curry with fluffy deep-fried bhatura — a festive treat',
+    prep_time_minutes: 15, cook_time_minutes: 30, servings: 4,
+    calories_per_serving: 620, protein_g: 18, carbs_g: 82, fat_g: 24, fiber_g: 12,
+    kitchen_equipment: 'pressure cooker,kadai,deep pan', difficulty: 'medium',
+    is_vegetarian: true, is_vegan: false,
+    ingredients: [
+      { name: 'Kabuli chana (chickpeas)', quantity: '1.5', unit: 'cups', calories: 520 },
+      { name: 'Bhatura (fried bread)', quantity: '2', unit: 'pcs', calories: 400 },
+      { name: 'Onion, tomato, spices', quantity: '1', unit: 'serving', calories: 100 },
+    ]
+  },
+  {
+    meal_type: 'lunch', name: 'Veg Biryani', cuisine_type: 'Mughal',
+    description: 'Aromatic basmati rice cooked with mixed vegetables, saffron and whole spices',
+    prep_time_minutes: 20, cook_time_minutes: 40, servings: 4,
+    calories_per_serving: 520, protein_g: 12, carbs_g: 80, fat_g: 16, fiber_g: 6,
+    kitchen_equipment: 'heavy pot,tawa', difficulty: 'medium',
+    is_vegetarian: true, is_vegan: false,
+    ingredients: [
+      { name: 'Basmati rice', quantity: '1.5', unit: 'cups', calories: 510 },
+      { name: 'Mixed vegetables', quantity: '2', unit: 'cups', calories: 160 },
+      { name: 'Ghee', quantity: '3', unit: 'tbsp', calories: 270 },
+      { name: 'Fried onion (birista)', quantity: '0.5', unit: 'cup', calories: 200 },
+      { name: 'Saffron, whole spices', quantity: '1', unit: 'tsp', calories: 10 },
+    ]
+  },
+  {
+    meal_type: 'lunch', name: 'Kadhi Chawal', cuisine_type: 'Gujarati',
+    description: 'Tangy yogurt-besan curry with pakoda, served over fluffy rice',
+    prep_time_minutes: 10, cook_time_minutes: 30, servings: 4,
+    calories_per_serving: 460, protein_g: 13, carbs_g: 66, fat_g: 15, fiber_g: 4,
+    kitchen_equipment: 'kadai,pressure cooker', difficulty: 'medium',
+    is_vegetarian: true, is_vegan: false,
+    ingredients: [
+      { name: 'Dahi (curd)', quantity: '1', unit: 'cup', calories: 150 },
+      { name: 'Besan', quantity: '3', unit: 'tbsp', calories: 100 },
+      { name: 'Basmati rice (cooked)', quantity: '1.5', unit: 'cups', calories: 340 },
+      { name: 'Ghee', quantity: '1', unit: 'tbsp', calories: 90 },
+    ]
+  },
+  {
+    meal_type: 'lunch', name: 'Mix Veg Thali', cuisine_type: 'Indian',
+    description: 'Complete thali with 2 sabzis, dal, rice, 2 rotis, salad and dahi',
+    prep_time_minutes: 20, cook_time_minutes: 40, servings: 4,
+    calories_per_serving: 680, protein_g: 22, carbs_g: 92, fat_g: 22, fiber_g: 10,
+    kitchen_equipment: 'kadai,tawa,pressure cooker', difficulty: 'medium',
+    is_vegetarian: true, is_vegan: false,
+    ingredients: [
+      { name: 'Mixed sabzi', quantity: '2', unit: 'cups', calories: 300 },
+      { name: 'Dal', quantity: '1', unit: 'cup', calories: 200 },
+      { name: 'Rice', quantity: '1', unit: 'cup', calories: 200 },
+      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
+      { name: 'Dahi, salad', quantity: '1', unit: 'serving', calories: 100 },
+    ]
+  },
+
+  // ─────────────────────────────────────────────
+  // DINNER
+  // ─────────────────────────────────────────────
   {
     meal_type: 'dinner', name: 'Dal Khichdi', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 7, cook_time_minutes: 27, servings: 1,
-    calories_per_serving: 192, protein_g: 15.0, carbs_g: 45.0, fat_g: 14.0, fiber_g: 4.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
+    description: 'Light one-pot rice and moong dal khichdi — easy to digest, perfect dinner',
+    prep_time_minutes: 5, cook_time_minutes: 25, servings: 4,
+    calories_per_serving: 380, protein_g: 14, carbs_g: 60, fat_g: 10, fiber_g: 5,
+    kitchen_equipment: 'pressure cooker,kadai', difficulty: 'easy',
     is_vegetarian: true, is_vegan: false,
-    ingredients: []
+    ingredients: [
+      { name: 'Rice', quantity: '1', unit: 'cup', calories: 340 },
+      { name: 'Moong dal', quantity: '0.5', unit: 'cup', calories: 170 },
+      { name: 'Ghee', quantity: '1.5', unit: 'tbsp', calories: 135 },
+      { name: 'Turmeric, jeera', quantity: '1', unit: 'tsp', calories: 5 },
+    ]
   },
   {
-    meal_type: 'dinner', name: 'Grilled Veggies', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 12, cook_time_minutes: 33, servings: 1,
-    calories_per_serving: 483, protein_g: 23.0, carbs_g: 29.0, fat_g: 10.0, fiber_g: 10.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
+    meal_type: 'dinner', name: 'Aloo Matar with Roti', cuisine_type: 'North Indian',
+    description: 'Comforting potato and peas curry in tomato-based gravy served with 2 rotis',
+    prep_time_minutes: 10, cook_time_minutes: 25, servings: 4,
+    calories_per_serving: 440, protein_g: 12, carbs_g: 66, fat_g: 14, fiber_g: 8,
+    kitchen_equipment: 'kadai,tawa', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Potato', quantity: '3', unit: 'medium', calories: 240 },
+      { name: 'Green peas', quantity: '1', unit: 'cup', calories: 120 },
+      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
+      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
+    ]
   },
   {
-    meal_type: 'dinner', name: 'Hakka Noodles Veg', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 14, cook_time_minutes: 32, servings: 1,
-    calories_per_serving: 285, protein_g: 6.0, carbs_g: 57.0, fat_g: 24.0, fiber_g: 8.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
+    meal_type: 'dinner', name: 'Lauki Sabzi with Roti', cuisine_type: 'North Indian',
+    description: 'Light bottle gourd curry — low calorie, easy to digest, great for dinner',
+    prep_time_minutes: 10, cook_time_minutes: 20, servings: 4,
+    calories_per_serving: 350, protein_g: 8, carbs_g: 56, fat_g: 10, fiber_g: 7,
+    kitchen_equipment: 'kadai,tawa', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Lauki (bottle gourd)', quantity: '500', unit: 'g', calories: 80 },
+      { name: 'Oil', quantity: '1.5', unit: 'tbsp', calories: 180 },
+      { name: 'Spices', quantity: '1', unit: 'tsp', calories: 5 },
+      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
+    ]
   },
   {
-    meal_type: 'dinner', name: 'Lemon Rice', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 20, cook_time_minutes: 34, servings: 1,
-    calories_per_serving: 320, protein_g: 6, carbs_g: 52, fat_g: 11, fiber_g: 2,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
+    meal_type: 'dinner', name: 'Paneer Bhurji with Roti', cuisine_type: 'North Indian',
+    description: 'Scrambled crumbled paneer with onion, tomato and spices, served with 2 rotis',
+    prep_time_minutes: 10, cook_time_minutes: 15, servings: 4,
+    calories_per_serving: 490, protein_g: 22, carbs_g: 50, fat_g: 24, fiber_g: 4,
+    kitchen_equipment: 'kadai,tawa', difficulty: 'easy',
     is_vegetarian: true, is_vegan: false,
-    ingredients: []
+    ingredients: [
+      { name: 'Paneer', quantity: '250', unit: 'g', calories: 400 },
+      { name: 'Onion, tomato, capsicum', quantity: '2', unit: 'medium', calories: 100 },
+      { name: 'Oil', quantity: '1.5', unit: 'tbsp', calories: 180 },
+      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
+    ]
   },
   {
-    meal_type: 'dinner', name: 'Macaroni Veg', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 8, cook_time_minutes: 24, servings: 1,
-    calories_per_serving: 280, protein_g: 17.0, carbs_g: 44.0, fat_g: 24.0, fiber_g: 6.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
+    meal_type: 'dinner', name: 'Methi Thepla with Dahi', cuisine_type: 'Gujarati',
+    description: 'Soft spiced fenugreek flatbreads served with fresh curd — light and wholesome',
+    prep_time_minutes: 15, cook_time_minutes: 20, servings: 4,
+    calories_per_serving: 400, protein_g: 13, carbs_g: 56, fat_g: 14, fiber_g: 7,
+    kitchen_equipment: 'tawa,rolling pin', difficulty: 'easy',
     is_vegetarian: true, is_vegan: false,
-    ingredients: []
+    ingredients: [
+      { name: 'Whole wheat flour', quantity: '2', unit: 'cups', calories: 400 },
+      { name: 'Fresh methi leaves', quantity: '1', unit: 'cup', calories: 30 },
+      { name: 'Dahi (curd)', quantity: '3', unit: 'tbsp', calories: 50 },
+      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
+      { name: 'Dahi (serving)', quantity: '0.5', unit: 'cup', calories: 80 },
+    ]
   },
   {
-    meal_type: 'dinner', name: 'Paneer Bhurji', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 17, cook_time_minutes: 29, servings: 1,
-    calories_per_serving: 317, protein_g: 24.0, carbs_g: 56.0, fat_g: 17.0, fiber_g: 2.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
+    meal_type: 'dinner', name: 'Coconut Rice with Sambar', cuisine_type: 'South Indian',
+    description: 'Fragrant coconut-tempered rice served with toor dal sambar and papad',
+    prep_time_minutes: 10, cook_time_minutes: 20, servings: 4,
+    calories_per_serving: 450, protein_g: 10, carbs_g: 70, fat_g: 14, fiber_g: 4,
+    kitchen_equipment: 'kadai,pressure cooker', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Basmati rice (cooked)', quantity: '1.5', unit: 'cups', calories: 340 },
+      { name: 'Fresh coconut (grated)', quantity: '0.5', unit: 'cup', calories: 160 },
+      { name: 'Oil', quantity: '1.5', unit: 'tbsp', calories: 180 },
+      { name: 'Sambar', quantity: '1', unit: 'cup', calories: 80 },
+    ]
   },
   {
-    meal_type: 'dinner', name: 'Paneer Tikka', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 19, cook_time_minutes: 24, servings: 1,
-    calories_per_serving: 497, protein_g: 19.0, carbs_g: 52.0, fat_g: 15.0, fiber_g: 9.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
+    meal_type: 'dinner', name: 'Veg Pulao with Raita', cuisine_type: 'Indian',
+    description: 'Mildly spiced vegetable pulao served with refreshing boondi raita',
+    prep_time_minutes: 10, cook_time_minutes: 25, servings: 4,
+    calories_per_serving: 460, protein_g: 11, carbs_g: 70, fat_g: 14, fiber_g: 5,
+    kitchen_equipment: 'heavy pot,pressure cooker', difficulty: 'easy',
     is_vegetarian: true, is_vegan: false,
-    ingredients: []
+    ingredients: [
+      { name: 'Basmati rice', quantity: '1.5', unit: 'cups', calories: 510 },
+      { name: 'Mixed vegetables', quantity: '1.5', unit: 'cups', calories: 120 },
+      { name: 'Ghee', quantity: '2', unit: 'tbsp', calories: 180 },
+      { name: 'Dahi (for raita)', quantity: '0.5', unit: 'cup', calories: 80 },
+    ]
   },
   {
-    meal_type: 'dinner', name: 'Spinach Soup', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 17, cook_time_minutes: 12, servings: 1,
-    calories_per_serving: 279, protein_g: 14.0, carbs_g: 52.0, fat_g: 15.0, fiber_g: 4.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
+    meal_type: 'dinner', name: 'Stuffed Capsicum with Roti', cuisine_type: 'Indian',
+    description: 'Bell peppers stuffed with spiced paneer and potato, served with 2 rotis',
+    prep_time_minutes: 15, cook_time_minutes: 25, servings: 4,
+    calories_per_serving: 430, protein_g: 16, carbs_g: 56, fat_g: 16, fiber_g: 6,
+    kitchen_equipment: 'oven/kadai,tawa', difficulty: 'medium',
     is_vegetarian: true, is_vegan: false,
-    ingredients: []
+    ingredients: [
+      { name: 'Capsicum (bell pepper)', quantity: '4', unit: 'large', calories: 80 },
+      { name: 'Paneer', quantity: '150', unit: 'g', calories: 240 },
+      { name: 'Potato (boiled)', quantity: '2', unit: 'medium', calories: 160 },
+      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
+      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
+    ]
   },
   {
-    meal_type: 'dinner', name: 'Stuffed Paratha', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 6, cook_time_minutes: 28, servings: 1,
-    calories_per_serving: 229, protein_g: 7.0, carbs_g: 64.0, fat_g: 10.0, fiber_g: 5.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
+    meal_type: 'dinner', name: 'Dahi Aloo with Roti', cuisine_type: 'North Indian',
+    description: 'Potatoes cooked in tangy yogurt gravy — light and flavourful dinner',
+    prep_time_minutes: 10, cook_time_minutes: 20, servings: 4,
+    calories_per_serving: 400, protein_g: 10, carbs_g: 62, fat_g: 11, fiber_g: 5,
+    kitchen_equipment: 'kadai,tawa', difficulty: 'easy',
     is_vegetarian: true, is_vegan: false,
-    ingredients: []
+    ingredients: [
+      { name: 'Baby potato / regular potato', quantity: '400', unit: 'g', calories: 320 },
+      { name: 'Dahi (curd)', quantity: '0.5', unit: 'cup', calories: 80 },
+      { name: 'Oil', quantity: '1.5', unit: 'tbsp', calories: 180 },
+      { name: 'Whole wheat roti', quantity: '2', unit: 'pcs', calories: 240 },
+    ]
   },
   {
-    meal_type: 'dinner', name: 'Sweet Corn Soup', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 10, cook_time_minutes: 31, servings: 1,
-    calories_per_serving: 449, protein_g: 7.0, carbs_g: 48.0, fat_g: 23.0, fiber_g: 10.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
+    meal_type: 'dinner', name: 'Sabudana Khichdi', cuisine_type: 'Indian',
+    description: 'Light tapioca pearl khichdi with peanuts and cumin — easy on the stomach',
+    prep_time_minutes: 30, cook_time_minutes: 15, servings: 4,
+    calories_per_serving: 420, protein_g: 8, carbs_g: 68, fat_g: 13, fiber_g: 2,
+    kitchen_equipment: 'kadai,spatula', difficulty: 'medium',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Sabudana', quantity: '1.5', unit: 'cups', calories: 540 },
+      { name: 'Peanuts (roasted)', quantity: '0.5', unit: 'cup', calories: 280 },
+      { name: 'Potato', quantity: '1', unit: 'medium', calories: 80 },
+      { name: 'Oil', quantity: '1.5', unit: 'tbsp', calories: 180 },
+    ]
+  },
+
+  // ─────────────────────────────────────────────
+  // SNACKS
+  // ─────────────────────────────────────────────
+  {
+    meal_type: 'snack', name: 'Roasted Makhana', cuisine_type: 'Indian',
+    description: 'Light fox nuts roasted with ghee and rock salt — guilt-free healthy snack',
+    prep_time_minutes: 2, cook_time_minutes: 8, servings: 2,
+    calories_per_serving: 180, protein_g: 5, carbs_g: 28, fat_g: 5, fiber_g: 1,
+    kitchen_equipment: 'kadai', difficulty: 'easy',
     is_vegetarian: true, is_vegan: false,
-    ingredients: []
+    ingredients: [
+      { name: 'Makhana (fox nuts)', quantity: '2', unit: 'cups', calories: 280 },
+      { name: 'Ghee', quantity: '1', unit: 'tsp', calories: 40 },
+      { name: 'Rock salt, black pepper', quantity: '0.5', unit: 'tsp', calories: 2 },
+    ]
   },
   {
-    meal_type: 'dinner', name: 'Tomato Soup', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 19, cook_time_minutes: 21, servings: 1,
-    calories_per_serving: 266, protein_g: 25.0, carbs_g: 59.0, fat_g: 21.0, fiber_g: 5.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
+    meal_type: 'snack', name: 'Roasted Chana', cuisine_type: 'Indian',
+    description: 'Crunchy roasted chickpeas with salt and spices — high protein snack',
+    prep_time_minutes: 2, cook_time_minutes: 5, servings: 2,
+    calories_per_serving: 200, protein_g: 10, carbs_g: 30, fat_g: 4, fiber_g: 8,
+    kitchen_equipment: 'pan', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Roasted chana', quantity: '0.75', unit: 'cup', calories: 280 },
+      { name: 'Chaat masala', quantity: '0.5', unit: 'tsp', calories: 3 },
+    ]
   },
   {
-    meal_type: 'dinner', name: 'Veg Fried Rice', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 15, cook_time_minutes: 31, servings: 1,
-    calories_per_serving: 359, protein_g: 23.0, carbs_g: 25.0, fat_g: 17.0, fiber_g: 10.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
+    meal_type: 'snack', name: 'Mixed Dry Fruits', cuisine_type: 'Indian',
+    description: 'Handful of almonds, walnuts, cashews and raisins — energy-dense healthy snack',
+    prep_time_minutes: 1, cook_time_minutes: 0, servings: 2,
+    calories_per_serving: 280, protein_g: 7, carbs_g: 18, fat_g: 20, fiber_g: 3,
+    kitchen_equipment: 'bowl', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Almonds', quantity: '8', unit: 'pcs', calories: 80 },
+      { name: 'Walnuts', quantity: '4', unit: 'halves', calories: 80 },
+      { name: 'Cashews', quantity: '6', unit: 'pcs', calories: 80 },
+      { name: 'Raisins', quantity: '1', unit: 'tbsp', calories: 40 },
+    ]
   },
   {
-    meal_type: 'dinner', name: 'Veg Manchurian', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 18, cook_time_minutes: 22, servings: 1,
-    calories_per_serving: 443, protein_g: 20.0, carbs_g: 34.0, fat_g: 8.0, fiber_g: 5.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
+    meal_type: 'snack', name: 'Fruit Chaat', cuisine_type: 'Indian',
+    description: 'Seasonal fruit salad tossed with chaat masala, lemon juice and mint',
+    prep_time_minutes: 8, cook_time_minutes: 0, servings: 2,
+    calories_per_serving: 160, protein_g: 2, carbs_g: 38, fat_g: 1, fiber_g: 5,
+    kitchen_equipment: 'bowl,knife', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Banana', quantity: '1', unit: 'medium', calories: 100 },
+      { name: 'Apple', quantity: '1', unit: 'medium', calories: 80 },
+      { name: 'Orange', quantity: '1', unit: 'medium', calories: 60 },
+      { name: 'Chaat masala, lemon juice', quantity: '1', unit: 'tsp', calories: 5 },
+    ]
   },
   {
-    meal_type: 'dinner', name: 'Veg Spring Rolls', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 18, cook_time_minutes: 27, servings: 1,
-    calories_per_serving: 281, protein_g: 8.0, carbs_g: 56.0, fat_g: 8.0, fiber_g: 2.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
+    meal_type: 'snack', name: 'Sprouts Salad', cuisine_type: 'Indian',
+    description: 'Mixed sprouts with onion, tomato, lemon and chaat masala — protein-packed',
+    prep_time_minutes: 5, cook_time_minutes: 0, servings: 2,
+    calories_per_serving: 190, protein_g: 12, carbs_g: 28, fat_g: 3, fiber_g: 8,
+    kitchen_equipment: 'bowl', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Mixed sprouts (moong, chana)', quantity: '1', unit: 'cup', calories: 200 },
+      { name: 'Onion, tomato, cucumber', quantity: '0.5', unit: 'cup each', calories: 50 },
+      { name: 'Lemon juice, chaat masala', quantity: '1', unit: 'tsp', calories: 5 },
+    ]
   },
   {
-    meal_type: 'dinner', name: 'Vegetable Pasta', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 13, cook_time_minutes: 15, servings: 1,
-    calories_per_serving: 538, protein_g: 14.0, carbs_g: 58.0, fat_g: 6.0, fiber_g: 3.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
+    meal_type: 'snack', name: 'Dahi Vada', cuisine_type: 'North Indian',
+    description: 'Soft lentil dumplings soaked in chilled curd with sweet tamarind chutney',
+    prep_time_minutes: 30, cook_time_minutes: 20, servings: 4,
+    calories_per_serving: 320, protein_g: 12, carbs_g: 44, fat_g: 10, fiber_g: 5,
+    kitchen_equipment: 'deep pan,bowl', difficulty: 'medium',
     is_vegetarian: true, is_vegan: false,
-    ingredients: []
+    ingredients: [
+      { name: 'Urad dal (soaked)', quantity: '1', unit: 'cup', calories: 340 },
+      { name: 'Dahi (curd)', quantity: '1', unit: 'cup', calories: 150 },
+      { name: 'Tamarind chutney', quantity: '2', unit: 'tbsp', calories: 50 },
+      { name: 'Oil (for frying)', quantity: '3', unit: 'tbsp', calories: 360 },
+    ]
   },
   {
-    meal_type: 'dinner', name: 'Vegetable Soup', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 16, cook_time_minutes: 10, servings: 1,
-    calories_per_serving: 90, protein_g: 4, carbs_g: 14, fat_g: 3, fiber_g: 4,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
+    meal_type: 'snack', name: 'Samosa (2 pcs)', cuisine_type: 'North Indian',
+    description: 'Crispy pastry filled with spiced potato and peas — the classic Indian snack',
+    prep_time_minutes: 30, cook_time_minutes: 20, servings: 4,
+    calories_per_serving: 360, protein_g: 7, carbs_g: 42, fat_g: 18, fiber_g: 4,
+    kitchen_equipment: 'deep pan,rolling pin', difficulty: 'hard',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Maida (refined flour)', quantity: '1', unit: 'cup', calories: 360 },
+      { name: 'Potato, peas (filling)', quantity: '2', unit: 'cups', calories: 250 },
+      { name: 'Oil (for frying)', quantity: '4', unit: 'tbsp', calories: 480 },
+    ]
   },
   {
-    meal_type: 'dinner', name: 'Vegetable Stew', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 7, cook_time_minutes: 20, servings: 1,
-    calories_per_serving: 225, protein_g: 24.0, carbs_g: 61.0, fat_g: 9.0, fiber_g: 5.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
+    meal_type: 'snack', name: 'Namkeen Mathri', cuisine_type: 'North Indian',
+    description: 'Crispy flaky deep-fried crackers with ajwain and black pepper',
+    prep_time_minutes: 20, cook_time_minutes: 20, servings: 4,
+    calories_per_serving: 290, protein_g: 5, carbs_g: 32, fat_g: 16, fiber_g: 2,
+    kitchen_equipment: 'deep pan,rolling pin', difficulty: 'medium',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Maida / whole wheat flour', quantity: '1.5', unit: 'cups', calories: 500 },
+      { name: 'Oil (in dough + frying)', quantity: '4', unit: 'tbsp', calories: 480 },
+      { name: 'Ajwain, black pepper', quantity: '1', unit: 'tsp each', calories: 6 },
+    ]
   },
-  {
-    meal_type: 'lunch', name: 'Aloo Gobi', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 13, cook_time_minutes: 33, servings: 1,
-    calories_per_serving: 279, protein_g: 14.0, carbs_g: 42.0, fat_g: 8.0, fiber_g: 6.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Baingan Bharta', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 7, cook_time_minutes: 26, servings: 1,
-    calories_per_serving: 519, protein_g: 14.0, carbs_g: 66.0, fat_g: 14.0, fiber_g: 9.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Bhindi Masala', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 10, cook_time_minutes: 13, servings: 1,
-    calories_per_serving: 408, protein_g: 24.0, carbs_g: 25.0, fat_g: 21.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Chole Chawal', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 13, cook_time_minutes: 18, servings: 1,
-    calories_per_serving: 458, protein_g: 14.0, carbs_g: 53.0, fat_g: 8.0, fiber_g: 5.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Dal Tadka Rice', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 16, cook_time_minutes: 33, servings: 1,
-    calories_per_serving: 468, protein_g: 19.0, carbs_g: 21.0, fat_g: 14.0, fiber_g: 5.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Jeera Rice Dal', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 6, cook_time_minutes: 24, servings: 1,
-    calories_per_serving: 307, protein_g: 6.0, carbs_g: 42.0, fat_g: 10.0, fiber_g: 2.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Kadhi Chawal', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 15, cook_time_minutes: 35, servings: 1,
-    calories_per_serving: 204, protein_g: 23.0, carbs_g: 53.0, fat_g: 15.0, fiber_g: 9.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Lauki Sabzi', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 6, cook_time_minutes: 12, servings: 1,
-    calories_per_serving: 540, protein_g: 22.0, carbs_g: 24.0, fat_g: 12.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Matar Paneer', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 6, cook_time_minutes: 16, servings: 1,
-    calories_per_serving: 185, protein_g: 24.0, carbs_g: 57.0, fat_g: 5.0, fiber_g: 7.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Mixed Veg Curry', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 20, cook_time_minutes: 28, servings: 1,
-    calories_per_serving: 360, protein_g: 19.0, carbs_g: 57.0, fat_g: 12.0, fiber_g: 10.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Palak Paneer', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 19, cook_time_minutes: 18, servings: 1,
-    calories_per_serving: 371, protein_g: 5.0, carbs_g: 69.0, fat_g: 10.0, fiber_g: 10.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Paneer Butter Masala', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 14, cook_time_minutes: 12, servings: 1,
-    calories_per_serving: 529, protein_g: 13.0, carbs_g: 22.0, fat_g: 22.0, fiber_g: 3.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Soyabean Curry', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 12, cook_time_minutes: 18, servings: 1,
-    calories_per_serving: 539, protein_g: 15.0, carbs_g: 70.0, fat_g: 15.0, fiber_g: 8.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Stuffed Capsicum', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 11, cook_time_minutes: 32, servings: 1,
-    calories_per_serving: 404, protein_g: 19.0, carbs_g: 30.0, fat_g: 21.0, fiber_g: 4.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Tinda Masala', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 7, cook_time_minutes: 30, servings: 1,
-    calories_per_serving: 473, protein_g: 20.0, carbs_g: 66.0, fat_g: 11.0, fiber_g: 3.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Toor Dal Roti', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 20, cook_time_minutes: 27, servings: 1,
-    calories_per_serving: 390, protein_g: 15, carbs_g: 58, fat_g: 11, fiber_g: 9,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Veg Biryani', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 14, cook_time_minutes: 23, servings: 1,
-    calories_per_serving: 291, protein_g: 13.0, carbs_g: 30.0, fat_g: 22.0, fiber_g: 8.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  },
-  {
-    meal_type: 'lunch', name: 'Vegetable Kofta', cuisine_type: 'Indian',
-    description: '',
-    prep_time_minutes: 13, cook_time_minutes: 11, servings: 1,
-    calories_per_serving: 431, protein_g: 20.0, carbs_g: 41.0, fat_g: 12.0, fiber_g: 8.0,
-    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
-    is_vegetarian: true, is_vegan: false,
-    ingredients: []
-  }
 ];
 
 async function seedMenu() {
-  let added = 0;
+  // Clear existing data in correct order (to avoid FK constraints)
+  await DietPlanDayItem.destroy({ where: {}, truncate: true });
+  await DietPlanDay.destroy({ where: {}, truncate: true });
+  await DietPlan.destroy({ where: {}, truncate: true });
+
+  // Delete ingredients + menu items
+  const { Ingredient } = require('../models');
+  await Ingredient.destroy({ where: {}, truncate: true });
+  await MenuItem.destroy({ where: {}, truncate: true });
+
+  let created = 0;
   for (const item of menuData) {
-    const { ingredients, ...menuItem } = item;
-    const [created, wasCreated] = await MenuItem.findOrCreate({
-      where: { name: menuItem.name, meal_type: menuItem.meal_type },
-      defaults: menuItem
-    });
-    if (wasCreated) {
-      if (ingredients && ingredients.length > 0) {
-        await Promise.all(
-          ingredients.map(ing => Ingredient.create({ ...ing, menu_item_id: created.id }))
-        );
-      }
-      added++;
+    const { ingredients, ...data } = item;
+    const menuItem = await MenuItem.create(data);
+    if (ingredients && ingredients.length) {
+      await Ingredient.bulkCreate(
+        ingredients.map(ing => ({ ...ing, menu_item_id: menuItem.id }))
+      );
     }
+    created++;
   }
-  if (added > 0) console.log(`Seeded ${added} new menu items`);
+  console.log(`[menuSeeder] Seeded ${created} menu items.`);
+  return created;
 }
 
 module.exports = { seedMenu };
