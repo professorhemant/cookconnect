@@ -1,6 +1,14 @@
 import React from 'react';
 import { Flame, AlertTriangle } from 'lucide-react';
 
+const MEAL_COLORS = {
+  breakfast: 'bg-orange-50 text-orange-700',
+  lunch:     'bg-blue-50 text-blue-700',
+  dinner:    'bg-purple-50 text-purple-700',
+  snack:     'bg-teal-50 text-teal-700',
+};
+const MEAL_PREFIX = { breakfast: 'B', lunch: 'L', dinner: 'D', snack: 'S' };
+
 export default function MealCell({ day, onEdit, requiredCalories, familyMembers = 1 }) {
   if (!day) {
     return (
@@ -16,6 +24,9 @@ export default function MealCell({ day, onEdit, requiredCalories, familyMembers 
   const displayCalories = day.total_calories * familyMembers;
   const isLow = requiredCalories && displayCalories < requiredCalories;
 
+  // Use mealItems (multiple per meal) if available, else fall back to single-item fields
+  const hasMealItems = day.mealItems && day.mealItems.length > 0;
+
   return (
     <div
       className={`bg-white rounded-lg border p-2 cursor-pointer hover:shadow-sm transition-all ${
@@ -30,22 +41,39 @@ export default function MealCell({ day, onEdit, requiredCalories, familyMembers 
           <span className="text-xs font-medium">{displayCalories}</span>
         </div>
       </div>
+
       <div className="space-y-1">
-        {day.breakfast && (
-          <div className="text-xs bg-orange-50 text-orange-700 px-1.5 py-0.5 rounded truncate">
-            B: {day.breakfast.name}
-          </div>
+        {hasMealItems ? (
+          ['breakfast', 'lunch', 'dinner', 'snack'].map(type => {
+            const items = day.mealItems.filter(mi => mi.meal_type === type);
+            if (!items.length) return null;
+            return items.map((mi, idx) => (
+              <div key={mi.id || idx} className={`text-xs px-1.5 py-0.5 rounded truncate ${MEAL_COLORS[type]}`}>
+                {MEAL_PREFIX[type]}: {mi.menuItem?.name || '—'}
+              </div>
+            ));
+          })
+        ) : (
+          <>
+            {day.breakfast && (
+              <div className="text-xs bg-orange-50 text-orange-700 px-1.5 py-0.5 rounded truncate">
+                B: {day.breakfast.name}
+              </div>
+            )}
+            {day.lunch && (
+              <div className="text-xs bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded truncate">
+                L: {day.lunch.name}
+              </div>
+            )}
+            {day.dinner && (
+              <div className="text-xs bg-purple-50 text-purple-700 px-1.5 py-0.5 rounded truncate">
+                D: {day.dinner.name}
+              </div>
+            )}
+          </>
         )}
-        {day.lunch && (
-          <div className="text-xs bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded truncate">
-            L: {day.lunch.name}
-          </div>
-        )}
-        {day.dinner && (
-          <div className="text-xs bg-purple-50 text-purple-700 px-1.5 py-0.5 rounded truncate">
-            D: {day.dinner.name}
-          </div>
-        )}
+
+        {/* Add-ons always from single fields */}
         {day.breakfastAddon && (
           <div className="text-xs bg-orange-50 text-orange-700 px-1.5 py-0.5 rounded truncate">
             +B: {day.breakfastAddon.name}
@@ -62,6 +90,7 @@ export default function MealCell({ day, onEdit, requiredCalories, familyMembers 
           </div>
         )}
       </div>
+
       {isLow && (
         <div className="flex items-center gap-1 mt-1.5 bg-amber-50 rounded px-1.5 py-0.5">
           <AlertTriangle size={9} className="text-amber-500 shrink-0" />

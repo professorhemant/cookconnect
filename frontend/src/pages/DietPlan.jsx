@@ -306,12 +306,13 @@ export default function DietPlan() {
 
   function selectMealForDay(dayIdx, mealType, item) {
     const current = dailyMeals[dayIdx]?.[mealType] || [];
-    const isSelected = current.length === 1 && current[0].id === item.id;
-
-    // Deselect if already selected, otherwise replace with just this item (1 per meal)
+    const isSelected = current.some(i => i.id === item.id);
     setDailyMeals(prev => ({
       ...prev,
-      [dayIdx]: { ...prev[dayIdx], [mealType]: isSelected ? [] : [item] }
+      [dayIdx]: {
+        ...prev[dayIdx],
+        [mealType]: isSelected ? current.filter(i => i.id !== item.id) : [...current, item]
+      }
     }));
   }
 

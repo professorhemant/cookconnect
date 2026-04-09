@@ -1,13 +1,17 @@
-const { DietPlan, DietPlanDay, MenuItem, Ingredient } = require('../models');
+const { DietPlan, DietPlanDay, DietPlanDayItem, MenuItem, Ingredient, User, FamilyMember, NotificationLog } = require('../models');
 const { generatePlan } = require('../services/dietPlanService');
+const { generateShoppingListPDF } = require('../services/pdfService');
+const { sendPDF } = require('../services/whatsappService');
 const { Op } = require('sequelize');
 
 const dayIncludes = [
   { model: MenuItem, as: 'breakfast', include: [{ model: Ingredient, as: 'ingredients' }] },
   { model: MenuItem, as: 'lunch', include: [{ model: Ingredient, as: 'ingredients' }] },
   { model: MenuItem, as: 'dinner', include: [{ model: Ingredient, as: 'ingredients' }] },
+  { model: MenuItem, as: 'breakfastAddon' },
   { model: MenuItem, as: 'morningSnack' },
-  { model: MenuItem, as: 'eveningSnack' }
+  { model: MenuItem, as: 'eveningSnack' },
+  { model: DietPlanDayItem, as: 'mealItems', include: [{ model: MenuItem, as: 'menuItem' }] }
 ];
 
 async function generateDietPlan(req, res) {
@@ -21,9 +25,38 @@ async function generateDietPlan(req, res) {
       include: [{ model: DietPlanDay, as: 'days', include: dayIncludes, order: [['day_number', 'ASC']] }]
     });
     res.status(201).json(full);
+
+    // Auto-send shopping list to user (not cook) only for weekly plans
+    if (planType === 'weekly') {
+      sendShoppingList(plan.user_id, full.days).catch(err =>
+        console.error('[ShoppingList] Auto-send failed:', err.message)
+      );
+    }
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
+}
+
+async function sendShoppingList(userId, planDays) {
+  const user = await User.findByPk(userId);
+  if (!user || !user.phone) return;
+
+  const familyCount = await FamilyMember.count({ where: { user_id: userId } });
+  const members = familyCount > 0 ? familyCount : 1;
+
+  const { filename, filepath } = await generateShoppingListPDF(user, planDays, members);
+  const caption = `CookConnect — Shopping List for week (${members} member${members !== 1 ? 's' : ''})`;
+  const result = await sendPDF(user.phone, filepath, filename, caption);
+
+  await NotificationLog.create({
+    user_id: userId,
+    type: 'shopping_list',
+    recipient_phone: user.phone,
+    message: filepath,
+    status: result.status
+  });
+
+  console.log(`[ShoppingList] Sent to ${user.phone}: ${result.status}`);
 }
 
 async function getUserPlans(req, res) {

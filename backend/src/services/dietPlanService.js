@@ -1,4 +1,4 @@
-const { MenuItem, NutritionRequirement, FamilyMember, DietPlan, DietPlanDay } = require('../models');
+const { MenuItem, NutritionRequirement, FamilyMember, DietPlan, DietPlanDay, DietPlanDayItem } = require('../models');
 const { Op } = require('sequelize');
 
 function addDays(dateStr, days) {
@@ -50,15 +50,21 @@ function pickNonRepeating(items, recentIds, mealType) {
 async function generatePlan(userId, planType, startDate, preferences = {}) {
   const { isVegetarian, maxCaloriesPerDay, cuisineTypes, preferredBreakfastIds, preferredLunchIds, preferredDinnerIds, dailyAssignments, selectedOnly } = preferences;
 
+  console.log('[generatePlan] selectedOnly:', selectedOnly, '| dailyAssignments count:', dailyAssignments?.length ?? 0);
+
   // selectedOnly: only create days that have explicit assignments, no auto-fill
   const selectedDayIndices = selectedOnly && dailyAssignments && dailyAssignments.length > 0
     ? [...new Set(dailyAssignments.map(a => a.dayIndex))].sort((a, b) => a - b)
     : null;
 
+  console.log('[generatePlan] selectedDayIndices:', selectedDayIndices);
+
   const numDays = selectedDayIndices ? selectedDayIndices.length : (planType === 'monthly' ? 30 : 7);
   const endDate = selectedDayIndices
     ? addDays(startDate, selectedDayIndices[selectedDayIndices.length - 1])
     : addDays(startDate, numDays - 1);
+
+  console.log('[generatePlan] numDays:', numDays, '| endDate:', endDate);
 
   const calorieTarget = await getFamilyCalorieTarget(userId);
   const effectiveMax = maxCaloriesPerDay || calorieTarget.max;
@@ -122,6 +128,12 @@ async function generatePlan(userId, planType, startDate, preferences = {}) {
 
     const assignment = dailyAssignments?.find(a => a.dayIndex === i);
 
+    // Resolve all selected IDs for each meal type (multiple allowed)
+    const resolveIds = (ids) =>
+      ids && ids.length > 0
+        ? ids.map(id => allItems.find(x => x.id === id)).filter(Boolean)
+        : null;
+
     const pickFromIds = (ids, pool, recentSet) => {
       if (ids && ids.length > 0) {
         const available = ids.map(id => allItems.find(x => x.id === id)).filter(Boolean);
@@ -134,18 +146,31 @@ async function generatePlan(userId, planType, startDate, preferences = {}) {
       return pickItem(pool, recentSet);
     };
 
-    const breakfast = pickFromIds(assignment?.breakfastIds, breakfastItems, recentBreakfast);
-    const lunch     = pickFromIds(assignment?.lunchIds,     lunchItems,     recentLunch);
-    const dinner    = pickFromIds(assignment?.dinnerIds,    dinnerItems,    recentDinner);
+    // For selectedOnly mode: use ALL selected items per meal; for auto: pick one
+    const breakfastSelected = selectedOnly ? resolveIds(assignment?.breakfastIds) : null;
+    const lunchSelected     = selectedOnly ? resolveIds(assignment?.lunchIds)     : null;
+    const dinnerSelected    = selectedOnly ? resolveIds(assignment?.dinnerIds)     : null;
+    const snackSelected     = selectedOnly ? resolveIds(assignment?.snackIds)      : null;
+
+    const breakfast = breakfastSelected?.[0] || pickFromIds(assignment?.breakfastIds, breakfastItems, recentBreakfast);
+    const lunch     = lunchSelected?.[0]     || pickFromIds(assignment?.lunchIds,     lunchItems,     recentLunch);
+    const dinner    = dinnerSelected?.[0]    || pickFromIds(assignment?.dinnerIds,    dinnerItems,    recentDinner);
 
     recentBreakfast.add(breakfast.id);
     recentLunch.add(lunch.id);
     recentDinner.add(dinner.id);
 
-    const totalCalories = breakfast.calories_per_serving + lunch.calories_per_serving + dinner.calories_per_serving;
-    const totalProtein = breakfast.protein_g + lunch.protein_g + dinner.protein_g;
-    const totalCarbs = breakfast.carbs_g + lunch.carbs_g + dinner.carbs_g;
-    const totalFat = breakfast.fat_g + lunch.fat_g + dinner.fat_g;
+    // Sum calories from ALL selected items (not just the first)
+    const allSelectedItems = [
+      ...(breakfastSelected || [breakfast]),
+      ...(lunchSelected     || [lunch]),
+      ...(dinnerSelected    || [dinner]),
+      ...(snackSelected     || []),
+    ];
+    const totalCalories = allSelectedItems.reduce((s, x) => s + (x.calories_per_serving || 0), 0);
+    const totalProtein  = allSelectedItems.reduce((s, x) => s + (x.protein_g || 0), 0);
+    const totalCarbs    = allSelectedItems.reduce((s, x) => s + (x.carbs_g   || 0), 0);
+    const totalFat      = allSelectedItems.reduce((s, x) => s + (x.fat_g     || 0), 0);
 
     const day = await DietPlanDay.create({
       diet_plan_id: plan.id,
@@ -159,6 +184,15 @@ async function generatePlan(userId, planType, startDate, preferences = {}) {
       total_carbs: totalCarbs,
       total_fat: totalFat
     });
+
+    // Create DietPlanDayItem records for all items
+    const itemsToCreate = [
+      ...(breakfastSelected || [breakfast]).map(x => ({ diet_plan_day_id: day.id, menu_item_id: x.id, meal_type: 'breakfast' })),
+      ...(lunchSelected     || [lunch]    ).map(x => ({ diet_plan_day_id: day.id, menu_item_id: x.id, meal_type: 'lunch'     })),
+      ...(dinnerSelected    || [dinner]   ).map(x => ({ diet_plan_day_id: day.id, menu_item_id: x.id, meal_type: 'dinner'    })),
+      ...(snackSelected     || []         ).map(x => ({ diet_plan_day_id: day.id, menu_item_id: x.id, meal_type: 'snack'     })),
+    ];
+    await DietPlanDayItem.bulkCreate(itemsToCreate);
 
     days.push(day);
   }
