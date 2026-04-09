@@ -494,7 +494,7 @@ const menuData = [
   },
   {
     meal_type: 'breakfast', name: 'Upma', cuisine_type: 'South Indian',
-    sub_category: 'Other Breakfast',
+    sub_category: 'Upma',
     description: 'Semolina porridge cooked with mixed vegetables and tempered spices',
     prep_time_minutes: 5, cook_time_minutes: 20, servings: 4,
     calories_per_serving: 320, protein_g: 9, carbs_g: 52, fat_g: 8, fiber_g: 3,
@@ -505,6 +505,226 @@ const menuData = [
       { name: 'Onion', quantity: '1', unit: 'large', calories: 40 },
       { name: 'Mixed vegetables', quantity: '0.5', unit: 'cup', calories: 40 },
       { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
+      { name: 'Mustard seeds, curry leaves', quantity: '1', unit: 'tsp', calories: 5 },
+    ]
+  },
+
+  // ─────────────────────────────────────────────
+  // BREAKFAST — More Dosa varieties
+  // ─────────────────────────────────────────────
+  {
+    meal_type: 'breakfast', name: 'Rava Dosa', cuisine_type: 'South Indian',
+    sub_category: 'Dosa and Idli',
+    description: 'Instant crispy lacy dosa made with semolina, rice flour and onion — no fermentation needed',
+    prep_time_minutes: 10, cook_time_minutes: 15, servings: 4,
+    calories_per_serving: 270, protein_g: 7, carbs_g: 42, fat_g: 8, fiber_g: 2,
+    kitchen_equipment: 'tawa,spatula', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Sooji (semolina)', quantity: '0.5', unit: 'cup', calories: 170 },
+      { name: 'Rice flour', quantity: '0.5', unit: 'cup', calories: 180 },
+      { name: 'Onion (finely chopped)', quantity: '1', unit: 'medium', calories: 40 },
+      { name: 'Green chilli, cumin', quantity: '1', unit: 'tsp', calories: 5 },
+      { name: 'Oil', quantity: '1.5', unit: 'tbsp', calories: 180 },
+    ]
+  },
+  {
+    meal_type: 'breakfast', name: 'Onion Dosa', cuisine_type: 'South Indian',
+    sub_category: 'Dosa and Idli',
+    description: 'Crispy dosa topped with finely chopped onion and green chilli',
+    prep_time_minutes: 5, cook_time_minutes: 15, servings: 4,
+    calories_per_serving: 265, protein_g: 7, carbs_g: 44, fat_g: 7, fiber_g: 3,
+    kitchen_equipment: 'tawa,spatula', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Dosa batter', quantity: '2', unit: 'cups', calories: 360 },
+      { name: 'Onion (finely chopped)', quantity: '2', unit: 'medium', calories: 80 },
+      { name: 'Green chilli', quantity: '2', unit: 'pcs', calories: 6 },
+      { name: 'Oil', quantity: '1', unit: 'tbsp', calories: 120 },
+    ]
+  },
+  {
+    meal_type: 'breakfast', name: 'Mysore Masala Dosa', cuisine_type: 'South Indian',
+    sub_category: 'Dosa and Idli',
+    description: 'Crispy dosa spread with spicy red chutney and filled with seasoned potato masala',
+    prep_time_minutes: 10, cook_time_minutes: 20, servings: 4,
+    calories_per_serving: 420, protein_g: 11, carbs_g: 62, fat_g: 14, fiber_g: 5,
+    kitchen_equipment: 'tawa,spatula', difficulty: 'medium',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Dosa batter', quantity: '2', unit: 'cups', calories: 360 },
+      { name: 'Potato masala (filling)', quantity: '1', unit: 'cup', calories: 200 },
+      { name: 'Red chutney (Mysore)', quantity: '3', unit: 'tbsp', calories: 60 },
+      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
+    ]
+  },
+  {
+    meal_type: 'breakfast', name: 'Paneer Dosa', cuisine_type: 'South Indian',
+    sub_category: 'Dosa and Idli',
+    description: 'Golden dosa stuffed with spiced crumbled paneer and onion filling',
+    prep_time_minutes: 10, cook_time_minutes: 20, servings: 4,
+    calories_per_serving: 430, protein_g: 17, carbs_g: 50, fat_g: 18, fiber_g: 3,
+    kitchen_equipment: 'tawa,spatula', difficulty: 'medium',
+    is_vegetarian: true, is_vegan: false,
+    ingredients: [
+      { name: 'Dosa batter', quantity: '2', unit: 'cups', calories: 360 },
+      { name: 'Paneer (crumbled)', quantity: '150', unit: 'g', calories: 240 },
+      { name: 'Onion, green chilli', quantity: '1', unit: 'medium', calories: 45 },
+      { name: 'Oil', quantity: '2', unit: 'tbsp', calories: 240 },
+    ]
+  },
+  {
+    meal_type: 'breakfast', name: 'Pesarattu', cuisine_type: 'South Indian',
+    sub_category: 'Dosa and Idli',
+    description: 'Andhra-style green moong dal dosa — high protein, naturally crispy',
+    prep_time_minutes: 15, cook_time_minutes: 15, servings: 4,
+    calories_per_serving: 290, protein_g: 15, carbs_g: 40, fat_g: 7, fiber_g: 8,
+    kitchen_equipment: 'tawa,spatula,blender', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Green moong dal (soaked)', quantity: '1', unit: 'cup', calories: 340 },
+      { name: 'Ginger, green chilli', quantity: '1', unit: 'inch + 2 pcs', calories: 8 },
+      { name: 'Oil', quantity: '1.5', unit: 'tbsp', calories: 180 },
+    ]
+  },
+  {
+    meal_type: 'breakfast', name: 'Ghee Roast Dosa', cuisine_type: 'South Indian',
+    sub_category: 'Dosa and Idli',
+    description: 'Extra crispy dosa roasted in generous ghee — a Karnataka speciality',
+    prep_time_minutes: 5, cook_time_minutes: 15, servings: 4,
+    calories_per_serving: 310, protein_g: 7, carbs_g: 44, fat_g: 12, fiber_g: 2,
+    kitchen_equipment: 'tawa,spatula', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: false,
+    ingredients: [
+      { name: 'Dosa batter', quantity: '2', unit: 'cups', calories: 360 },
+      { name: 'Ghee', quantity: '2', unit: 'tbsp', calories: 180 },
+    ]
+  },
+
+  // ─────────────────────────────────────────────
+  // BREAKFAST — More Idli varieties
+  // ─────────────────────────────────────────────
+  {
+    meal_type: 'breakfast', name: 'Rava Idli', cuisine_type: 'South Indian',
+    sub_category: 'Dosa and Idli',
+    description: 'Instant soft semolina idli with mustard seeds and cashews — no overnight soaking needed',
+    prep_time_minutes: 10, cook_time_minutes: 15, servings: 4,
+    calories_per_serving: 280, protein_g: 8, carbs_g: 44, fat_g: 8, fiber_g: 2,
+    kitchen_equipment: 'idli cooker,kadai', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: false,
+    ingredients: [
+      { name: 'Sooji (semolina)', quantity: '1.5', unit: 'cups', calories: 500 },
+      { name: 'Dahi (curd)', quantity: '1', unit: 'cup', calories: 150 },
+      { name: 'Cashews', quantity: '8', unit: 'pcs', calories: 80 },
+      { name: 'Ghee', quantity: '1', unit: 'tbsp', calories: 90 },
+    ]
+  },
+  {
+    meal_type: 'breakfast', name: 'Mini Idli Sambar', cuisine_type: 'South Indian',
+    sub_category: 'Dosa and Idli',
+    description: 'Bite-sized mini idlis dunked in piping hot toor dal sambar — kids favourite',
+    prep_time_minutes: 5, cook_time_minutes: 15, servings: 4,
+    calories_per_serving: 270, protein_g: 10, carbs_g: 46, fat_g: 5, fiber_g: 4,
+    kitchen_equipment: 'mini idli cooker,pressure cooker', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Idli batter', quantity: '2', unit: 'cups', calories: 360 },
+      { name: 'Toor dal sambar', quantity: '1.5', unit: 'cups', calories: 150 },
+      { name: 'Oil', quantity: '1', unit: 'tsp', calories: 40 },
+    ]
+  },
+  {
+    meal_type: 'breakfast', name: 'Ragi Idli', cuisine_type: 'South Indian',
+    sub_category: 'Dosa and Idli',
+    description: 'Nutritious finger millet idli — high calcium, iron-rich healthy breakfast',
+    prep_time_minutes: 5, cook_time_minutes: 15, servings: 4,
+    calories_per_serving: 240, protein_g: 8, carbs_g: 42, fat_g: 3, fiber_g: 5,
+    kitchen_equipment: 'idli cooker', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Ragi (finger millet) flour', quantity: '1', unit: 'cup', calories: 320 },
+      { name: 'Urad dal (soaked, ground)', quantity: '0.5', unit: 'cup', calories: 170 },
+      { name: 'Salt', quantity: '1', unit: 'tsp', calories: 0 },
+    ]
+  },
+
+  // ─────────────────────────────────────────────
+  // BREAKFAST — More Upma varieties
+  // ─────────────────────────────────────────────
+  {
+    meal_type: 'breakfast', name: 'Semiya Upma', cuisine_type: 'South Indian',
+    sub_category: 'Upma',
+    description: 'Vermicelli cooked with vegetables and South Indian tempering — light and quick',
+    prep_time_minutes: 5, cook_time_minutes: 15, servings: 4,
+    calories_per_serving: 300, protein_g: 8, carbs_g: 50, fat_g: 7, fiber_g: 3,
+    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Semiya (vermicelli)', quantity: '1.5', unit: 'cups', calories: 480 },
+      { name: 'Onion, mixed vegetables', quantity: '1', unit: 'cup', calories: 80 },
+      { name: 'Oil', quantity: '1.5', unit: 'tbsp', calories: 180 },
+      { name: 'Mustard seeds, curry leaves', quantity: '1', unit: 'tsp', calories: 5 },
+    ]
+  },
+  {
+    meal_type: 'breakfast', name: 'Oats Upma', cuisine_type: 'Indian',
+    sub_category: 'Upma',
+    description: 'Healthy savoury oats upma with vegetables and spices — guilt-free breakfast',
+    prep_time_minutes: 5, cook_time_minutes: 12, servings: 2,
+    calories_per_serving: 290, protein_g: 10, carbs_g: 44, fat_g: 8, fiber_g: 6,
+    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Rolled oats', quantity: '1', unit: 'cup', calories: 300 },
+      { name: 'Mixed vegetables (carrot, peas, capsicum)', quantity: '0.5', unit: 'cup', calories: 50 },
+      { name: 'Oil', quantity: '1.5', unit: 'tbsp', calories: 180 },
+      { name: 'Mustard seeds, curry leaves, green chilli', quantity: '1', unit: 'tsp', calories: 5 },
+    ]
+  },
+  {
+    meal_type: 'breakfast', name: 'Bread Upma', cuisine_type: 'Indian',
+    sub_category: 'Upma',
+    description: 'Leftover bread stir-fried with onion, tomato and spices — quick tasty breakfast',
+    prep_time_minutes: 5, cook_time_minutes: 10, servings: 2,
+    calories_per_serving: 310, protein_g: 9, carbs_g: 48, fat_g: 9, fiber_g: 3,
+    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Bread (cubed)', quantity: '6', unit: 'slices', calories: 360 },
+      { name: 'Onion', quantity: '1', unit: 'medium', calories: 40 },
+      { name: 'Tomato', quantity: '1', unit: 'medium', calories: 20 },
+      { name: 'Oil', quantity: '1.5', unit: 'tbsp', calories: 180 },
+      { name: 'Mustard seeds, curry leaves', quantity: '1', unit: 'tsp', calories: 5 },
+    ]
+  },
+  {
+    meal_type: 'breakfast', name: 'Rava Upma', cuisine_type: 'South Indian',
+    sub_category: 'Upma',
+    description: 'Classic semolina upma with cashews and fresh coconut — a South Indian staple',
+    prep_time_minutes: 5, cook_time_minutes: 20, servings: 4,
+    calories_per_serving: 340, protein_g: 9, carbs_g: 54, fat_g: 10, fiber_g: 3,
+    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: false,
+    ingredients: [
+      { name: 'Sooji (semolina)', quantity: '1.5', unit: 'cups', calories: 500 },
+      { name: 'Cashews', quantity: '10', unit: 'pcs', calories: 100 },
+      { name: 'Fresh coconut (grated)', quantity: '2', unit: 'tbsp', calories: 60 },
+      { name: 'Ghee', quantity: '1.5', unit: 'tbsp', calories: 135 },
+      { name: 'Mustard seeds, urad dal, curry leaves', quantity: '1', unit: 'tsp', calories: 8 },
+    ]
+  },
+  {
+    meal_type: 'breakfast', name: 'Poha Upma', cuisine_type: 'Indian',
+    sub_category: 'Upma',
+    description: 'Flattened rice cooked upma-style with peanuts and tempering',
+    prep_time_minutes: 10, cook_time_minutes: 15, servings: 4,
+    calories_per_serving: 330, protein_g: 8, carbs_g: 54, fat_g: 9, fiber_g: 3,
+    kitchen_equipment: 'kadai,spatula', difficulty: 'easy',
+    is_vegetarian: true, is_vegan: true,
+    ingredients: [
+      { name: 'Thick poha', quantity: '2', unit: 'cups', calories: 350 },
+      { name: 'Peanuts', quantity: '3', unit: 'tbsp', calories: 120 },
+      { name: 'Oil', quantity: '1.5', unit: 'tbsp', calories: 180 },
       { name: 'Mustard seeds, curry leaves', quantity: '1', unit: 'tsp', calories: 5 },
     ]
   },
