@@ -37,7 +37,8 @@ const MenuItem = sequelize.define('MenuItem', {
   },
   calories_per_serving: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: true,
+    defaultValue: 0
   },
   protein_g: {
     type: DataTypes.FLOAT,
@@ -75,6 +76,11 @@ const MenuItem = sequelize.define('MenuItem', {
   image_url: {
     type: DataTypes.STRING,
     allowNull: true
+  },
+  sub_category: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    defaultValue: null
   }
 }, {
   tableName: 'menu_items',

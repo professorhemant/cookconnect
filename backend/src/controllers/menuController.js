@@ -100,7 +100,7 @@ async function getMenuItems(req, res) {
     const items = await MenuItem.findAll({
       where,
       include: [{ model: Ingredient, as: 'ingredients' }],
-      order: [['name', 'ASC']]
+      order: [['sub_category', 'ASC'], ['name', 'ASC']]
     });
     res.json(items);
   } catch (err) {
