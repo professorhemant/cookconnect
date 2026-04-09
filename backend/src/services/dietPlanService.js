@@ -2,8 +2,9 @@ const { MenuItem, NutritionRequirement, FamilyMember, DietPlan, DietPlanDay } = 
 const { Op } = require('sequelize');
 
 function addDays(dateStr, days) {
-  const d = new Date(dateStr);
-  d.setDate(d.getDate() + days);
+  const [year, month, day] = dateStr.split('-').map(Number);
+  const d = new Date(Date.UTC(year, month - 1, day));
+  d.setUTCDate(d.getUTCDate() + days);
   return d.toISOString().split('T')[0];
 }
 
@@ -47,7 +48,7 @@ function pickNonRepeating(items, recentIds, mealType) {
 }
 
 async function generatePlan(userId, planType, startDate, preferences = {}) {
-  const { isVegetarian, maxCaloriesPerDay, cuisineTypes, preferredBreakfastIds, preferredLunchIds, preferredDinnerIds } = preferences;
+  const { isVegetarian, maxCaloriesPerDay, cuisineTypes, preferredBreakfastIds, preferredLunchIds, preferredDinnerIds, dailyAssignments } = preferences;
 
   const numDays = planType === 'monthly' ? 30 : 7;
   const endDate = addDays(startDate, numDays - 1);
@@ -109,9 +110,14 @@ async function generatePlan(userId, planType, startDate, preferences = {}) {
       }
     }
 
-    const breakfast = pickItem(breakfastItems, recentBreakfast);
-    const lunch = pickItem(lunchItems, recentLunch);
-    const dinner = pickItem(dinnerItems, recentDinner);
+    const assignment = dailyAssignments?.find(a => a.dayIndex === i);
+
+    const breakfast = (assignment?.breakfastId && allItems.find(x => x.id === assignment.breakfastId))
+      || pickItem(breakfastItems, recentBreakfast);
+    const lunch = (assignment?.lunchId && allItems.find(x => x.id === assignment.lunchId))
+      || pickItem(lunchItems, recentLunch);
+    const dinner = (assignment?.dinnerId && allItems.find(x => x.id === assignment.dinnerId))
+      || pickItem(dinnerItems, recentDinner);
 
     recentBreakfast.add(breakfast.id);
     recentLunch.add(lunch.id);

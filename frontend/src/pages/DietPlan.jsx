@@ -28,6 +28,8 @@ export default function DietPlan() {
   const [selectedLunchAddon, setSelectedLunchAddon] = useState([]);
   const [selectedDinnerAddon, setSelectedDinnerAddon] = useState([]);
   const [activeMealTab, setActiveMealTab] = useState('breakfast');
+  const [dailyMeals, setDailyMeals] = useState({});
+  const [activeDay, setActiveDay] = useState(0);
   const [showSwap, setShowSwap] = useState(false);
   const [swapDay, setSwapDay] = useState(null);
   const [swapMealType, setSwapMealType] = useState('');
@@ -89,6 +91,7 @@ export default function DietPlan() {
   async function goToMealSelection() {
     setLoadingMenuItems(true);
     setGenStep(2);
+    setActiveDay(0);
     try {
       const [bRes, lRes, dRes, sRes] = await Promise.all([
         getMenuItems({ meal_type: 'breakfast' }),
@@ -129,6 +132,15 @@ export default function DietPlan() {
   async function handleGenerate() {
     setGenerating(true);
     try {
+      const dailyAssignmentsPayload = Object.entries(dailyMeals)
+        .map(([dayIdx, meals]) => ({
+          dayIndex: parseInt(dayIdx),
+          breakfastId: meals.breakfast?.id || null,
+          lunchId: meals.lunch?.id || null,
+          dinnerId: meals.dinner?.id || null,
+        }))
+        .filter(a => a.breakfastId || a.lunchId || a.dinnerId);
+
       const res = await generateDietPlan({
         userId: currentUser.id,
         planType: genForm.planType,
@@ -140,12 +152,14 @@ export default function DietPlan() {
           preferredBreakfastIds: selectedBreakfast.length > 0 ? selectedBreakfast : undefined,
           preferredLunchIds: selectedLunch.length > 0 ? selectedLunch : undefined,
           preferredDinnerIds: selectedDinner.length > 0 ? selectedDinner : undefined,
+          dailyAssignments: dailyAssignmentsPayload.length > 0 ? dailyAssignmentsPayload : undefined,
         }
       });
       setActivePlan(res.data);
       setPlanDays(res.data.days || []);
       setShowGenForm(false);
       setGenStep(1);
+      setDailyMeals({}); setActiveDay(0);
       setSelectedBreakfast([]); setSelectedLunch([]); setSelectedDinner([]);
       setSelectedLunchAddon([]); setSelectedDinnerAddon([]);
       loadPlans();
@@ -252,6 +266,29 @@ export default function DietPlan() {
       ...f,
       cuisineTypes: f.cuisineTypes.includes(c) ? f.cuisineTypes.filter(x => x !== c) : [...f.cuisineTypes, c]
     }));
+  }
+
+  const dailyTarget = requiredCalories > 0 ? requiredCalories : genForm.maxCaloriesPerDay;
+
+  function getDayCalories(dayIdx) {
+    const d = dailyMeals[dayIdx] || {};
+    return (d.breakfast?.calories_per_serving || 0) +
+           (d.lunch?.calories_per_serving || 0) +
+           (d.dinner?.calories_per_serving || 0);
+  }
+
+  function selectMealForDay(dayIdx, mealType, item) {
+    const d = dailyMeals[dayIdx] || {};
+    const currentMealCal = d[mealType]?.calories_per_serving || 0;
+    const otherCal = getDayCalories(dayIdx) - currentMealCal;
+    const newTotal = otherCal + item.calories_per_serving;
+    setDailyMeals(prev => ({
+      ...prev,
+      [dayIdx]: { ...prev[dayIdx], [mealType]: item }
+    }));
+    if (newTotal >= dailyTarget) {
+      // alert shown via UI state — no window.alert
+    }
   }
 
   return (
@@ -553,7 +590,7 @@ export default function DietPlan() {
                 </div>
                 <span className="text-xs text-gray-400">Step {genStep} of 2</span>
               </div>
-              <button onClick={() => { setShowGenForm(false); setGenStep(1); }} className="text-gray-400 hover:text-gray-600"><X size={20} /></button>
+              <button onClick={() => { setShowGenForm(false); setGenStep(1); setDailyMeals({}); setActiveDay(0); }} className="text-gray-400 hover:text-gray-600"><X size={20} /></button>
             </div>
 
             {/* Step 1 — Settings */}
@@ -607,7 +644,7 @@ export default function DietPlan() {
                 </div>
 
                 <div className="flex gap-3 pt-2">
-                  <button onClick={() => { setShowGenForm(false); setGenStep(1); }}
+                  <button onClick={() => { setShowGenForm(false); setGenStep(1); setDailyMeals({}); setActiveDay(0); }}
                     className="flex-1 py-2.5 border-2 border-gray-200 text-gray-600 rounded-xl text-sm font-semibold hover:bg-gray-50">Cancel</button>
                   <button onClick={goToMealSelection}
                     className="flex-1 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-bold hover:bg-emerald-700 shadow-md">
@@ -617,69 +654,186 @@ export default function DietPlan() {
               </div>
             )}
 
-            {/* Step 2 — Meal Item Selection */}
+            {/* Step 2 — Day-by-day meal selection */}
             {genStep === 2 && (
               <div className="flex flex-col overflow-hidden flex-1">
-                <div className="px-6 pt-4 pb-2 shrink-0">
-                  <p className="text-sm text-gray-500 mb-3">Select items you want in your plan. Leave all unchecked to use all available items.</p>
-                  {/* Meal type tabs */}
-                  <div className="flex flex-wrap gap-2">
-                    {[
-                      { key: 'breakfast',  label: 'Breakfast',          icon: Coffee,          activeClass: 'bg-orange-500 border-orange-500 text-white',  count: selectedBreakfast.length },
-                      { key: 'lunch',      label: 'Lunch',              icon: Sun,             activeClass: 'bg-blue-500 border-blue-500 text-white',      count: selectedLunch.length },
-                      { key: 'dinner',     label: 'Dinner',             icon: Moon,            activeClass: 'bg-purple-500 border-purple-500 text-white',  count: selectedDinner.length },
-                      { key: 'lunchAddon', label: 'Add Ons for Lunch',  icon: Salad,           activeClass: 'bg-teal-500 border-teal-500 text-white',      count: selectedLunchAddon.length },
-                      { key: 'dinnerAddon',label: 'Add Ons for Dinner', icon: UtensilsCrossed, activeClass: 'bg-rose-500 border-rose-500 text-white',      count: selectedDinnerAddon.length },
-                    ].map(({ key, label, icon: Icon, activeClass, count }) => (
-                      <button key={key} onClick={() => setActiveMealTab(key)}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold border-2 transition-all ${
-                          activeMealTab === key ? activeClass : 'border-gray-200 text-gray-600 hover:border-gray-300'
-                        }`}>
-                        <Icon size={14} /> {label}
-                        {count > 0 && <span className="bg-white/30 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">{count}</span>}
-                      </button>
-                    ))}
+                {/* Top: target banner + day tabs */}
+                <div className="px-6 pt-4 pb-3 shrink-0 border-b border-gray-100 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-2">
+                      <Flame size={15} className="text-emerald-600" />
+                      <span className="text-sm font-bold text-emerald-800">
+                        Family Daily Target: {dailyTarget.toLocaleString()} kcal
+                      </span>
+                      <span className="text-xs text-emerald-600 ml-1">· {familyMembers} member{familyMembers !== 1 ? 's' : ''}</span>
+                    </div>
+                    <span className="text-xs text-gray-400">Select meals per day until target is reached</span>
+                  </div>
+
+                  {/* Day tabs */}
+                  <div className="flex gap-1.5 overflow-x-auto pb-0.5">
+                    {Array.from({ length: genForm.planType === 'monthly' ? 30 : 7 }, (_, i) => {
+                      const cal = getDayCalories(i);
+                      const done = cal >= dailyTarget;
+                      const isActive = activeDay === i;
+                      return (
+                        <button
+                          key={i}
+                          onClick={() => setActiveDay(i)}
+                          className={`shrink-0 flex flex-col items-center px-3 py-1.5 rounded-xl text-xs font-bold border-2 transition-all min-w-[52px] ${
+                            isActive
+                              ? done ? 'bg-emerald-600 border-emerald-600 text-white' : 'bg-blue-600 border-blue-600 text-white'
+                              : done ? 'bg-emerald-50 border-emerald-300 text-emerald-700' : 'border-gray-200 text-gray-500 hover:border-gray-300'
+                          }`}
+                        >
+                          <span>Day {i + 1}</span>
+                          {done
+                            ? <Check size={10} className="mt-0.5" />
+                            : cal > 0
+                              ? <span className="text-[9px] opacity-70 mt-0.5">{cal}k</span>
+                              : <span className="text-[9px] opacity-40 mt-0.5">empty</span>
+                          }
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
 
-                {/* Item list */}
-                <div className="overflow-y-auto flex-1 px-6 pb-4">
-                  {loadingMenuItems ? (
-                    <div className="flex justify-center py-12"><RefreshCw className="w-6 h-6 text-emerald-600 animate-spin" /></div>
-                  ) : (() => {
-                    const items = allMenuItems[activeMealTab] || [];
-                    const [selected] = selectionMap[activeMealTab] || [[]];
+                {/* Day content */}
+                <div className="flex flex-col flex-1 overflow-hidden px-6 py-4">
+                  {(() => {
+                    const cal = getDayCalories(activeDay);
+                    const pct = Math.min(100, (cal / dailyTarget) * 100);
+                    const dayMeals = dailyMeals[activeDay] || {};
+                    const limitReached = cal >= dailyTarget;
+                    const numDays = genForm.planType === 'monthly' ? 30 : 7;
+
                     return (
                       <>
-                        <div className="flex items-center justify-between py-2 sticky top-0 bg-white">
-                          <span className="text-xs text-gray-400">{items.length} items · {selected.length} selected</span>
-                          <button onClick={() => selectAll(activeMealTab)}
-                            className="text-xs text-emerald-600 font-bold hover:underline">
-                            {selected.length === items.length ? 'Deselect All' : 'Select All'}
-                          </button>
+                        {/* Kcal tracker */}
+                        <div className="mb-4 shrink-0">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-sm font-bold text-gray-700">Day {activeDay + 1} — Kcal Tracker</span>
+                            <span className={`text-sm font-bold ${limitReached ? 'text-emerald-600' : 'text-blue-600'}`}>
+                              {cal} / {dailyTarget.toLocaleString()} kcal
+                            </span>
+                          </div>
+                          <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                            <div
+                              className={`h-full rounded-full transition-all duration-300 ${limitReached ? 'bg-emerald-500' : 'bg-blue-500'}`}
+                              style={{ width: `${pct}%` }}
+                            />
+                          </div>
+                          {(dayMeals.breakfast || dayMeals.lunch || dayMeals.dinner) && (
+                            <div className="flex gap-3 mt-1.5 flex-wrap">
+                              {dayMeals.breakfast && (
+                                <span className="text-xs text-gray-500">🌅 {dayMeals.breakfast.name} <span className="text-orange-500 font-semibold">({dayMeals.breakfast.calories_per_serving} kcal)</span></span>
+                              )}
+                              {dayMeals.lunch && (
+                                <span className="text-xs text-gray-500">☀️ {dayMeals.lunch.name} <span className="text-orange-500 font-semibold">({dayMeals.lunch.calories_per_serving} kcal)</span></span>
+                              )}
+                              {dayMeals.dinner && (
+                                <span className="text-xs text-gray-500">🌙 {dayMeals.dinner.name} <span className="text-orange-500 font-semibold">({dayMeals.dinner.calories_per_serving} kcal)</span></span>
+                              )}
+                            </div>
+                          )}
+                          {limitReached && (
+                            <div className="mt-2 flex items-center gap-2 px-3 py-2 bg-emerald-50 border border-emerald-300 rounded-xl">
+                              <Check size={14} className="text-emerald-600 shrink-0" />
+                              <span className="text-xs font-bold text-emerald-700">Required family kcalorie limit reached for Day {activeDay + 1}</span>
+                            </div>
+                          )}
                         </div>
-                        <div className="grid grid-cols-1 gap-2">
-                          {items.map(item => {
-                            const isSelected = selected.includes(item.id);
-                            return (
-                              <button key={item.id} onClick={() => toggleItem(item.id, activeMealTab)}
-                                className={`flex items-center gap-3 p-3 rounded-xl border-2 text-left transition-all ${isSelected ? 'border-emerald-500 bg-emerald-50' : 'border-gray-100 hover:border-gray-200 bg-gray-50'}`}>
-                                <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center shrink-0 transition-all ${isSelected ? 'bg-emerald-500 border-emerald-500' : 'border-gray-300 bg-white'}`}>
-                                  {isSelected && <Check size={13} className="text-white" />}
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                  <p className="text-sm font-semibold text-gray-800 truncate">{item.name}</p>
-                                  <p className="text-xs text-gray-400">{item.cuisine_type} · {item.calories_per_serving} kcal · P:{item.protein_g}g C:{item.carbs_g}g F:{item.fat_g}g</p>
-                                </div>
+
+                        {limitReached ? (
+                          /* Day complete state */
+                          <div className="flex flex-col items-center justify-center flex-1 text-center">
+                            <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-3">
+                              <Check size={28} className="text-emerald-600" />
+                            </div>
+                            <p className="font-bold text-emerald-700 text-lg">Day {activeDay + 1} Complete!</p>
+                            <p className="text-sm text-gray-500 mt-1">Daily kcal target reached. Move to the next day or generate the plan.</p>
+                            {activeDay < numDays - 1 && (
+                              <button
+                                onClick={() => setActiveDay(d => d + 1)}
+                                className="mt-4 px-6 py-2.5 bg-emerald-600 text-white text-sm font-bold rounded-xl hover:bg-emerald-700 transition-colors"
+                              >
+                                Go to Day {activeDay + 2} →
                               </button>
-                            );
-                          })}
-                        </div>
+                            )}
+                          </div>
+                        ) : (
+                          <>
+                            {/* Meal type tabs */}
+                            <div className="flex gap-2 mb-3 shrink-0">
+                              {[
+                                { key: 'breakfast', label: 'Breakfast', icon: '🌅' },
+                                { key: 'lunch',     label: 'Lunch',     icon: '☀️' },
+                                { key: 'dinner',    label: 'Dinner',    icon: '🌙' },
+                              ].map(({ key, label, icon }) => {
+                                const sel = dayMeals[key];
+                                return (
+                                  <button
+                                    key={key}
+                                    onClick={() => setActiveMealTab(key)}
+                                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold border-2 transition-all ${
+                                      activeMealTab === key
+                                        ? 'bg-emerald-600 border-emerald-600 text-white'
+                                        : sel
+                                          ? 'border-emerald-300 bg-emerald-50 text-emerald-700'
+                                          : 'border-gray-200 text-gray-600 hover:border-gray-300'
+                                    }`}
+                                  >
+                                    {icon} {label}
+                                    {sel && <span className="text-[10px] font-semibold opacity-80">({sel.calories_per_serving}k)</span>}
+                                  </button>
+                                );
+                              })}
+                            </div>
+
+                            {/* Items list */}
+                            <div className="overflow-y-auto flex-1">
+                              {loadingMenuItems ? (
+                                <div className="flex justify-center py-12"><RefreshCw className="w-6 h-6 text-emerald-600 animate-spin" /></div>
+                              ) : (
+                                <div className="grid grid-cols-1 gap-2">
+                                  {(allMenuItems[activeMealTab] || []).map(item => {
+                                    const isSelected = dayMeals[activeMealTab]?.id === item.id;
+                                    return (
+                                      <button
+                                        key={item.id}
+                                        onClick={() => selectMealForDay(activeDay, activeMealTab, item)}
+                                        className={`flex items-center gap-3 p-3 rounded-xl border-2 text-left transition-all ${
+                                          isSelected ? 'border-emerald-500 bg-emerald-50' : 'border-gray-100 hover:border-gray-200 bg-gray-50'
+                                        }`}
+                                      >
+                                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${
+                                          isSelected ? 'bg-emerald-500 border-emerald-500' : 'border-gray-300 bg-white'
+                                        }`}>
+                                          {isSelected && <Check size={12} className="text-white" />}
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                          <p className="text-sm font-semibold text-gray-800 truncate">{item.name}</p>
+                                          <p className="text-xs text-gray-400">{item.cuisine_type} · P:{item.protein_g}g C:{item.carbs_g}g F:{item.fat_g}g</p>
+                                        </div>
+                                        <div className="shrink-0 flex items-center gap-1 text-orange-500">
+                                          <Flame size={12} />
+                                          <span className="text-xs font-bold">{item.calories_per_serving}</span>
+                                        </div>
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                              )}
+                            </div>
+                          </>
+                        )}
                       </>
                     );
                   })()}
                 </div>
 
+                {/* Footer */}
                 <div className="flex gap-3 px-6 py-4 border-t border-gray-100 shrink-0">
                   <button onClick={() => setGenStep(1)}
                     className="flex-1 py-2.5 border-2 border-gray-200 text-gray-600 rounded-xl text-sm font-semibold hover:bg-gray-50">← Back</button>
