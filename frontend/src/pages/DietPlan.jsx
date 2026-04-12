@@ -4,7 +4,7 @@ import { Calendar, RefreshCw, Trash2, X, ChevronLeft, ChevronRight, Check, Flame
 import { useApp } from '../context/AppContext';
 import {
   getPlans, generateDietPlan, getFullPlan, deletePlan,
-  updatePlanDay, getMenuItems, getFamilySummary
+  updatePlanDay, addDayItem, deleteDayItem, getMenuItems, getFamilySummary
 } from '../api';
 import MealCell from '../components/MealCell';
 import MenuCard from '../components/MenuCard';
@@ -41,6 +41,7 @@ export default function DietPlan() {
   const [swapMealType, setSwapMealType] = useState('');
   const [menuItems, setMenuItems] = useState([]);
   const [loadingMenu, setLoadingMenu] = useState(false);
+  const [addItemModal, setAddItemModal] = useState(null); // { day, mealType }
   const [requiredCalories, setRequiredCalories] = useState(0);
   const [familyMembers, setFamilyMembers] = useState(1);
   const [genForm, setGenForm] = useState({
@@ -224,6 +225,38 @@ export default function DietPlan() {
   }
 
 
+  async function handleDeleteItem(day, mealType, menuItemId) {
+    if (!activePlan) return;
+    try {
+      const updatedDay = await deleteDayItem(activePlan.id, day.id, menuItemId, mealType);
+      setPlanDays(prev => prev.map(d => d.id === day.id ? updatedDay.data : d));
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to remove dish');
+    }
+  }
+
+  async function handleAddItem(menuItem) {
+    if (!addItemModal || !activePlan) return;
+    const { day, mealType } = addItemModal;
+    try {
+      const updatedDay = await addDayItem(activePlan.id, day.id, { menu_item_id: menuItem.id, meal_type: mealType });
+      setPlanDays(prev => prev.map(d => d.id === day.id ? updatedDay.data : d));
+      setAddItemModal(null);
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to add dish');
+    }
+  }
+
+  async function openAddItem(day, mealType) {
+    setAddItemModal({ day, mealType, items: [], loading: true });
+    try {
+      const res = await getMenuItems({ meal_type: mealType });
+      setAddItemModal(prev => ({ ...prev, items: res.data || [], loading: false }));
+    } catch {
+      setAddItemModal(prev => ({ ...prev, loading: false }));
+    }
+  }
+
   const weekStart = weekOffset * 7;
   const weekDays = planDays.slice(weekStart, weekStart + 7);
   const totalWeeks = Math.ceil(planDays.length / 7);
@@ -355,6 +388,8 @@ export default function DietPlan() {
                   requiredCalories={dailyTarget}
                   familyMembers={familyMembers}
                   onSwap={(mealType) => openSwap(day, mealType)}
+                  onDelete={(mealType, menuItemId) => handleDeleteItem(day, mealType, menuItemId)}
+                  onAdd={(mealType) => openAddItem(day, mealType)}
                 />
               ))}
             </div>
@@ -688,6 +723,43 @@ export default function DietPlan() {
                   ))}
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {addItemModal && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[85vh] overflow-hidden flex flex-col">
+            <div className="flex items-center justify-between p-5 border-b border-gray-100 flex-shrink-0">
+              <div>
+                <h2 className="font-bold text-gray-900 capitalize">Add dish to {addItemModal.mealType}</h2>
+                <p className="text-xs text-gray-400 mt-0.5">Pick a dish to add alongside existing items</p>
+              </div>
+              <button onClick={() => setAddItemModal(null)} className="text-gray-400 hover:text-gray-600"><X size={20} /></button>
+            </div>
+            <div className="overflow-y-auto flex-1 p-4 space-y-2">
+              {addItemModal.loading ? (
+                <div className="flex justify-center py-8"><RefreshCw className="w-6 h-6 text-emerald-600 animate-spin" /></div>
+              ) : (addItemModal.items || []).map(item => {
+                const displayKcal = familyMembers > 1 ? (item.calories_per_serving || 0) * familyMembers : item.calories_per_serving;
+                return (
+                  <button key={item.id} onClick={() => handleAddItem(item)}
+                    className="w-full flex items-center gap-3 p-3 rounded-xl border-2 border-gray-100 hover:border-emerald-400 hover:bg-emerald-50 text-left transition-all">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-gray-800">{item.name}</p>
+                      <p className="text-xs text-gray-400">{item.cuisine_type} · {item.sub_category}</p>
+                    </div>
+                    <div className="shrink-0 text-right">
+                      <div className="flex items-center gap-1 text-orange-500 justify-end">
+                        <Flame size={13} />
+                        <span className="text-sm font-bold">{displayKcal} kcal</span>
+                      </div>
+                      {familyMembers > 1 && <p className="text-[10px] text-gray-400">{item.calories_per_serving}/person</p>}
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>

@@ -140,6 +140,46 @@ async function deletePlan(req, res) {
   }
 }
 
+async function addDayItem(req, res) {
+  try {
+    const { planId, dayId } = req.params;
+    const { menu_item_id, meal_type } = req.body;
+    if (!menu_item_id || !meal_type) return res.status(400).json({ error: 'menu_item_id and meal_type are required' });
+
+    const day = await DietPlanDay.findOne({ where: { id: dayId, diet_plan_id: planId } });
+    if (!day) return res.status(404).json({ error: 'Day not found' });
+
+    const existing = await DietPlanDayItem.findOne({ where: { diet_plan_day_id: dayId, menu_item_id, meal_type } });
+    if (existing) return res.status(400).json({ error: 'Dish already added to this meal' });
+
+    await DietPlanDayItem.create({ diet_plan_day_id: dayId, menu_item_id, meal_type });
+
+    const updatedDay = await DietPlanDay.findByPk(dayId, { include: dayIncludes });
+    res.json(updatedDay);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+async function deleteDayItem(req, res) {
+  try {
+    const { planId, dayId, menuItemId } = req.params;
+    const { meal_type } = req.query;
+
+    const day = await DietPlanDay.findOne({ where: { id: dayId, diet_plan_id: planId } });
+    if (!day) return res.status(404).json({ error: 'Day not found' });
+
+    const where = { diet_plan_day_id: dayId, menu_item_id: menuItemId };
+    if (meal_type) where.meal_type = meal_type;
+    await DietPlanDayItem.destroy({ where });
+
+    const updatedDay = await DietPlanDay.findByPk(dayId, { include: dayIncludes });
+    res.json(updatedDay);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
 module.exports = {
-  generateDietPlan, getUserPlans, getFullPlan, getTodayMenu, updatePlanDay, deletePlan
+  generateDietPlan, getUserPlans, getFullPlan, getTodayMenu, updatePlanDay, deletePlan, addDayItem, deleteDayItem
 };

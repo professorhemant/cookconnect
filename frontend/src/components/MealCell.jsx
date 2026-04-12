@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flame, RefreshCw } from 'lucide-react';
+import { Flame, RefreshCw, Trash2, Plus } from 'lucide-react';
 
 const MEALS = [
   {
@@ -43,7 +43,7 @@ const MEALS = [
   },
 ];
 
-export default function MealCell({ day, onSwap, requiredCalories, familyMembers = 1 }) {
+export default function MealCell({ day, onSwap, onDelete, onAdd, requiredCalories, familyMembers = 1 }) {
   if (!day) {
     return (
       <div className="rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50 h-28 flex items-center justify-center text-sm text-gray-300">
@@ -193,7 +193,7 @@ export default function MealCell({ day, onSwap, requiredCalories, familyMembers 
                 {hasMeal ? (
                   <div className="space-y-2">
                     {items.map((item, idx) => (
-                      <div key={item.id || idx} className="flex items-start gap-2">
+                      <div key={item.id || idx} className="flex items-start gap-2 group">
                         <div className={`w-2 h-2 rounded-full ${dot} shrink-0 mt-1.5`} />
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-semibold text-gray-800 leading-snug">{item.name}</p>
@@ -202,11 +202,28 @@ export default function MealCell({ day, onSwap, requiredCalories, familyMembers 
                             {familyMembers > 1 && <span className="text-gray-300"> ({item.calories_per_serving}/person)</span>}
                           </p>
                         </div>
+                        {onDelete && (
+                          <button
+                            onClick={(e) => { e.stopPropagation(); onDelete(key, item.id); }}
+                            className="opacity-0 group-hover:opacity-100 p-1 rounded-lg text-gray-300 hover:text-rose-500 hover:bg-rose-50 transition-all shrink-0"
+                            title="Remove dish"
+                          >
+                            <Trash2 size={13} />
+                          </button>
+                        )}
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <p className="text-sm italic text-gray-300 mt-1">tap header to add</p>
+                  <p className="text-sm italic text-gray-300 mt-1">tap header to swap</p>
+                )}
+                {onAdd && (
+                  <button
+                    onClick={(e) => { e.stopPropagation(); onAdd(key); }}
+                    className="mt-2 w-full flex items-center justify-center gap-1 py-1.5 rounded-lg border border-dashed border-gray-200 text-gray-400 hover:border-emerald-400 hover:text-emerald-600 hover:bg-emerald-50 transition-all text-xs font-semibold"
+                  >
+                    <Plus size={12} /> Add dish
+                  </button>
                 )}
               </div>
             </div>

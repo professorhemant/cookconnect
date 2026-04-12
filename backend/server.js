@@ -58,6 +58,8 @@ app.get('/api/plans/today/:userId', dietPlanController.getTodayMenu);
 app.get('/api/plans/:userId', dietPlanController.getUserPlans);
 app.get('/api/plans/:planId/full', dietPlanController.getFullPlan);
 app.put('/api/plans/:planId/day/:dayId', dietPlanController.updatePlanDay);
+app.post('/api/plans/:planId/day/:dayId/items', dietPlanController.addDayItem);
+app.delete('/api/plans/:planId/day/:dayId/items/:menuItemId', dietPlanController.deleteDayItem);
 app.delete('/api/plans/:planId', dietPlanController.deletePlan);
 
 // Notification routes
