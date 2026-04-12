@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Calendar, RefreshCw, Trash2, X, ChevronLeft, ChevronRight, Check, Flame, Sparkles } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Calendar, RefreshCw, Trash2, X, ChevronLeft, ChevronRight, Check, Flame } from 'lucide-react';
+
 import { useApp } from '../context/AppContext';
 import {
   getPlans, generateDietPlan, getFullPlan, deletePlan,
@@ -19,7 +19,7 @@ const MEAL_META = [
 
 export default function DietPlan() {
   const { currentUser } = useApp();
-  const navigate = useNavigate();
+
   const [plans, setPlans] = useState([]);
   const [activePlan, setActivePlan] = useState(null);
   const [planDays, setPlanDays] = useState([]);
@@ -296,12 +296,6 @@ export default function DietPlan() {
                 <Trash2 size={20} />
               </button>
             )}
-            <button
-              onClick={() => navigate('/thali-plan')}
-              className="flex items-center gap-2 px-6 py-3 bg-yellow-400 text-yellow-900 text-sm font-bold rounded-xl hover:bg-yellow-300 transition-colors shadow-lg"
-            >
-              <Sparkles size={18} /> Smart Thali Plan
-            </button>
             <button
               onClick={() => setShowGenForm(true)}
               className="flex items-center gap-2 px-6 py-3 bg-white text-emerald-700 text-sm font-bold rounded-xl hover:bg-emerald-50 transition-colors shadow-lg"
@@ -661,10 +655,6 @@ export default function DietPlan() {
                   <button onClick={() => handleGenerate('selected')} disabled={generating}
                     className="flex-1 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-bold hover:bg-emerald-700 disabled:opacity-60 shadow-md">
                     {generating ? 'Generating...' : '✅ Create Selected Meal Plan'}
-                  </button>
-                  <button onClick={() => { setShowGenForm(false); navigate('/thali-plan'); }}
-                    className="flex-1 py-2.5 bg-violet-600 text-white rounded-xl text-sm font-bold hover:bg-violet-700 shadow-md flex items-center justify-center gap-2">
-                    <Sparkles size={15} /> Smart Thali Planner
                   </button>
                 </div>
               </div>

@@ -9,7 +9,7 @@ import DietPlan from './pages/DietPlan';
 import NutritionGuide from './pages/NutritionGuide';
 import Notifications from './pages/Notifications';
 import AuthPage from './pages/AuthPage';
-
+import ImageToDish from './pages/ImageToDish';
 function Layout() {
   const { currentUser } = useApp();
   if (!currentUser) return <Navigate to="/auth" replace />;
@@ -25,6 +25,7 @@ function Layout() {
           <Route path="/plans" element={<DietPlan />} />
           <Route path="/nutrition" element={<NutritionGuide />} />
           <Route path="/notifications" element={<Notifications />} />
+          <Route path="/image-to-dish" element={<ImageToDish />} />
         </Routes>
       </main>
     </div>
