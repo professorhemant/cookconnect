@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Search, Filter, Plus, X, RefreshCw, Sparkles } from 'lucide-react';
-import { getMenuItems, createMenuItem, estimateNutrition, getFamilyMembers } from '../api';
+import { getMenuItems, createMenuItem, updateMenuItem, deleteMenuItem, estimateNutrition, getFamilyMembers } from '../api';
 import MenuCard from '../components/MenuCard';
 import { useApp } from '../context/AppContext';
 
@@ -44,6 +44,7 @@ export default function MenuLibrary() {
   const retryTimerRef = useRef(null);
   const [aiBaseNutrition, setAiBaseNutrition] = useState(null);
   const [aiBaseServings, setAiBaseServings] = useState(1);
+  const [editItem, setEditItem] = useState(null); // item being edited (null = add mode)
 
   useEffect(() => { loadItems(); }, [tab, vegOnly, cuisine]);
 
@@ -151,6 +152,45 @@ export default function MenuLibrary() {
     }
   }
 
+  function handleEdit(item) {
+    setEditItem(item);
+    setForm({
+      name: item.name || '',
+      meal_type: item.meal_type || 'breakfast',
+      description: item.description || '',
+      cuisine_type: item.cuisine_type || 'Indian',
+      prep_time_minutes: item.prep_time_minutes ?? '',
+      cook_time_minutes: item.cook_time_minutes ?? '',
+      servings: item.servings ?? 1,
+      calories_per_serving: item.calories_per_serving ?? '',
+      protein_g: item.protein_g ?? '',
+      carbs_g: item.carbs_g ?? '',
+      fat_g: item.fat_g ?? '',
+      fiber_g: item.fiber_g ?? '',
+      kitchen_equipment: item.kitchen_equipment || '',
+      difficulty: item.difficulty || 'easy',
+      is_vegetarian: item.is_vegetarian ?? true,
+      is_vegan: item.is_vegan ?? false,
+      sub_category: item.sub_category || '',
+      ingredients: item.ingredients?.map(i => ({ name: i.name, quantity: i.quantity, unit: i.unit || '', notes: i.notes || '' })) || []
+    });
+    setAiFilledFields(false);
+    setAiBaseNutrition(null);
+    setAiBaseServings(item.servings ?? 1);
+    setAiError('');
+    setShowAdd(true);
+  }
+
+  async function handleDelete(item) {
+    if (!window.confirm(`Delete "${item.name}"? This cannot be undone.`)) return;
+    try {
+      await deleteMenuItem(item.id);
+      loadItems();
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to delete item');
+    }
+  }
+
   function handleServingsChange(e) {
     const raw = e.target.value;
     const newServings = parseFloat(raw) || 1;
@@ -171,15 +211,20 @@ export default function MenuLibrary() {
   async function handleSave() {
     setSaving(true);
     try {
-      await createMenuItem(form);
+      if (editItem) {
+        await updateMenuItem(editItem.id, form);
+      } else {
+        await createMenuItem(form);
+      }
       setShowAdd(false);
+      setEditItem(null);
       setForm(emptyForm);
       setAiFilledFields(false);
       setAiBaseNutrition(null);
       setAiBaseServings(1);
       loadItems();
     } catch (err) {
-      alert(err.response?.data?.error || 'Failed to create item');
+      alert(err.response?.data?.error || `Failed to ${editItem ? 'update' : 'create'} item`);
     } finally {
       setSaving(false);
     }
@@ -263,7 +308,7 @@ export default function MenuLibrary() {
         </div>
       ) : (
         <div className="grid grid-cols-3 gap-4">
-          {filtered.map(item => <MenuCard key={item.id} item={item} />)}
+          {filtered.map(item => <MenuCard key={item.id} item={item} onEdit={handleEdit} onDelete={handleDelete} />)}
         </div>
       )}
 
@@ -271,8 +316,8 @@ export default function MenuLibrary() {
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between p-6 border-b border-gray-100">
-              <h2 className="font-bold text-gray-900">Add New Dish</h2>
-              <button onClick={() => { setShowAdd(false); setAiFilledFields(false); setAiError(""); setAiBaseNutrition(null); setAiBaseServings(1); setForm(emptyForm); }} className="text-gray-400 hover:text-gray-600">
+              <h2 className="font-bold text-gray-900">{editItem ? `Edit: ${editItem.name}` : 'Add New Dish'}</h2>
+              <button onClick={() => { setShowAdd(false); setEditItem(null); setAiFilledFields(false); setAiError(""); setAiBaseNutrition(null); setAiBaseServings(1); setForm(emptyForm); }} className="text-gray-400 hover:text-gray-600">
                 <X size={20} />
               </button>
             </div>
@@ -429,13 +474,13 @@ export default function MenuLibrary() {
               </div>
 
               <div className="flex gap-3 pt-2">
-                <button onClick={() => { setShowAdd(false); setAiFilledFields(false); setAiError(""); setAiBaseNutrition(null); setAiBaseServings(1); setForm(emptyForm); }}
+                <button onClick={() => { setShowAdd(false); setEditItem(null); setAiFilledFields(false); setAiError(""); setAiBaseNutrition(null); setAiBaseServings(1); setForm(emptyForm); }}
                   className="flex-1 py-2.5 border border-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50">
                   Cancel
                 </button>
                 <button onClick={handleSave} disabled={saving || !form.name}
                   className="flex-1 py-2.5 bg-emerald-600 text-white rounded-lg text-sm font-semibold hover:bg-emerald-700 disabled:opacity-60">
-                  {saving ? 'Saving...' : 'Add Dish'}
+                  {saving ? 'Saving...' : editItem ? 'Save Changes' : 'Add Dish'}
                 </button>
               </div>
             </div>

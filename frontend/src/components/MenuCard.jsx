@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Clock, ChefHat, Flame, Leaf, ChevronDown, ChevronUp } from 'lucide-react';
+import { Clock, ChefHat, Flame, Leaf, ChevronDown, ChevronUp, Pencil, Trash2 } from 'lucide-react';
 import NutritionBar from './NutritionBar';
 
 const difficultyColor = {
@@ -15,7 +15,7 @@ const mealTypeColor = {
   snack: 'bg-pink-100 text-pink-700'
 };
 
-export default function MenuCard({ item, onSelect }) {
+export default function MenuCard({ item, onSelect, onEdit, onDelete }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -40,10 +40,30 @@ export default function MenuCard({ item, onSelect }) {
             <h3 className="font-semibold text-gray-900 text-sm leading-snug">{item.name}</h3>
             <p className="text-xs text-gray-500 mt-0.5">{item.cuisine_type}</p>
           </div>
-          <div className="flex items-center gap-1 ml-3 bg-orange-50 px-2 py-1 rounded-lg">
-            <Flame size={13} className="text-orange-500" />
-            <span className="text-xs font-bold text-orange-700">{item.calories_per_serving}</span>
-            <span className="text-xs text-orange-500">kcal</span>
+          <div className="flex items-center gap-2 ml-3">
+            <div className="flex items-center gap-1 bg-orange-50 px-2 py-1 rounded-lg">
+              <Flame size={13} className="text-orange-500" />
+              <span className="text-xs font-bold text-orange-700">{item.calories_per_serving}</span>
+              <span className="text-xs text-orange-500">kcal</span>
+            </div>
+            {onEdit && (
+              <button
+                onClick={e => { e.stopPropagation(); onEdit(item); }}
+                className="p-1.5 rounded-lg text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 transition-colors"
+                title="Edit dish"
+              >
+                <Pencil size={14} />
+              </button>
+            )}
+            {onDelete && (
+              <button
+                onClick={e => { e.stopPropagation(); onDelete(item); }}
+                className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                title="Delete dish"
+              >
+                <Trash2 size={14} />
+              </button>
+            )}
           </div>
         </div>
 
