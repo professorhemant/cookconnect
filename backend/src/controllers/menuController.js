@@ -216,7 +216,142 @@ async function deleteMenuItem(req, res) {
   }
 }
 
+// NIN (National Institute of Nutrition, India) daily calorie distribution
+// Breakfast 30% | Lunch 30% | Evening Snacks 10% | Dinner 30%
+
+// Thali slot templates — each slot picks one item from its matching sub_categories
+const THALI_TEMPLATES = {
+  breakfast: [
+    { role: 'Main Dish',      emoji: '🫓', cats: ['Parantha', 'Chilla', 'Dosa and Idli', 'Uttapam', 'Upma', 'Poha', 'Other Breakfast'] },
+    { role: 'Sabzi',          emoji: '🥬', cats: ['Aloo Sabzi', 'Gobhi Sabzi', 'Paneer Sabzi', 'Other Sabzi', 'Sabzi', 'Stuffed Sabzi'] },
+    { role: 'Dahi / Raita',   emoji: '🥛', cats: ['Raita', 'Dahi and Lassi'] },
+  ],
+  lunch: [
+    { role: 'Rice / Biryani', emoji: '🍚', cats: ['Biryani', 'Rice Dishes', 'Rice/Chawal', 'Khichdi'] },
+    { role: 'Roti',           emoji: '🫓', cats: ['Roti', 'Parantha'] },
+    { role: 'Dal',            emoji: '🥘', cats: ['Dal', 'Kadhi', 'Chana Chole'] },
+    { role: 'Sabzi',          emoji: '🥬', cats: ['Aloo Sabzi', 'Paneer Sabzi', 'Gobhi Sabzi', 'Other Sabzi', 'Sabzi', 'Stuffed Sabzi'] },
+    { role: 'Salad',          emoji: '🥗', cats: ['Salad'] },
+    { role: 'Raita / Dahi',   emoji: '🥛', cats: ['Raita', 'Dahi and Lassi'] },
+  ],
+  snack: [
+    { role: 'Light Snack',    emoji: '🥜', cats: ['Light Snacks', 'Fried Snacks', 'Chilla'] },
+    { role: 'Beverage / Dahi',emoji: '🥛', cats: ['Shake', 'Dahi and Lassi', 'Raita'] },
+  ],
+  dinner: [
+    { role: 'Roti',           emoji: '🫓', cats: ['Roti', 'Parantha'] },
+    { role: 'Dal',            emoji: '🥘', cats: ['Dal', 'Kadhi', 'Chana Chole'] },
+    { role: 'Sabzi',          emoji: '🥬', cats: ['Aloo Sabzi', 'Paneer Sabzi', 'Gobhi Sabzi', 'Other Sabzi', 'Sabzi', 'Stuffed Sabzi'] },
+    { role: 'Salad',          emoji: '🥗', cats: ['Salad'] },
+    { role: 'Raita / Dahi',   emoji: '🥛', cats: ['Raita', 'Dahi and Lassi'] },
+  ],
+};
+
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+async function getThaliOptions(req, res) {
+  try {
+    const { meal_type = 'lunch', isVegetarian = false, numOptions = 3 } = req.body;
+
+    const template = THALI_TEMPLATES[meal_type] || THALI_TEMPLATES.lunch;
+
+    // Fetch all items for this meal_type
+    const where = { meal_type };
+    if (isVegetarian) where.is_vegetarian = true;
+    const allItems = await MenuItem.findAll({ where });
+
+    // Group items by sub_category
+    const byCategory = {};
+    allItems.forEach(item => {
+      const cat = item.sub_category || 'Other';
+      if (!byCategory[cat]) byCategory[cat] = [];
+      byCategory[cat].push(item);
+    });
+
+    // For each slot, build a pool and pre-shuffle so options get different items
+    // slotPools[i] = shuffled array of candidates for slot i
+    const slotPools = template.map(slot => {
+      const pool = [];
+      slot.cats.forEach(cat => { if (byCategory[cat]) pool.push(...byCategory[cat]); });
+      return shuffleArray(pool);
+    });
+
+    // Generate options by taking successive items from each slot's pool
+    const options = [];
+    for (let n = 0; n < numOptions; n++) {
+      const components = [];
+      let totalKcal = 0, totalProtein = 0, totalCarbs = 0, totalFat = 0;
+
+      for (let si = 0; si < template.length; si++) {
+        const slot = template[si];
+        const pool = slotPools[si];
+        if (pool.length === 0) continue;
+
+        // Pick item at position n (wrap around if fewer items than numOptions)
+        const item = pool[n % pool.length];
+
+        components.push({
+          role: slot.role,
+          emoji: slot.emoji,
+          item: {
+            id: item.id,
+            name: item.name,
+            sub_category: item.sub_category,
+            cuisine_type: item.cuisine_type,
+            calories_per_serving: item.calories_per_serving || 0,
+            protein_g: parseFloat(item.protein_g) || 0,
+            carbs_g: parseFloat(item.carbs_g) || 0,
+            fat_g: parseFloat(item.fat_g) || 0,
+            is_vegetarian: item.is_vegetarian,
+          }
+        });
+
+        totalKcal     += item.calories_per_serving || 0;
+        totalProtein  += parseFloat(item.protein_g) || 0;
+        totalCarbs    += parseFloat(item.carbs_g) || 0;
+        totalFat      += parseFloat(item.fat_g) || 0;
+      }
+
+      options.push({
+        id: n,
+        components,
+        totalKcal:    Math.round(totalKcal),
+        totalProtein: Math.round(totalProtein * 10) / 10,
+        totalCarbs:   Math.round(totalCarbs * 10) / 10,
+        totalFat:     Math.round(totalFat * 10) / 10,
+      });
+    }
+
+    // Also return available items per slot so the frontend can offer swaps
+    const slotCandidates = template.map(slot => {
+      const pool = [];
+      slot.cats.forEach(cat => { if (byCategory[cat]) pool.push(...byCategory[cat]); });
+      return { role: slot.role, emoji: slot.emoji, items: pool.map(i => ({
+        id: i.id, name: i.name, sub_category: i.sub_category,
+        calories_per_serving: i.calories_per_serving || 0,
+        protein_g: parseFloat(i.protein_g) || 0,
+        carbs_g: parseFloat(i.carbs_g) || 0,
+        fat_g: parseFloat(i.fat_g) || 0,
+        is_vegetarian: i.is_vegetarian,
+        cuisine_type: i.cuisine_type,
+      })) };
+    });
+
+    res.json({ options, slotCandidates, meal_type });
+  } catch (err) {
+    console.error('getThaliOptions error:', err);
+    res.status(500).json({ error: err.message });
+  }
+}
+
 module.exports = {
   getMenuItems, getMenuItemById, getBreakfastItems, getLunchItems, getDinnerItems,
-  createMenuItem, updateMenuItem, deleteMenuItem, estimateNutrition
+  createMenuItem, updateMenuItem, deleteMenuItem, estimateNutrition, getThaliOptions
 };

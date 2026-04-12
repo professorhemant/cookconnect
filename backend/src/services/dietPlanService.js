@@ -86,13 +86,18 @@ async function generatePlan(userId, planType, startDate, preferences = {}) {
     ? allItems.filter(i => i.meal_type === 'breakfast' && preferredBreakfastIds.includes(i.id))
     : allItems.filter(i => i.meal_type === 'breakfast');
 
+  // Salad pools — fetched without cuisine filter so they always appear
+  const allSalads = await MenuItem.findAll({ where: { sub_category: 'Salad' } });
+  const lunchSalads  = allSalads.filter(i => i.meal_type === 'lunch');
+  const dinnerSalads = allSalads.filter(i => i.meal_type === 'dinner');
+
   const lunchItems = (preferredLunchIds && preferredLunchIds.length > 0)
-    ? allItems.filter(i => i.meal_type === 'lunch' && preferredLunchIds.includes(i.id))
-    : allItems.filter(i => i.meal_type === 'lunch');
+    ? allItems.filter(i => i.meal_type === 'lunch' && i.sub_category !== 'Salad' && preferredLunchIds.includes(i.id))
+    : allItems.filter(i => i.meal_type === 'lunch' && i.sub_category !== 'Salad');
 
   const dinnerItems = (preferredDinnerIds && preferredDinnerIds.length > 0)
-    ? allItems.filter(i => i.meal_type === 'dinner' && preferredDinnerIds.includes(i.id))
-    : allItems.filter(i => i.meal_type === 'dinner');
+    ? allItems.filter(i => i.meal_type === 'dinner' && i.sub_category !== 'Salad' && preferredDinnerIds.includes(i.id))
+    : allItems.filter(i => i.meal_type === 'dinner' && i.sub_category !== 'Salad');
 
   if (!breakfastItems.length || !lunchItems.length || !dinnerItems.length) {
     throw new Error('Insufficient menu items for all meal types.');
@@ -160,14 +165,21 @@ async function generatePlan(userId, planType, startDate, preferences = {}) {
     recentLunch.add(lunch.id);
     recentDinner.add(dinner.id);
 
-    // Sum calories from ALL selected items (not just the first)
+    // Auto-pick a seasonal salad for lunch and dinner (non-repeating where possible)
+    const lunchSalad  = !selectedOnly && lunchSalads.length  > 0 ? pickItem(lunchSalads,  new Set()) : null;
+    const dinnerSalad = !selectedOnly && dinnerSalads.length > 0 ? pickItem(dinnerSalads, new Set()) : null;
+
+    // Sum calories from primary 3 meals only (one per slot)
+    const primaryItems = [breakfast, lunch, dinner].filter(Boolean);
     const allSelectedItems = [
       ...(breakfastSelected || [breakfast]),
       ...(lunchSelected     || [lunch]),
       ...(dinnerSelected    || [dinner]),
       ...(snackSelected     || []),
+      ...(lunchSalad  ? [lunchSalad]  : []),
+      ...(dinnerSalad ? [dinnerSalad] : []),
     ];
-    const totalCalories = allSelectedItems.reduce((s, x) => s + (x.calories_per_serving || 0), 0);
+    const totalCalories = primaryItems.reduce((s, x) => s + (x.calories_per_serving || 0), 0);
     const totalProtein  = allSelectedItems.reduce((s, x) => s + (x.protein_g || 0), 0);
     const totalCarbs    = allSelectedItems.reduce((s, x) => s + (x.carbs_g   || 0), 0);
     const totalFat      = allSelectedItems.reduce((s, x) => s + (x.fat_g     || 0), 0);
@@ -191,6 +203,8 @@ async function generatePlan(userId, planType, startDate, preferences = {}) {
       ...(lunchSelected     || [lunch]    ).map(x => ({ diet_plan_day_id: day.id, menu_item_id: x.id, meal_type: 'lunch'     })),
       ...(dinnerSelected    || [dinner]   ).map(x => ({ diet_plan_day_id: day.id, menu_item_id: x.id, meal_type: 'dinner'    })),
       ...(snackSelected     || []         ).map(x => ({ diet_plan_day_id: day.id, menu_item_id: x.id, meal_type: 'snack'     })),
+      ...(lunchSalad  ? [{ diet_plan_day_id: day.id, menu_item_id: lunchSalad.id,  meal_type: 'lunch'  }] : []),
+      ...(dinnerSalad ? [{ diet_plan_day_id: day.id, menu_item_id: dinnerSalad.id, meal_type: 'dinner' }] : []),
     ];
     await DietPlanDayItem.bulkCreate(itemsToCreate);
 
