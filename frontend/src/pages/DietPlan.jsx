@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Calendar, RefreshCw, Trash2, X, Printer, ChevronLeft, ChevronRight, Check, Flame } from 'lucide-react';
+import { Calendar, RefreshCw, Trash2, X, ChevronLeft, ChevronRight, Check, Flame, Sparkles } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import {
   getPlans, generateDietPlan, getFullPlan, deletePlan,
-  updatePlanDay, getMenuItems, sendWeekMenu, getFamilySummary
+  updatePlanDay, getMenuItems, getFamilySummary
 } from '../api';
 import MealCell from '../components/MealCell';
 import MenuCard from '../components/MenuCard';
@@ -18,6 +19,7 @@ const MEAL_META = [
 
 export default function DietPlan() {
   const { currentUser } = useApp();
+  const navigate = useNavigate();
   const [plans, setPlans] = useState([]);
   const [activePlan, setActivePlan] = useState(null);
   const [planDays, setPlanDays] = useState([]);
@@ -39,7 +41,6 @@ export default function DietPlan() {
   const [swapMealType, setSwapMealType] = useState('');
   const [menuItems, setMenuItems] = useState([]);
   const [loadingMenu, setLoadingMenu] = useState(false);
-  const [sendMsg, setSendMsg] = useState('');
   const [requiredCalories, setRequiredCalories] = useState(0);
   const [familyMembers, setFamilyMembers] = useState(1);
   const [genForm, setGenForm] = useState({
@@ -223,29 +224,6 @@ export default function DietPlan() {
   }
 
 
-  function handleSendWhatsApp() {
-    const cookPhone = currentUser.cook_phone || '9462933363';
-    const days = planDays.slice(weekOffset * 7, weekOffset * 7 + 7);
-    if (!days.length) { setSendMsg('No plan days to send.'); setTimeout(() => setSendMsg(''), 3000); return; }
-
-    const lines = [`🍽️ *Weekly Diet Plan*`, `📅 ${activePlan.start_date} to ${activePlan.end_date}`, ``];
-    days.forEach(day => {
-      const date = new Date(day.day_date);
-      const label = date.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' });
-      lines.push(`*${label}* 🔥${day.total_calories} kcal`);
-      if (day.breakfast) lines.push(`  🌅 B: ${day.breakfast.name}`);
-      if (day.lunch)     lines.push(`  ☀️ L: ${day.lunch.name}`);
-      if (day.dinner)    lines.push(`  🌙 D: ${day.dinner.name}`);
-      lines.push(``);
-    });
-    lines.push(`Sent via CookConnect 🥗`);
-
-    const text = encodeURIComponent(lines.join('\n'));
-    window.open(`https://wa.me/91${cookPhone}?text=${text}`, '_blank');
-    setSendMsg('WhatsApp opened with weekly plan!');
-    setTimeout(() => setSendMsg(''), 4000);
-  }
-
   const weekStart = weekOffset * 7;
   const weekDays = planDays.slice(weekStart, weekStart + 7);
   const totalWeeks = Math.ceil(planDays.length / 7);
@@ -257,14 +235,14 @@ export default function DietPlan() {
     }));
   }
 
-  const dailyTarget = requiredCalories > 0 ? requiredCalories : genForm.maxCaloriesPerDay;
+  const dailyTarget = requiredCalories > 0 ? requiredCalories : genForm.maxCaloriesPerDay * familyMembers;
 
   function getMealTarget(mealType) {
     return Math.round(dailyTarget * (MEAL_RATIOS[mealType] || 0));
   }
 
   function getMealCalories(dayIdx, mealType) {
-    return (dailyMeals[dayIdx]?.[mealType] || []).reduce((s, i) => s + (i.calories_per_serving || 0), 0);
+    return (dailyMeals[dayIdx]?.[mealType] || []).reduce((s, i) => s + (i.calories_per_serving || 0), 0) * familyMembers;
   }
 
   function getDayCalories(dayIdx) {
@@ -285,139 +263,105 @@ export default function DietPlan() {
 
   return (
     <div className="p-8">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Diet Plans</h1>
-          <p className="text-gray-500 text-sm mt-0.5">
-            {activePlan ? `${activePlan.plan_type} plan • ${activePlan.start_date} to ${activePlan.end_date}` : 'No active plan'}
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-          {activePlan && (
-            <>
-              <button
-                onClick={handleSendWhatsApp}
-                className="flex items-center gap-2 px-4 py-2 border border-green-500 text-green-700 text-sm font-semibold rounded-lg hover:bg-green-50 transition-colors"
-              >
-                <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.554 4.122 1.522 5.858L0 24l6.336-1.49A11.953 11.953 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.808 9.808 0 01-5.006-1.374l-.36-.214-3.728.878.939-3.618-.234-.372A9.808 9.808 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
-                Send to Cook
-              </button>
-              <button
-                onClick={() => window.print()}
-                className="flex items-center gap-2 px-4 py-2 border border-gray-200 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                <Printer size={14} /> Print
-              </button>
+      {/* Hero header */}
+      <div className="relative rounded-3xl overflow-hidden mb-8 bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-700 shadow-xl">
+        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, white 1px, transparent 1px), radial-gradient(circle at 80% 20%, white 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+        <div className="relative flex items-center justify-between px-10 py-8">
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <Calendar size={28} className="text-white/80" />
+              <h1 className="text-4xl font-extrabold text-white tracking-tight">Diet Plans</h1>
+            </div>
+            <p className="text-white/70 text-base mt-1">
+              {activePlan
+                ? `${activePlan.plan_type.charAt(0).toUpperCase() + activePlan.plan_type.slice(1)} plan · ${activePlan.start_date} → ${activePlan.end_date}`
+                : 'No active plan — generate one to get started'}
+            </p>
+            {dailyTarget > 0 && (
+              <div className="mt-3 inline-flex items-center gap-2 bg-white/20 backdrop-blur rounded-full px-4 py-1.5">
+                <Flame size={14} className="text-amber-300" />
+                <span className="text-white text-sm font-bold">
+                  {familyMembers} member{familyMembers !== 1 ? 's' : ''} · {dailyTarget.toLocaleString()} kcal/day
+                  {familyMembers > 1 && <span className="opacity-70"> (~{Math.round(dailyTarget / familyMembers).toLocaleString()}/person)</span>}
+                </span>
+              </div>
+            )}
+          </div>
+          <div className="flex items-center gap-3">
+            {activePlan && (
               <button
                 onClick={() => handleDeletePlan(activePlan.id)}
-                className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                className="p-3 text-white/60 hover:text-white hover:bg-white/20 rounded-xl transition-colors"
               >
-                <Trash2 size={16} />
+                <Trash2 size={20} />
               </button>
-            </>
-          )}
-          <button
-            onClick={() => setShowGenForm(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white text-sm font-semibold rounded-lg hover:bg-emerald-700 transition-colors shadow-sm"
-          >
-            <Calendar size={16} /> Generate Plan
-          </button>
+            )}
+            <button
+              onClick={() => navigate('/thali-plan')}
+              className="flex items-center gap-2 px-6 py-3 bg-yellow-400 text-yellow-900 text-sm font-bold rounded-xl hover:bg-yellow-300 transition-colors shadow-lg"
+            >
+              <Sparkles size={18} /> Smart Thali Plan
+            </button>
+            <button
+              onClick={() => setShowGenForm(true)}
+              className="flex items-center gap-2 px-6 py-3 bg-white text-emerald-700 text-sm font-bold rounded-xl hover:bg-emerald-50 transition-colors shadow-lg"
+            >
+              <Calendar size={18} /> Custom Plan
+            </button>
+          </div>
         </div>
       </div>
-
-      {sendMsg && (
-        <div className="mb-4 px-4 py-2.5 bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm rounded-lg">
-          {sendMsg}
-        </div>
-      )}
 
       {loading ? (
         <div className="flex justify-center py-16"><RefreshCw className="w-7 h-7 text-emerald-600 animate-spin" /></div>
       ) : !activePlan ? (
-        <div className="text-center py-16 bg-white rounded-xl border border-gray-100 shadow-sm">
-          <Calendar className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-500 font-medium">No diet plan yet</p>
-          <p className="text-gray-400 text-sm mt-1">Generate a weekly or monthly plan based on your family's nutrition needs</p>
-          <button onClick={() => setShowGenForm(true)} className="mt-4 px-5 py-2.5 bg-emerald-600 text-white text-sm font-semibold rounded-lg hover:bg-emerald-700">
+        <div className="text-center py-24 bg-white rounded-2xl border border-gray-100 shadow-md">
+          <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-5">
+            <Calendar className="w-10 h-10 text-emerald-400" />
+          </div>
+          <p className="text-gray-700 font-bold text-xl">No diet plan yet</p>
+          <p className="text-gray-400 text-base mt-2 max-w-sm mx-auto">Generate a weekly or monthly plan based on your family's nutrition needs</p>
+          <button onClick={() => setShowGenForm(true)} className="mt-6 px-8 py-3.5 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 shadow-md text-base">
             Generate First Plan
           </button>
         </div>
       ) : (
         <>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 mb-5">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <h2 className="font-semibold text-gray-900">
-                  Week {weekOffset + 1} of {totalWeeks}
+          <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-8 mb-6">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-4">
+                <h2 className="text-xl font-bold text-gray-900">
+                  Week {weekOffset + 1} <span className="text-gray-400 font-normal">of {totalWeeks}</span>
                 </h2>
-                <span className="text-xs text-gray-500">Click any meal to swap</span>
-                <div className="flex items-center gap-1.5 ml-2 bg-gray-100 rounded-lg px-2 py-1">
-                  <span className="text-xs text-gray-500 font-medium">Family:</span>
-                  <button onClick={() => setFamilyMembers(m => Math.max(1, m - 1))} className="w-5 h-5 flex items-center justify-center rounded bg-white border border-gray-200 text-gray-600 hover:bg-emerald-50 hover:border-emerald-400 text-sm font-bold">−</button>
-                  <span className="text-xs font-bold text-gray-800 w-4 text-center">{familyMembers}</span>
-                  <button onClick={() => setFamilyMembers(m => m + 1)} className="w-5 h-5 flex items-center justify-center rounded bg-white border border-gray-200 text-gray-600 hover:bg-emerald-50 hover:border-emerald-400 text-sm font-bold">+</button>
-                  <span className="text-xs text-gray-400 ml-0.5">{familyMembers === 1 ? 'member' : 'members'}</span>
-                </div>
+                <span className="text-sm text-gray-400 bg-gray-50 px-3 py-1 rounded-full">Tap any meal to swap</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 <button
                   onClick={() => setWeekOffset(w => Math.max(0, w - 1))}
                   disabled={weekOffset === 0}
-                  className="p-1.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40 transition-colors"
+                  className="p-2.5 rounded-xl border-2 border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40 transition-colors"
                 >
-                  <ChevronLeft size={16} />
+                  <ChevronLeft size={20} />
                 </button>
+                <span className="text-sm font-semibold text-gray-500 min-w-[3rem] text-center">{weekOffset + 1} / {totalWeeks}</span>
                 <button
                   onClick={() => setWeekOffset(w => Math.min(totalWeeks - 1, w + 1))}
                   disabled={weekOffset >= totalWeeks - 1}
-                  className="p-1.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40 transition-colors"
+                  className="p-2.5 rounded-xl border-2 border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40 transition-colors"
                 >
-                  <ChevronRight size={16} />
+                  <ChevronRight size={20} />
                 </button>
               </div>
             </div>
-            <div className="grid grid-cols-7 gap-2">
+            <div className="flex flex-col gap-4">
               {weekDays.map((day, i) => (
-                <div key={day.id || i}>
-                  <MealCell
-                    day={day}
-                    requiredCalories={requiredCalories}
-                    onSwap={(mealType) => openSwap(day, mealType)}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-            <h2 className="font-semibold text-gray-900 mb-3">All Plans</h2>
-            <div className="space-y-2">
-              {plans.map(plan => (
-                <div
-                  key={plan.id}
-                  className={`flex items-center justify-between p-3 rounded-lg cursor-pointer transition-all ${
-                    activePlan?.id === plan.id ? 'bg-emerald-50 border border-emerald-200' : 'border border-gray-100 hover:bg-gray-50'
-                  }`}
-                  onClick={() => loadFullPlan(plan.id)}
-                >
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 capitalize">{plan.plan_type} Plan</p>
-                    <p className="text-xs text-gray-500">{plan.start_date} → {plan.end_date}</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                      plan.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-600'
-                    }`}>
-                      {plan.status}
-                    </span>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); handleDeletePlan(plan.id); }}
-                      className="p-1 text-gray-300 hover:text-red-500 transition-colors"
-                    >
-                      <Trash2 size={13} />
-                    </button>
-                  </div>
-                </div>
+                <MealCell
+                  key={day.id || i}
+                  day={day}
+                  requiredCalories={dailyTarget}
+                  familyMembers={familyMembers}
+                  onSwap={(mealType) => openSwap(day, mealType)}
+                />
               ))}
             </div>
           </div>
@@ -466,15 +410,15 @@ export default function DietPlan() {
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Max Calories/Day: <span className="text-emerald-600">{genForm.maxCaloriesPerDay.toLocaleString()} kcal</span>
-                    {requiredCalories > 0 && <span className="text-xs text-gray-400 ml-2">(family required: {requiredCalories.toLocaleString()} kcal)</span>}
+                    Max Calories/Day (family total): <span className="text-emerald-600">{genForm.maxCaloriesPerDay.toLocaleString()} kcal</span>
+                    {familyMembers > 1 && <span className="text-xs text-gray-400 ml-2">(~{Math.round(genForm.maxCaloriesPerDay / familyMembers).toLocaleString()} kcal/person × {familyMembers} members)</span>}
                   </label>
-                  <input type="range" min={0} max={requiredCalories > 0 ? requiredCalories : 3500} step={50} value={genForm.maxCaloriesPerDay}
+                  <input type="range" min={0} max={dailyTarget > 0 ? dailyTarget : 3500 * familyMembers} step={50} value={genForm.maxCaloriesPerDay}
                     onChange={e => setGenForm(f => ({ ...f, maxCaloriesPerDay: Number(e.target.value) }))}
                     className="w-full accent-emerald-600" />
                   <div className="flex justify-between text-xs text-gray-400 mt-1">
                     <span>0</span>
-                    <span>{requiredCalories > 0 ? requiredCalories.toLocaleString() : '3,500'} kcal</span>
+                    <span>{dailyTarget > 0 ? dailyTarget.toLocaleString() : (3500 * familyMembers).toLocaleString()} kcal</span>
                   </div>
                 </div>
 
@@ -685,11 +629,17 @@ export default function DietPlan() {
                                         </div>
                                         <div className="flex-1 min-w-0">
                                           <p className="text-sm font-semibold text-gray-800 truncate">{item.name}</p>
-                                          <p className="text-xs text-gray-400">{item.cuisine_type} · P:{item.protein_g}g C:{item.carbs_g}g F:{item.fat_g}g</p>
+                                          <p className="text-xs text-gray-400">
+                                            {item.cuisine_type} · P:{familyMembers > 1 ? Math.round(item.protein_g * familyMembers * 10) / 10 : item.protein_g}g C:{familyMembers > 1 ? Math.round(item.carbs_g * familyMembers * 10) / 10 : item.carbs_g}g F:{familyMembers > 1 ? Math.round(item.fat_g * familyMembers * 10) / 10 : item.fat_g}g
+                                            {familyMembers > 1 && <span className="text-gray-300 ml-1">(×{familyMembers})</span>}
+                                          </p>
                                         </div>
-                                        <div className="shrink-0 flex items-center gap-1 text-orange-500">
-                                          <Flame size={12} />
-                                          <span className="text-xs font-bold">{item.calories_per_serving}</span>
+                                        <div className="shrink-0 flex flex-col items-end gap-0.5 text-orange-500">
+                                          <div className="flex items-center gap-1">
+                                            <Flame size={12} />
+                                            <span className="text-xs font-bold">{familyMembers > 1 ? (item.calories_per_serving || 0) * familyMembers : item.calories_per_serving} kcal</span>
+                                          </div>
+                                          {familyMembers > 1 && <span className="text-[10px] text-gray-400">{item.calories_per_serving}/person</span>}
                                         </div>
                                       </button>
                                     );
@@ -712,9 +662,9 @@ export default function DietPlan() {
                     className="flex-1 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-bold hover:bg-emerald-700 disabled:opacity-60 shadow-md">
                     {generating ? 'Generating...' : '✅ Create Selected Meal Plan'}
                   </button>
-                  <button onClick={() => handleGenerate('auto')} disabled={generating}
-                    className="flex-1 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 disabled:opacity-60 shadow-md">
-                    {generating ? 'Generating...' : '✨ Create Auto Meal Plan'}
+                  <button onClick={() => { setShowGenForm(false); navigate('/thali-plan'); }}
+                    className="flex-1 py-2.5 bg-violet-600 text-white rounded-xl text-sm font-bold hover:bg-violet-700 shadow-md flex items-center justify-center gap-2">
+                    <Sparkles size={15} /> Smart Thali Planner
                   </button>
                 </div>
               </div>

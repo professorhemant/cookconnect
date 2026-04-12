@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, Calendar, Flame, UtensilsCrossed, Send, RefreshCw, AlertCircle, Sparkles, ChefHat, TrendingUp, Heart, Leaf, Brain, Shield, Zap, Apple } from 'lucide-react';
+import { Users, Calendar, Flame, UtensilsCrossed, Send, RefreshCw, AlertCircle, AlertTriangle, Sparkles, ChefHat, TrendingUp, Heart, Leaf, Brain, Shield, Zap, Apple, Plus } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, PieChart, Pie, Legend
 } from 'recharts';
@@ -75,7 +75,10 @@ export default function Dashboard() {
       if (activePlan) {
         try {
           const fullRes = await getFullPlan(activePlan.id);
-          weekDaysData = fullRes.data?.days?.slice(0, 7) || [];
+          weekDaysData = (fullRes.data?.days || [])
+            .slice()
+            .sort((a, b) => a.day_number - b.day_number)
+            .slice(0, 7);
         } catch {}
       }
 
@@ -127,6 +130,12 @@ export default function Dashboard() {
     value: nutrition ? Math.round((nutrition.calories_min + nutrition.calories_max) / 2) : 0
   })).filter(d => d.value > 0) || [];
 
+  // Total required calories for the whole family (sum of each member's min)
+  const totalRequiredCalories = familySummary?.members?.reduce(
+    (sum, { nutrition }) => sum + (nutrition?.calories_min || 0), 0
+  ) || 0;
+  const calorieDeficit = totalRequiredCalories > 0 && stats.todayCalories > 0 && stats.todayCalories < totalRequiredCalories;
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50">
@@ -164,15 +173,15 @@ export default function Dashboard() {
               <span className="text-emerald-200 text-sm font-medium">{new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</span>
             </div>
             <h1 className="text-3xl font-extrabold text-white drop-shadow">
-              {greeting()}, {currentUser?.name?.split(' ')[0]}! 👋
+              {greeting()}, Surabhi! 👋
             </h1>
             <p className="text-emerald-100 text-sm mt-1 font-medium">
               {currentUser?.family_name || 'Your family'} · Diet & Nutrition Overview
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center shadow-inner">
-              <ChefHat className="w-8 h-8 text-white" />
+            <div className="w-16 h-16 rounded-2xl overflow-hidden ring-2 ring-white/40 shadow-lg">
+              <img src="/hemant.jpg" alt="Hemant" className="w-full h-full object-cover" />
             </div>
           </div>
         </div>
@@ -185,6 +194,29 @@ export default function Dashboard() {
         <StatCard icon={Flame}          label="Today's Calories" value={stats.todayCalories ? stats.todayCalories.toLocaleString() : '—'}         sub="kcal planned"       color="orange" />
         <StatCard icon={UtensilsCrossed} label="Plans Created"  value={stats.mealsPlanned}                                                        sub="total plans"        color="purple" />
       </div>
+
+      {/* ── Calorie Alert Banner ── */}
+      {calorieDeficit && (
+        <div className="flex items-center justify-between bg-amber-50 border border-amber-300 rounded-2xl px-5 py-4 mb-6 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center shrink-0">
+              <AlertTriangle className="w-5 h-5 text-amber-600" />
+            </div>
+            <div>
+              <p className="font-bold text-amber-900 text-sm">More Calories needed — go to Add Ons</p>
+              <p className="text-xs text-amber-700 mt-0.5">
+                Today's plan: <strong>{stats.todayCalories.toLocaleString()} kcal</strong> · Family needs: <strong>{totalRequiredCalories.toLocaleString()} kcal</strong> · Deficit: <strong>{(totalRequiredCalories - stats.todayCalories).toLocaleString()} kcal</strong>
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => navigate('/plans')}
+            className="flex items-center gap-1.5 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded-xl shadow transition-colors shrink-0 ml-4"
+          >
+            <Plus size={13} /> Add Ons
+          </button>
+        </div>
+      )}
 
       {/* ── Today's Menu + Pie chart ── */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
@@ -216,7 +248,10 @@ export default function Dashboard() {
                           <p className="text-xs text-gray-500 mt-0.5 capitalize">{meal.cuisine_type}</p>
                           <div className="flex items-center gap-1 mt-2 bg-white/60 rounded-full px-2 py-0.5 w-fit">
                             <Flame size={11} className="text-orange-500" />
-                            <span className="text-xs font-bold text-gray-700">{meal.calories_per_serving} kcal</span>
+                            <span className="text-xs font-bold text-gray-700">
+                              {stats.members > 1 ? (meal.calories_per_serving || 0) * stats.members : meal.calories_per_serving} kcal
+                              {stats.members > 1 && <span className="font-normal text-gray-400 ml-1">({meal.calories_per_serving}/person)</span>}
+                            </span>
                           </div>
                         </>
                       ) : (
@@ -324,7 +359,7 @@ export default function Dashboard() {
           <div className="p-5">
             <div className="grid grid-cols-7 gap-2">
               {weekDays.map((day, i) => (
-                <MealCell key={day.id || i} day={day} onEdit={() => navigate('/plans')} />
+                <MealCell key={day.id || i} day={day} onEdit={() => navigate('/plans')} requiredCalories={totalRequiredCalories} />
               ))}
             </div>
           </div>
