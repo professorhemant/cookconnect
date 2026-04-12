@@ -218,7 +218,8 @@ export default function ThaliPlanner() {
 
   const totalSelected = MEAL_CONFIG.reduce((sum, m) => {
     const idx = currentIdx[m.key];
-    const kcal = thaliData[m.key]?.options?.[idx]?.totalKcal || 0;
+    const components = thaliData[m.key]?.options?.[idx]?.components || [];
+    const kcal = components.reduce((s, c) => s + (c.item?.calories_per_serving || 0), 0);
     return sum + kcal * familyMembers;
   }, 0);
 
@@ -278,7 +279,8 @@ export default function ThaliPlanner() {
                 {MEAL_CONFIG.map(m => {
                   const target = mealTarget(m.key);
                   const idx    = currentIdx[m.key];
-                  const actual = (thaliData[m.key]?.options?.[idx]?.totalKcal || 0) * familyMembers;
+                  const comps  = thaliData[m.key]?.options?.[idx]?.components || [];
+                  const actual = comps.reduce((s, c) => s + (c.item?.calories_per_serving || 0), 0) * familyMembers;
                   return (
                     <div key={m.key} className="relative flex items-center justify-center text-white text-[10px] font-bold"
                       style={{ width: `${m.ninPct}%` }}>
@@ -294,7 +296,8 @@ export default function ThaliPlanner() {
                 {MEAL_CONFIG.map(m => {
                   const target = mealTarget(m.key);
                   const idx    = currentIdx[m.key];
-                  const actual = (thaliData[m.key]?.options?.[idx]?.totalKcal || 0) * familyMembers;
+                  const comps  = thaliData[m.key]?.options?.[idx]?.components || [];
+                  const actual = comps.reduce((s, c) => s + (c.item?.calories_per_serving || 0), 0) * familyMembers;
                   return (
                     <div key={m.key} className="text-center text-[10px] text-white/50 font-semibold"
                       style={{ width: `${m.ninPct}%` }}>
