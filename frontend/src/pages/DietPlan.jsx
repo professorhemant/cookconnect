@@ -467,7 +467,8 @@ export default function DietPlan() {
                   <div className="flex gap-1.5 overflow-x-auto pb-0.5">
                     {Array.from({ length: genForm.planType === 'monthly' ? 30 : 7 }, (_, i) => {
                       const cal = getDayCalories(i);
-                      const done = cal >= dailyTarget;
+                      const over = dailyTarget > 0 && cal > dailyTarget * 1.05;
+                      const done = cal >= dailyTarget && !over;
                       const isActive = activeDay === i;
                       return (
                         <button
@@ -475,16 +476,22 @@ export default function DietPlan() {
                           onClick={() => setActiveDay(i)}
                           className={`shrink-0 flex flex-col items-center px-3 py-1.5 rounded-xl text-xs font-bold border-2 transition-all min-w-[52px] ${
                             isActive
-                              ? done ? 'bg-emerald-600 border-emerald-600 text-white' : 'bg-blue-600 border-blue-600 text-white'
-                              : done ? 'bg-emerald-50 border-emerald-300 text-emerald-700' : 'border-gray-200 text-gray-500 hover:border-gray-300'
+                              ? over  ? 'bg-rose-500 border-rose-500 text-white'
+                              : done  ? 'bg-emerald-600 border-emerald-600 text-white'
+                                      : 'bg-blue-600 border-blue-600 text-white'
+                              : over  ? 'bg-rose-50 border-rose-300 text-rose-700'
+                              : done  ? 'bg-emerald-50 border-emerald-300 text-emerald-700'
+                                      : 'border-gray-200 text-gray-500 hover:border-gray-300'
                           }`}
                         >
                           <span>Day {i + 1}</span>
-                          {done
-                            ? <Check size={10} className="mt-0.5" />
-                            : cal > 0
-                              ? <span className="text-[9px] opacity-70 mt-0.5">{cal}k</span>
-                              : <span className="text-[9px] opacity-40 mt-0.5">empty</span>
+                          {over
+                            ? <span className="text-[9px] mt-0.5">▲over</span>
+                            : done
+                              ? <Check size={10} className="mt-0.5" />
+                              : cal > 0
+                                ? <span className="text-[9px] opacity-70 mt-0.5">{cal}k</span>
+                                : <span className="text-[9px] opacity-40 mt-0.5">empty</span>
                           }
                         </button>
                       );
@@ -545,33 +552,35 @@ export default function DietPlan() {
                             })}
                           </div>
 
-                          {limitReached && (
-                            <div className="mt-2 flex items-center gap-2 px-3 py-2 bg-emerald-50 border border-emerald-300 rounded-xl">
-                              <Check size={14} className="text-emerald-600 shrink-0" />
-                              <span className="text-xs font-bold text-emerald-700">Required family kcalorie limit reached for Day {activeDay + 1}</span>
+                          {cal > 0 && (
+                            <div className={`mt-2 flex items-center justify-between gap-2 px-3 py-2 rounded-xl border ${
+                              cal > dailyTarget * 1.05
+                                ? 'bg-rose-50 border-rose-300'
+                                : limitReached
+                                  ? 'bg-emerald-50 border-emerald-300'
+                                  : 'bg-amber-50 border-amber-200'
+                            }`}>
+                              <div className="flex items-center gap-2">
+                                {cal > dailyTarget * 1.05
+                                  ? <span className="text-xs font-bold text-rose-700">⚠ {cal - dailyTarget} kcal over target — deselect items to reduce</span>
+                                  : limitReached
+                                    ? <span className="text-xs font-bold text-emerald-700"><Check size={12} className="inline mr-1" />Day {activeDay + 1} on target — you can still edit selections</span>
+                                    : <span className="text-xs font-bold text-amber-700">{dailyTarget - cal} kcal remaining for Day {activeDay + 1}</span>
+                                }
+                              </div>
+                              {limitReached && activeDay < numDays - 1 && (
+                                <button
+                                  onClick={() => setActiveDay(d => d + 1)}
+                                  className="shrink-0 px-3 py-1 bg-emerald-600 text-white text-xs font-bold rounded-lg hover:bg-emerald-700 transition-colors"
+                                >
+                                  Day {activeDay + 2} →
+                                </button>
+                              )}
                             </div>
                           )}
                         </div>
 
-                        {limitReached ? (
-                          /* Day complete state */
-                          <div className="flex flex-col items-center justify-center flex-1 text-center">
-                            <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-3">
-                              <Check size={28} className="text-emerald-600" />
-                            </div>
-                            <p className="font-bold text-emerald-700 text-lg">Day {activeDay + 1} Complete!</p>
-                            <p className="text-sm text-gray-500 mt-1">Daily kcal target reached. Move to the next day or generate the plan.</p>
-                            {activeDay < numDays - 1 && (
-                              <button
-                                onClick={() => setActiveDay(d => d + 1)}
-                                className="mt-4 px-6 py-2.5 bg-emerald-600 text-white text-sm font-bold rounded-xl hover:bg-emerald-700 transition-colors"
-                              >
-                                Go to Day {activeDay + 2} →
-                              </button>
-                            )}
-                          </div>
-                        ) : (
-                          <>
+                        <>
                             {/* Meal type tabs */}
                             <div className="flex gap-2 mb-3 shrink-0 flex-wrap">
                               {MEAL_META.map(({ key, label, icon }) => {
@@ -642,7 +651,6 @@ export default function DietPlan() {
                               )}
                             </div>
                           </>
-                        )}
                       </>
                     );
                   })()}
