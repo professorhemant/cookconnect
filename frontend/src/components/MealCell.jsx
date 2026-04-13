@@ -193,7 +193,6 @@ export default function MealCell({ day, onSwap, onDelete, onAdd, requiredCalorie
                 {hasMeal ? (
                   <div className="space-y-2">
                     {items.map((item, idx) => {
-                      const totalServings = (item.servings || 1) * familyMembers;
                       return (
                       <div key={item.id || idx} className="flex items-start gap-2 group">
                         <div className={`w-2 h-2 rounded-full ${dot} shrink-0 mt-1.5`} />
@@ -202,7 +201,7 @@ export default function MealCell({ day, onSwap, onDelete, onAdd, requiredCalorie
                             <p className="text-sm font-semibold text-gray-800 leading-snug">{item.name}</p>
                             {familyMembers > 1 && (
                               <span className="text-xs font-bold text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded-md">
-                                ×{familyMembers} = {totalServings}
+                                {familyMembers} servings
                               </span>
                             )}
                           </div>
