@@ -1,17 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { Bell, Send, Phone, RefreshCw, CheckCircle, XCircle, Clock } from 'lucide-react';
+import React, { useEffect, useState, useRef } from 'react';
+import { Bell, Send, Phone, RefreshCw, CheckCircle, XCircle, Clock, Wifi, WifiOff, QrCode, LogOut, Eye, Trash2, ShoppingCart, X } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import {
-  sendTodayMenu, sendWeekMenu, getNotificationHistory, updateProfile, getProfile
+  sendTodayMenu, sendWeekMenu, sendShoppingList, getNotificationHistory, updateProfile, getProfile,
+  getWhatsAppStatus, connectWhatsApp, disconnectWhatsApp,
+  previewTodayPDF, previewWeeklyPDF, previewShoppingPDF, deleteNotification
 } from '../api';
 
 export default function Notifications() {
   const { currentUser, saveUser, token } = useApp();
   const [history, setHistory] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loadingHistory, setLoadingHistory] = useState(true);
   const [sendingToday, setSendingToday] = useState(false);
   const [sendingWeek, setSendingWeek] = useState(false);
+  const [sendingShopping, setSendingShopping] = useState(false);
   const [msg, setMsg] = useState('');
+  const [previewModal, setPreviewModal] = useState(null); // { type, pdfUrl, label }
   const [settings, setSettings] = useState({
     sms_enabled: currentUser?.sms_enabled || false,
     phone: currentUser?.phone || '',
@@ -20,6 +24,13 @@ export default function Notifications() {
   });
   const [savingSettings, setSavingSettings] = useState(false);
   const [settingsSaved, setSettingsSaved] = useState(false);
+
+  // WhatsApp state
+  const [waStatus, setWaStatus] = useState('disconnected');
+  const [waQR, setWaQR] = useState(null);
+  const [waPhone, setWaPhone] = useState(null);
+  const [disconnecting, setDisconnecting] = useState(false);
+  const pollRef = useRef(null);
 
   useEffect(() => {
     if (currentUser) {
@@ -33,41 +44,104 @@ export default function Notifications() {
     }
   }, [currentUser]);
 
+  // Poll WhatsApp status
+  useEffect(() => {
+    fetchWaStatus();
+    pollRef.current = setInterval(fetchWaStatus, 4000);
+    return () => clearInterval(pollRef.current);
+  }, []);
+
+  // Stop polling when connected
+  useEffect(() => {
+    if (waStatus === 'connected') {
+      clearInterval(pollRef.current);
+    } else if (!pollRef.current) {
+      pollRef.current = setInterval(fetchWaStatus, 4000);
+    }
+  }, [waStatus]);
+
+  async function fetchWaStatus() {
+    try {
+      const res = await getWhatsAppStatus();
+      setWaStatus(res.data.status);
+      setWaQR(res.data.qrDataUrl || null);
+      setWaPhone(res.data.connectedPhone || null);
+    } catch {}
+  }
+
+  async function handleConnect() {
+    await connectWhatsApp();
+    setWaStatus('connecting');
+    // restart polling
+    clearInterval(pollRef.current);
+    pollRef.current = setInterval(fetchWaStatus, 3000);
+  }
+
+  async function handleDisconnect() {
+    setDisconnecting(true);
+    try {
+      await disconnectWhatsApp();
+      setWaStatus('disconnected');
+      setWaQR(null);
+      setWaPhone(null);
+      // restart polling
+      clearInterval(pollRef.current);
+      pollRef.current = setInterval(fetchWaStatus, 4000);
+    } finally {
+      setDisconnecting(false);
+    }
+  }
+
+  async function handleDeleteLog(id) {
+    try {
+      await deleteNotification(id);
+      setHistory(h => h.filter(l => l.id !== id));
+    } catch {}
+  }
+
   async function loadHistory() {
-    setLoading(true);
+    setLoadingHistory(true);
     try {
       const res = await getNotificationHistory(currentUser.id);
       setHistory(res.data);
     } catch {}
-    finally { setLoading(false); }
+    finally { setLoadingHistory(false); }
   }
 
-  async function handleSendToday() {
-    setSendingToday(true);
+  function openPreview(type) {
+    const map = {
+      today:    { pdfUrl: previewTodayPDF(currentUser?.id),    label: "Today's Menu" },
+      weekly:   { pdfUrl: previewWeeklyPDF(currentUser?.id),   label: 'Weekly Plan' },
+      shopping: { pdfUrl: previewShoppingPDF(currentUser?.id), label: 'Shopping List' },
+    };
+    setPreviewModal({ type, ...map[type] });
+  }
+
+  async function handleConfirmSend() {
+    const type = previewModal?.type;
+    setPreviewModal(null);
     setMsg('');
     try {
-      await sendTodayMenu(currentUser.id);
-      setMsg("Today's menu sent successfully!");
+      if (type === 'today') {
+        setSendingToday(true);
+        await sendTodayMenu(currentUser.id);
+        setMsg("Today's menu PDF sent via WhatsApp!");
+      } else if (type === 'weekly') {
+        setSendingWeek(true);
+        await sendWeekMenu(currentUser.id);
+        setMsg('Weekly plan PDF sent via WhatsApp!');
+      } else if (type === 'shopping') {
+        setSendingShopping(true);
+        await sendShoppingList(currentUser.id);
+        setMsg('Shopping list PDF sent via WhatsApp!');
+      }
       loadHistory();
     } catch (err) {
       setMsg(err.response?.data?.error || 'Failed to send');
     } finally {
       setSendingToday(false);
-      setTimeout(() => setMsg(''), 5000);
-    }
-  }
-
-  async function handleSendWeek() {
-    setSendingWeek(true);
-    setMsg('');
-    try {
-      await sendWeekMenu(currentUser.id);
-      setMsg('Weekly plan sent successfully!');
-      loadHistory();
-    } catch (err) {
-      setMsg(err.response?.data?.error || 'Failed to send');
-    } finally {
       setSendingWeek(false);
+      setSendingShopping(false);
       setTimeout(() => setMsg(''), 5000);
     }
   }
@@ -90,21 +164,101 @@ export default function Notifications() {
     return <Clock size={14} className="text-yellow-500" />;
   };
 
+  const waConnected = waStatus === 'connected';
+  const waLoading = waStatus === 'connecting';
+
   return (
     <div className="p-8">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Notifications</h1>
-        <p className="text-gray-500 text-sm mt-0.5">Manage SMS notifications to you and your cook</p>
+        <p className="text-gray-500 text-sm mt-0.5">Send diet plan PDFs automatically via WhatsApp</p>
       </div>
 
       <div className="grid grid-cols-3 gap-6">
         <div className="col-span-2 space-y-5">
+
+          {/* WhatsApp Connection Card */}
+          <div className={`rounded-xl border p-5 ${waConnected ? 'bg-emerald-50 border-emerald-200' : 'bg-white border-gray-100 shadow-sm'}`}>
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                {waConnected
+                  ? <Wifi className="w-5 h-5 text-emerald-600" />
+                  : <WifiOff className="w-5 h-5 text-gray-400" />
+                }
+                <h2 className="font-semibold text-gray-900">WhatsApp Connection</h2>
+              </div>
+              <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
+                waConnected ? 'bg-emerald-100 text-emerald-700' :
+                waLoading ? 'bg-yellow-100 text-yellow-700' :
+                waStatus === 'qr_ready' ? 'bg-blue-100 text-blue-700' :
+                'bg-gray-100 text-gray-500'
+              }`}>
+                {waConnected ? 'Connected' : waLoading ? 'Connecting...' : waStatus === 'qr_ready' ? 'Scan QR' : 'Not Connected'}
+              </span>
+            </div>
+
+            {waConnected && (
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-emerald-700 font-medium">WhatsApp is active and ready</p>
+                  {waPhone && <p className="text-xs text-emerald-600 mt-0.5">Connected: +{waPhone}</p>}
+                  <p className="text-xs text-gray-500 mt-1">PDFs will be auto-sent daily (7 AM) and weekly (Sunday 8 AM)</p>
+                </div>
+                <button
+                  onClick={handleDisconnect}
+                  disabled={disconnecting}
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors"
+                >
+                  <LogOut size={12} />
+                  {disconnecting ? 'Disconnecting...' : 'Disconnect'}
+                </button>
+              </div>
+            )}
+
+            {waStatus === 'qr_ready' && waQR && (
+              <div className="flex items-start gap-6 mt-2">
+                <img src={waQR} alt="WhatsApp QR Code" className="w-44 h-44 rounded-lg border border-gray-200 bg-white p-1" />
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-gray-800 mb-2">Scan with WhatsApp</p>
+                  <ol className="text-xs text-gray-600 space-y-1.5 list-decimal list-inside">
+                    <li>Open WhatsApp on your phone</li>
+                    <li>Tap Menu (⋮) → Linked Devices</li>
+                    <li>Tap "Link a device"</li>
+                    <li>Scan this QR code</li>
+                  </ol>
+                  <p className="text-xs text-gray-400 mt-3">QR expires in ~60s — it will refresh automatically</p>
+                </div>
+              </div>
+            )}
+
+            {(waStatus === 'disconnected') && (
+              <div className="flex items-center justify-between mt-1">
+                <p className="text-sm text-gray-500">Connect your WhatsApp to enable automatic PDF sending</p>
+                <button
+                  onClick={handleConnect}
+                  className="flex items-center gap-1.5 px-4 py-2 bg-emerald-600 text-white text-sm font-semibold rounded-lg hover:bg-emerald-700 transition-colors"
+                >
+                  <QrCode size={14} />
+                  Connect WhatsApp
+                </button>
+              </div>
+            )}
+
+            {waLoading && !waQR && (
+              <div className="flex items-center gap-2 mt-1">
+                <RefreshCw size={14} className="text-yellow-500 animate-spin" />
+                <p className="text-sm text-gray-500">Initialising connection, please wait...</p>
+              </div>
+            )}
+          </div>
+
+          {/* Send Now */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-            <h2 className="font-semibold text-gray-900 mb-4">Send Notifications</h2>
+            <h2 className="font-semibold text-gray-900 mb-4">Send Now</h2>
 
             {msg && (
               <div className={`mb-4 px-4 py-2.5 text-sm rounded-lg border ${
-                msg.includes('success') || msg.includes('sent')
+                msg.includes('sent') || msg.includes('success')
                   ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
                   : 'bg-red-50 border-red-200 text-red-600'
               }`}>
@@ -112,23 +266,34 @@ export default function Notifications() {
               </div>
             )}
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-4">
               <div className="bg-orange-50 border border-orange-100 rounded-xl p-5">
                 <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center mb-3">
                   <Bell className="w-5 h-5 text-orange-600" />
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-1">Today's Menu</h3>
                 <p className="text-xs text-gray-500 mb-4">
-                  Send today's breakfast, lunch, and dinner to you and your cook via SMS.
+                  Send a PDF of today's meals via WhatsApp to you and your cook.
                 </p>
-                <button
-                  onClick={handleSendToday}
-                  disabled={sendingToday || !currentUser?.sms_enabled}
-                  className="w-full flex items-center justify-center gap-2 py-2.5 bg-orange-500 text-white text-sm font-semibold rounded-lg hover:bg-orange-600 disabled:opacity-50 transition-colors"
-                >
-                  <Send size={14} />
-                  {sendingToday ? 'Sending...' : "Send Today's Menu"}
-                </button>
+                <div className="flex gap-2">
+                  <a
+                    href={previewTodayPDF(currentUser?.id)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center justify-center gap-1.5 px-3 py-2.5 border border-orange-300 text-orange-600 text-sm font-semibold rounded-lg hover:bg-orange-100 transition-colors"
+                    title="Preview PDF"
+                  >
+                    <Eye size={14} />
+                  </a>
+                  <button
+                    onClick={() => openPreview('today')}
+                    disabled={sendingToday || !waConnected}
+                    className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-orange-500 text-white text-sm font-semibold rounded-lg hover:bg-orange-600 disabled:opacity-50 transition-colors"
+                  >
+                    <Send size={14} />
+                    {sendingToday ? 'Sending...' : "Send via WhatsApp"}
+                  </button>
+                </div>
               </div>
 
               <div className="bg-blue-50 border border-blue-100 rounded-xl p-5">
@@ -137,26 +302,67 @@ export default function Notifications() {
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-1">Weekly Plan</h3>
                 <p className="text-xs text-gray-500 mb-4">
-                  Send the complete weekly meal plan to you and your cook for planning ahead.
+                  Send a PDF of the full weekly meal plan via WhatsApp.
                 </p>
-                <button
-                  onClick={handleSendWeek}
-                  disabled={sendingWeek || !currentUser?.sms_enabled}
-                  className="w-full flex items-center justify-center gap-2 py-2.5 bg-blue-500 text-white text-sm font-semibold rounded-lg hover:bg-blue-600 disabled:opacity-50 transition-colors"
-                >
-                  <Send size={14} />
-                  {sendingWeek ? 'Sending...' : 'Send Weekly Plan'}
-                </button>
+                <div className="flex gap-2">
+                  <a
+                    href={previewWeeklyPDF(currentUser?.id)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center justify-center gap-1.5 px-3 py-2.5 border border-blue-300 text-blue-600 text-sm font-semibold rounded-lg hover:bg-blue-100 transition-colors"
+                    title="Preview PDF"
+                  >
+                    <Eye size={14} />
+                  </a>
+                  <button
+                    onClick={() => openPreview('weekly')}
+                    disabled={sendingWeek || !waConnected}
+                    className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-blue-500 text-white text-sm font-semibold rounded-lg hover:bg-blue-600 disabled:opacity-50 transition-colors"
+                  >
+                    <Send size={14} />
+                    {sendingWeek ? 'Sending...' : 'Send via WhatsApp'}
+                  </button>
+                </div>
+              </div>
+
+              <div className="bg-sky-50 border border-sky-100 rounded-xl p-5">
+                <div className="w-10 h-10 bg-sky-100 rounded-lg flex items-center justify-center mb-3">
+                  <ShoppingCart className="w-5 h-5 text-sky-600" />
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-1">Shopping List</h3>
+                <p className="text-xs text-gray-500 mb-4">
+                  Ingredients for the week, quantities per family size. Sent to you only.
+                </p>
+                <div className="flex gap-2">
+                  <a
+                    href={previewShoppingPDF(currentUser?.id)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center justify-center gap-1.5 px-3 py-2.5 border border-sky-300 text-sky-600 text-sm font-semibold rounded-lg hover:bg-sky-100 transition-colors"
+                    title="Preview PDF"
+                  >
+                    <Eye size={14} />
+                  </a>
+                  <button
+                    onClick={() => openPreview('shopping')}
+                    disabled={sendingShopping || !waConnected}
+                    className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-sky-500 text-white text-sm font-semibold rounded-lg hover:bg-sky-600 disabled:opacity-50 transition-colors"
+                  >
+                    <Send size={14} />
+                    {sendingShopping ? 'Sending...' : 'Send via WhatsApp'}
+                  </button>
+                </div>
               </div>
             </div>
 
-            {!currentUser?.sms_enabled && (
+            {!waConnected && (
               <p className="text-xs text-amber-600 mt-3 text-center">
-                Enable SMS notifications in Settings panel to use these buttons.
+                Connect WhatsApp above to enable sending.
               </p>
             )}
           </div>
 
+          {/* History */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-semibold text-gray-900">Notification History</h2>
@@ -165,7 +371,7 @@ export default function Notifications() {
               </button>
             </div>
 
-            {loading ? (
+            {loadingHistory ? (
               <div className="flex justify-center py-8"><RefreshCw className="w-5 h-5 text-emerald-600 animate-spin" /></div>
             ) : history.length === 0 ? (
               <div className="text-center py-8">
@@ -181,6 +387,7 @@ export default function Notifications() {
                       <th className="text-left text-xs font-semibold text-gray-500 pb-2">Sent To</th>
                       <th className="text-left text-xs font-semibold text-gray-500 pb-2">Status</th>
                       <th className="text-left text-xs font-semibold text-gray-500 pb-2">Time</th>
+                      <th className="pb-2"></th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-50">
@@ -189,9 +396,10 @@ export default function Notifications() {
                         <td className="py-2.5">
                           <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                             log.type === 'today_menu' ? 'bg-orange-100 text-orange-700' :
-                            log.type === 'weekly_plan' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
+                            log.type === 'weekly_plan' ? 'bg-blue-100 text-blue-700' :
+                            log.type === 'shopping_list' ? 'bg-sky-100 text-sky-700' : 'bg-gray-100 text-gray-600'
                           }`}>
-                            {log.type === 'today_menu' ? "Today's Menu" : log.type === 'weekly_plan' ? 'Weekly Plan' : 'Manual'}
+                            {log.type === 'today_menu' ? "Today's Menu" : log.type === 'weekly_plan' ? 'Weekly Plan' : log.type === 'shopping_list' ? 'Shopping List' : 'Manual'}
                           </span>
                         </td>
                         <td className="py-2.5 text-xs text-gray-500">{log.recipient_phone || '—'}</td>
@@ -209,6 +417,15 @@ export default function Notifications() {
                             day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
                           })}
                         </td>
+                        <td className="py-2.5 text-right">
+                          <button
+                            onClick={() => handleDeleteLog(log.id)}
+                            className="text-gray-300 hover:text-red-500 transition-colors"
+                            title="Delete"
+                          >
+                            <Trash2 size={13} />
+                          </button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -218,14 +435,15 @@ export default function Notifications() {
           </div>
         </div>
 
+        {/* Right Panel */}
         <div>
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 sticky top-6">
-            <h2 className="font-semibold text-gray-900 mb-4">SMS Settings</h2>
+            <h2 className="font-semibold text-gray-900 mb-4">WhatsApp Settings</h2>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-800">Enable SMS</p>
-                  <p className="text-xs text-gray-500">Send daily and weekly reminders</p>
+                  <p className="text-sm font-medium text-gray-800">Enable WhatsApp</p>
+                  <p className="text-xs text-gray-500">Auto-send daily & weekly PDFs</p>
                 </div>
                 <div
                   onClick={() => setSettings(s => ({ ...s, sms_enabled: !s.sms_enabled }))}
@@ -280,9 +498,11 @@ export default function Notifications() {
 
               <div className="bg-gray-50 rounded-lg p-3 text-xs text-gray-500 space-y-1">
                 <p className="font-medium text-gray-700">Automated Schedule</p>
-                <p>Daily menu SMS at 7:00 AM IST</p>
-                <p>Weekly plan SMS every Sunday at 8:00 AM IST</p>
-                <p className="text-amber-600 mt-1">Requires Twilio credentials in backend .env</p>
+                <p>Today's menu PDF at 7:00 AM IST</p>
+                <p>Weekly plan PDF every Sunday at 8:00 AM IST</p>
+                <p className={`mt-1 font-medium ${waConnected ? 'text-emerald-600' : 'text-amber-600'}`}>
+                  {waConnected ? '✓ WhatsApp connected' : 'Connect WhatsApp to activate'}
+                </p>
               </div>
 
               <button
@@ -300,6 +520,47 @@ export default function Notifications() {
           </div>
         </div>
       </div>
+
+      {/* PDF Preview & Confirm Modal */}
+      {previewModal && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl flex flex-col" style={{ maxHeight: '90vh' }}>
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+              <div>
+                <h2 className="font-bold text-gray-900 text-lg">Preview: {previewModal.label}</h2>
+                <p className="text-sm text-gray-500 mt-0.5">Review the PDF before sending via WhatsApp</p>
+              </div>
+              <button onClick={() => setPreviewModal(null)} className="text-gray-400 hover:text-gray-600">
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-hidden p-4">
+              <iframe
+                src={previewModal.pdfUrl}
+                title="PDF Preview"
+                className="w-full rounded-lg border border-gray-200"
+                style={{ height: '60vh' }}
+              />
+            </div>
+
+            <div className="flex gap-3 px-6 py-4 border-t border-gray-100">
+              <button
+                onClick={() => setPreviewModal(null)}
+                className="flex-1 py-2.5 border border-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmSend}
+                className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-emerald-600 text-white rounded-lg text-sm font-semibold hover:bg-emerald-700 transition-colors"
+              >
+                <Send size={14} /> Confirm & Send via WhatsApp
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
