@@ -1,11 +1,12 @@
-const { User, DietPlan, DietPlanDay, MenuItem, NotificationLog } = require('../models');
+const { User, DietPlan, DietPlanDay, DietPlanDayItem, MenuItem, NotificationLog } = require('../models');
 const { sendTodayMenu, sendWeeklyMenu } = require('../services/smsService');
 const { Op } = require('sequelize');
 
 const dayIncludes = [
   { model: MenuItem, as: 'breakfast' },
   { model: MenuItem, as: 'lunch' },
-  { model: MenuItem, as: 'dinner' }
+  { model: MenuItem, as: 'dinner' },
+  { model: DietPlanDayItem, as: 'mealItems', include: [{ model: MenuItem, as: 'menuItem' }] }
 ];
 
 async function sendTodayMenuNotification(req, res) {
@@ -135,4 +136,15 @@ async function getNotificationHistory(req, res) {
   }
 }
 
-module.exports = { sendTodayMenuNotification, sendWeekMenuNotification, getNotificationHistory };
+async function deleteNotificationLog(req, res) {
+  try {
+    const log = await NotificationLog.findByPk(req.params.id);
+    if (!log) return res.status(404).json({ error: 'Not found' });
+    await log.destroy();
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+module.exports = { sendTodayMenuNotification, sendWeekMenuNotification, getNotificationHistory, deleteNotificationLog };
