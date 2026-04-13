@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Clock, ChefHat, Flame, Leaf, ChevronDown, ChevronUp, Pencil, Trash2, Users } from 'lucide-react';
+import { Clock, ChefHat, Flame, Leaf, ChevronDown, ChevronUp, Pencil, Trash2 } from 'lucide-react';
 import NutritionBar from './NutritionBar';
 
 const difficultyColor = {
@@ -15,7 +15,7 @@ const mealTypeColor = {
   snack: 'bg-pink-100 text-pink-700'
 };
 
-export default function MenuCard({ item, onSelect, onEdit, onDelete, familyCount = 4 }) {
+export default function MenuCard({ item, onSelect, onEdit, onDelete }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -76,9 +76,9 @@ export default function MenuCard({ item, onSelect, onEdit, onDelete, familyCount
             <Clock size={12} />
             {(item.prep_time_minutes || 0) + (item.cook_time_minutes || 0)} min
           </span>
-          <span className="flex items-center gap-1 px-1.5 py-0.5 bg-indigo-50 text-indigo-600 rounded-md font-medium">
-            <Users size={11} />
-            {item.servings} serving{item.servings !== 1 ? 's' : ''} · {familyCount} people
+          <span className="flex items-center gap-1">
+            <ChefHat size={12} />
+            1 serving
           </span>
         </div>
 

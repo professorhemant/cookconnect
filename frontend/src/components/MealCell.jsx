@@ -192,11 +192,20 @@ export default function MealCell({ day, onSwap, onDelete, onAdd, requiredCalorie
               <div className="flex-1 px-4 py-3">
                 {hasMeal ? (
                   <div className="space-y-2">
-                    {items.map((item, idx) => (
+                    {items.map((item, idx) => {
+                      const totalServings = (item.servings || 1) * familyMembers;
+                      return (
                       <div key={item.id || idx} className="flex items-start gap-2 group">
                         <div className={`w-2 h-2 rounded-full ${dot} shrink-0 mt-1.5`} />
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-semibold text-gray-800 leading-snug">{item.name}</p>
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <p className="text-sm font-semibold text-gray-800 leading-snug">{item.name}</p>
+                            {familyMembers > 1 && (
+                              <span className="text-xs font-bold text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded-md">
+                                ×{familyMembers} = {totalServings}
+                              </span>
+                            )}
+                          </div>
                           <p className="text-xs text-gray-400">
                             {item.cuisine_type} · {familyMembers > 1 ? (item.calories_per_serving || 0) * familyMembers : item.calories_per_serving} kcal
                             {familyMembers > 1 && <span className="text-gray-300"> ({item.calories_per_serving}/person)</span>}
@@ -212,7 +221,8 @@ export default function MealCell({ day, onSwap, onDelete, onAdd, requiredCalorie
                           </button>
                         )}
                       </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 ) : (
                   <p className="text-sm italic text-gray-300 mt-1">tap header to swap</p>
