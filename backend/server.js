@@ -8,7 +8,7 @@ const { startCronJobs } = require('./src/services/cronJobs');
 const { connectWhatsApp, getStatus, disconnect } = require('./src/services/whatsappService');
 const { generateTodayPDF, generateWeeklyPDF, generateShoppingListPDF } = require('./src/services/pdfService');
 const { sendPDF } = require('./src/services/whatsappService');
-const { User, DietPlan, DietPlanDay, MenuItem, FamilyMember, Ingredient, NotificationLog } = require('./src/models');
+const { User, DietPlan, DietPlanDay, DietPlanDayItem, MenuItem, FamilyMember, Ingredient, NotificationLog } = require('./src/models');
 const { Op } = require('sequelize');
 
 const authController = require('./src/controllers/authController');
@@ -68,11 +68,20 @@ app.post('/api/notifications/send-week/:userId', notificationController.sendWeek
 app.get('/api/notifications/history/:userId', notificationController.getNotificationHistory);
 app.delete('/api/notifications/:id', notificationController.deleteNotificationLog);
 
+// shared include for preview routes
+const previewDayIncludes = [
+  { model: MenuItem, as: 'breakfast' },
+  { model: MenuItem, as: 'lunch' },
+  { model: MenuItem, as: 'dinner' },
+  { model: DietPlanDayItem, as: 'mealItems', include: [{ model: MenuItem, as: 'menuItem' }] }
+];
+
 // PDF preview routes (opens in browser)
 app.get('/api/notifications/preview-today/:userId', async (req, res) => {
   try {
     const user = await User.findByPk(req.params.userId);
     if (!user) return res.status(404).json({ error: 'User not found' });
+    const familyCount = await FamilyMember.count({ where: { user_id: user.id } }) || 1;
     const today = new Date().toISOString().split('T')[0];
     const plan = await DietPlan.findOne({
       where: { user_id: user.id, status: 'active', start_date: { [Op.lte]: today }, end_date: { [Op.gte]: today } }
@@ -81,10 +90,10 @@ app.get('/api/notifications/preview-today/:userId', async (req, res) => {
     if (plan) {
       planDay = await DietPlanDay.findOne({
         where: { diet_plan_id: plan.id, day_date: today },
-        include: [{ model: MenuItem, as: 'breakfast' }, { model: MenuItem, as: 'lunch' }, { model: MenuItem, as: 'dinner' }]
+        include: previewDayIncludes
       });
     }
-    const { filepath } = await generateTodayPDF(user, planDay);
+    const { filepath } = await generateTodayPDF(user, planDay, familyCount);
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'inline; filename="today-menu.pdf"');
     require('fs').createReadStream(filepath).pipe(res);
@@ -95,6 +104,7 @@ app.get('/api/notifications/preview-weekly/:userId', async (req, res) => {
   try {
     const user = await User.findByPk(req.params.userId);
     if (!user) return res.status(404).json({ error: 'User not found' });
+    const familyCount = await FamilyMember.count({ where: { user_id: user.id } }) || 1;
     const today = new Date().toISOString().split('T')[0];
     const plan = await DietPlan.findOne({
       where: { user_id: user.id, status: 'active', start_date: { [Op.lte]: today }, end_date: { [Op.gte]: today } }
@@ -102,10 +112,10 @@ app.get('/api/notifications/preview-weekly/:userId', async (req, res) => {
     if (!plan) return res.status(404).json({ error: 'No active plan found' });
     const planDays = await DietPlanDay.findAll({
       where: { diet_plan_id: plan.id },
-      include: [{ model: MenuItem, as: 'breakfast' }, { model: MenuItem, as: 'lunch' }, { model: MenuItem, as: 'dinner' }],
+      include: previewDayIncludes,
       order: [['day_number', 'ASC']]
     });
-    const { filepath } = await generateWeeklyPDF(user, planDays);
+    const { filepath } = await generateWeeklyPDF(user, planDays, familyCount);
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'inline; filename="weekly-plan.pdf"');
     require('fs').createReadStream(filepath).pipe(res);
@@ -116,6 +126,7 @@ app.get('/api/notifications/preview-shopping/:userId', async (req, res) => {
   try {
     const user = await User.findByPk(req.params.userId);
     if (!user) return res.status(404).json({ error: 'User not found' });
+    const members = await FamilyMember.count({ where: { user_id: user.id } }) || 1;
     const today = new Date().toISOString().split('T')[0];
     const plan = await DietPlan.findOne({
       where: { user_id: user.id, status: 'active', start_date: { [Op.lte]: today }, end_date: { [Op.gte]: today } }
@@ -126,12 +137,11 @@ app.get('/api/notifications/preview-shopping/:userId', async (req, res) => {
       include: [
         { model: MenuItem, as: 'breakfast', include: [{ model: Ingredient, as: 'ingredients' }] },
         { model: MenuItem, as: 'lunch', include: [{ model: Ingredient, as: 'ingredients' }] },
-        { model: MenuItem, as: 'dinner', include: [{ model: Ingredient, as: 'ingredients' }] }
+        { model: MenuItem, as: 'dinner', include: [{ model: Ingredient, as: 'ingredients' }] },
+        { model: DietPlanDayItem, as: 'mealItems', include: [{ model: MenuItem, as: 'menuItem', include: [{ model: Ingredient, as: 'ingredients' }] }] }
       ],
       order: [['day_number', 'ASC']]
     });
-    const familyCount = await FamilyMember.count({ where: { user_id: user.id } });
-    const members = familyCount > 0 ? familyCount : 1;
     const { filepath } = await generateShoppingListPDF(user, planDays, members);
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'inline; filename="shopping-list.pdf"');
