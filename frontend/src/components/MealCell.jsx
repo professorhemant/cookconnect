@@ -205,10 +205,18 @@ export default function MealCell({ day, onSwap, onDelete, onAdd, requiredCalorie
                               </span>
                             )}
                           </div>
-                          <p className="text-xs text-gray-400">
-                            {item.cuisine_type} · {familyMembers > 1 ? (item.calories_per_serving || 0) * familyMembers : item.calories_per_serving} kcal
-                            {familyMembers > 1 && <span className="text-gray-300"> ({item.calories_per_serving}/person)</span>}
-                          </p>
+                          <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                            {item.cuisine_type && (
+                              <span className="text-xs text-gray-500 font-medium">{item.cuisine_type}</span>
+                            )}
+                            <span className="flex items-center gap-0.5 text-xs font-semibold text-orange-500">
+                              <Flame size={11} />
+                              {familyMembers > 1 ? (item.calories_per_serving || 0) * familyMembers : item.calories_per_serving} kcal
+                            </span>
+                            {familyMembers > 1 && item.calories_per_serving > 0 && (
+                              <span className="text-xs text-gray-400 font-medium">{item.calories_per_serving}/person</span>
+                            )}
+                          </div>
                         </div>
                         {onDelete && (
                           <button
