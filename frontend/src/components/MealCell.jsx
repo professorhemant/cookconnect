@@ -168,6 +168,12 @@ export default function MealCell({ day, onSwap, onDelete, onAdd, requiredCalorie
           const items = itemsByMeal[key];
           const mealTotal = mealCals[key];
           const hasMeal = items.length > 0;
+          const macros = hasMeal ? {
+            protein: Math.round(items.reduce((s, i) => s + (i.protein_g || 0), 0) * familyMembers),
+            carbs:   Math.round(items.reduce((s, i) => s + (i.carbs_g || 0), 0) * familyMembers),
+            fat:     Math.round(items.reduce((s, i) => s + (i.fat_g || 0), 0) * familyMembers),
+            fiber:   Math.round(items.reduce((s, i) => s + (i.fiber_g || 0), 0) * familyMembers),
+          } : null;
 
           return (
             <div key={key} className={`flex-1 flex flex-col ${hasMeal ? bg : 'bg-white'}`}>
@@ -233,6 +239,14 @@ export default function MealCell({ day, onSwap, onDelete, onAdd, requiredCalorie
                   </div>
                 ) : (
                   <p className="text-sm italic text-gray-300 mt-1">tap header to swap</p>
+                )}
+                {hasMeal && macros && (macros.protein > 0 || macros.carbs > 0 || macros.fat > 0) && (
+                  <div className="flex items-center gap-1.5 mt-2.5 pt-2 border-t border-gray-100 flex-wrap">
+                    <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded">P {macros.protein}g</span>
+                    <span className="text-[10px] font-bold text-yellow-600 bg-yellow-50 px-1.5 py-0.5 rounded">C {macros.carbs}g</span>
+                    <span className="text-[10px] font-bold text-orange-600 bg-orange-50 px-1.5 py-0.5 rounded">F {macros.fat}g</span>
+                    {macros.fiber > 0 && <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">Fb {macros.fiber}g</span>}
+                  </div>
                 )}
                 {onAdd && (
                   <button
