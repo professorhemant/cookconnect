@@ -76,13 +76,9 @@ export default function MenuCard({ item, onSelect, onEdit, onDelete, familyCount
             <Clock size={12} />
             {(item.prep_time_minutes || 0) + (item.cook_time_minutes || 0)} min
           </span>
-          <span className="flex items-center gap-1">
-            <ChefHat size={12} />
-            {item.servings > 1 ? `${item.servings} servings` : '1 serving'}
-          </span>
           <span className="flex items-center gap-1 px-1.5 py-0.5 bg-indigo-50 text-indigo-600 rounded-md font-medium">
             <Users size={11} />
-            ×{familyCount} family
+            {item.servings} serving{item.servings !== 1 ? 's' : ''} · {familyCount} people
           </span>
         </div>
 
