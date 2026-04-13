@@ -1,4 +1,4 @@
-const { User, DietPlan, DietPlanDay, DietPlanDayItem, MenuItem, NotificationLog } = require('../models');
+const { User, DietPlan, DietPlanDay, DietPlanDayItem, MenuItem, NotificationLog, FamilyMember } = require('../models');
 const { sendTodayMenu, sendWeeklyMenu } = require('../services/smsService');
 const { Op } = require('sequelize');
 
@@ -13,6 +13,8 @@ async function sendTodayMenuNotification(req, res) {
   try {
     const user = await User.findByPk(req.params.userId);
     if (!user) return res.status(404).json({ error: 'User not found' });
+
+    const familyCount = await FamilyMember.count({ where: { user_id: user.id } }) || 1;
 
     const today = new Date().toISOString().split('T')[0];
     const plan = await DietPlan.findOne({
@@ -32,7 +34,7 @@ async function sendTodayMenuNotification(req, res) {
       });
     }
 
-    const { message, results } = await sendTodayMenu(user, planDay);
+    const { message, results } = await sendTodayMenu(user, planDay, familyCount);
 
     const status = results.length === 0 ? 'skipped'
       : results.every(r => r.status === 'sent') ? 'sent'
@@ -56,6 +58,8 @@ async function sendWeekMenuNotification(req, res) {
   try {
     const user = await User.findByPk(req.params.userId);
     if (!user) return res.status(404).json({ error: 'User not found' });
+
+    const familyCount = await FamilyMember.count({ where: { user_id: user.id } }) || 1;
 
     const today = new Date().toISOString().split('T')[0];
     const plan = await DietPlan.findOne({
@@ -84,7 +88,7 @@ async function sendWeekMenuNotification(req, res) {
         order: [['day_number', 'ASC']]
       });
 
-      const { message, results } = await sendWeeklyMenu(user, planDays);
+      const { message, results } = await sendWeeklyMenu(user, planDays, familyCount);
       const status = results.length === 0 ? 'skipped'
         : results.some(r => r.status === 'sent') ? 'sent' : results[0]?.status;
 
@@ -105,7 +109,7 @@ async function sendWeekMenuNotification(req, res) {
       order: [['day_number', 'ASC']]
     });
 
-    const { message, results } = await sendWeeklyMenu(user, planDays);
+    const { message, results } = await sendWeeklyMenu(user, planDays, familyCount);
     const status = results.length === 0 ? 'skipped'
       : results.some(r => r.status === 'sent') ? 'sent' : results[0]?.status;
 

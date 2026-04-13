@@ -30,7 +30,7 @@ function drawDivider(doc, color = '#e5e7eb') {
   doc.moveDown(0.4);
 }
 
-async function generateWeeklyPDF(user, planDays) {
+async function generateWeeklyPDF(user, planDays, familyCount = 1) {
   return new Promise((resolve, reject) => {
     const doc = new PDFDocument({ margin: 50, size: 'A4' });
     const dir = ensurePdfDir();
@@ -48,7 +48,7 @@ async function generateWeeklyPDF(user, planDays) {
     doc.fill('#1f2937').fontSize(13).font('Helvetica-Bold')
       .text(`Family: ${user.family_name || user.name}`);
     doc.fill('#6b7280').fontSize(10).font('Helvetica')
-      .text(`Period: ${startDate} — ${endDate}`);
+      .text(`Period: ${startDate} — ${endDate}  ·  ${familyCount} member${familyCount !== 1 ? 's' : ''}`);
     doc.moveDown(0.6);
     drawDivider(doc);
 
@@ -70,9 +70,9 @@ async function generateWeeklyPDF(user, planDays) {
       const lItems = getWeeklyMealItems(day, 'lunch');
       const dItems = getWeeklyMealItems(day, 'dinner');
 
-      const sumCal = items => items.reduce((s, i) => s + (i.calories_per_serving || 0), 0);
+      const sumCal = items => items.reduce((s, i) => s + (i.calories_per_serving || 0), 0) * familyCount;
       const bCal = sumCal(bItems), lCal = sumCal(lItems), dCal = sumCal(dItems);
-      const totalCal = day.total_calories || (bCal + lCal + dCal);
+      const totalCal = bCal + lCal + dCal;
 
       const nameList = items => items.length ? items.map(i => i.name).join(', ') : '—';
 
@@ -117,7 +117,7 @@ async function generateWeeklyPDF(user, planDays) {
   });
 }
 
-async function generateTodayPDF(user, planDay) {
+async function generateTodayPDF(user, planDay, familyCount = 1) {
   return new Promise((resolve, reject) => {
     const doc = new PDFDocument({ margin: 50, size: 'A4' });
     const dir = ensurePdfDir();
@@ -132,7 +132,7 @@ async function generateTodayPDF(user, planDay) {
       .text(`Family: ${user.family_name || user.name}`);
     if (planDay) {
       doc.fill('#6b7280').fontSize(10).font('Helvetica')
-        .text(`Date: ${formatDate(planDay.day_date)}`);
+        .text(`Date: ${formatDate(planDay.day_date)}  ·  ${familyCount} member${familyCount !== 1 ? 's' : ''}`);
     }
     doc.moveDown(0.6);
     drawDivider(doc);
@@ -172,15 +172,20 @@ async function generateTodayPDF(user, planDay) {
         if (items.length > 0) {
           items.forEach(item => {
             const prep = (item.prep_time_minutes || 0) + (item.cook_time_minutes || 0);
-            const cal = item.calories_per_serving || 0;
-            totalCal += cal;
+            const calPer = item.calories_per_serving || 0;
+            const calTotal = calPer * familyCount;
+            totalCal += calTotal;
             doc.fill('#1f2937').fontSize(11).font('Helvetica-Bold').text(`• ${item.name}`);
-            let meta = `  ${item.cuisine_type || ''}  ·  ${cal} kcal`;
-            if (prep > 0) meta += `  ·  ${prep} min`;
+            let meta = `  ${item.cuisine_type || ''}  ·  ${calTotal} kcal (${familyCount} members)`;
+            if (familyCount > 1) meta += `  ·  ${calPer} kcal/person`;
+            if (prep > 0) meta += `  ·  ${prep} min prep`;
             doc.fill('#6b7280').fontSize(9).font('Helvetica').text(meta);
             if (item.protein_g || item.carbs_g || item.fat_g) {
+              const p = Math.round((item.protein_g || 0) * familyCount);
+              const c = Math.round((item.carbs_g || 0) * familyCount);
+              const f = Math.round((item.fat_g || 0) * familyCount);
               doc.fill('#9ca3af').fontSize(8)
-                .text(`  P: ${item.protein_g || 0}g  C: ${item.carbs_g || 0}g  F: ${item.fat_g || 0}g`);
+                .text(`  P: ${p}g  C: ${c}g  F: ${f}g  (for ${familyCount})`);
             }
           });
         } else {
