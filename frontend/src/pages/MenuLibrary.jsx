@@ -9,9 +9,6 @@ const TABS = [
   { key: 'breakfast', label: 'Breakfast', mealType: 'breakfast' },
   { key: 'lunch', label: 'Lunch', mealType: 'lunch' },
   { key: 'dinner', label: 'Dinner', mealType: 'dinner' },
-  { key: 'breakfastAddon', label: 'Add Ons for Breakfast', mealType: 'snack' },
-  { key: 'lunchAddon', label: 'Add Ons for Lunch', mealType: 'snack' },
-  { key: 'dinnerAddon', label: 'Add Ons for Dinner', mealType: 'snack' },
 ];
 const CUISINES = ['Indian', 'North Indian', 'South Indian', 'Punjabi', 'Gujarati', 'Mughal', 'International'];
 
@@ -308,7 +305,7 @@ export default function MenuLibrary() {
         </div>
       ) : (
         <div className="grid grid-cols-3 gap-4">
-          {filtered.map(item => <MenuCard key={item.id} item={item} onEdit={handleEdit} onDelete={handleDelete} />)}
+          {filtered.map(item => <MenuCard key={item.id} item={item} familyCount={familyCount} onEdit={handleEdit} onDelete={handleDelete} />)}
         </div>
       )}
 
